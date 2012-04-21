@@ -1,0 +1,8 @@
+webapp/.classpath
+webapp/.externalToolBuilders
+webapp/.project
+webapp/.settings
+webapp/war/WEB-INF/appengine-generated
+webapp/war/WEB-INF/classes
+*~
+
