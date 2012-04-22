@@ -390,9 +390,9 @@ define(["dojo/dom",
                         app.editAccountBalance(acct.key, this.get('value'));
                     }
                 }}(account),
-                onFocus: function() {
+                onFocus: function(acct) {return function( event ) {
                 	dijit.byId('currbalInput_'+acct.key).focusNode.select();
-                },
+                }}(account),
                 onKeyDown: function(acct) {return function( event ) {
                     if (event.keyCode == 13) {
                     	if (this.isValid() && this.get('value') != acct.balance) {
