@@ -8,10 +8,9 @@
 	UserService userService = UserServiceFactory.getUserService();
     User user = userService.getCurrentUser();
     if (user == null) {
-    	response.sendRedirect("/index.jsp");
+    	response.sendRedirect("index.jsp");
     } else {
     	logoutUrl = userService.createLogoutURL(request.getRequestURI());
-    }
 %><!DOCTYPE html>
 <html>
     <head>
@@ -179,4 +178,6 @@
 	    </script>
     </body>
 </html>
-
+<%
+   }
+%>
