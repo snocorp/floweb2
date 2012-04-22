@@ -25,12 +25,13 @@
         <div class="navbar navbar-fixed-top">
    			<div class="navbar-inner">
    				<div class="container">
-	   				<span class="brand">flophase</span>
+	   				<span class="brand">flophase [beta]</span>
 	   				<!-- <ul class="nav" style="display: none;">
 	   					<li class="active"><a href="#" onclick="app.notify('table mode'); return false;">table</a></li>
 	   					<li><a href="#" onclick="app.notify('calendar mode'); return false;">calendar</a></li>
 	   				</ul> -->
 	   				<ul class="nav pull-right">
+	   					<li class="navbar-text"><%=  user.getEmail() %></li>
 	   					<li><a href="<%=logoutUrl %>">logout</a></li>
 	   				</ul>
    				</div>
@@ -113,7 +114,7 @@
             </div>
         </div>
         
-        <!-- Placed at the end of the document so the pages load faster -->
+        <!-- Placed at the end of the document so the page loads faster -->
     	<script src="jquery/jquery-1.7.1.min.js" type="text/javascript"></script>
     	<script src="jquery/jquery-ui-1.8.17.custom.min.js" type="text/javascript"></script>
     	<script src="jquery/jquery.jmNotify.js" type="text/javascript"></script>

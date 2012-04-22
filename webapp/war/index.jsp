@@ -27,7 +27,7 @@
         <div class="navbar navbar-fixed-top">
    			<div class="navbar-inner">
    				<div class="container">
-	   				<span class="brand">flophase</span>
+	   				<span class="brand">flophase [beta]</span>
 	   				<ul class="nav pull-right">
 	   					<li><a href="<%=loginUrl %>">login</a></li>
 	   				</ul>
