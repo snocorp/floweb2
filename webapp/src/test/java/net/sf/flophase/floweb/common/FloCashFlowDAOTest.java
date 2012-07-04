@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 import net.sf.flophase.floweb.cashflow.CashFlow;
 import net.sf.flophase.floweb.cashflow.CashFlowDAO;
 
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -70,6 +71,32 @@ public class FloCashFlowDAOTest extends AbstractDAOTestCase {
 
 		// ensure the cash flows match
 		assertEquals(dao.getCashFlow(user).getKey(), cashflow.getKey());
+	}
+
+	/**
+	 * Tests the {@link FloDAO#createCashFlow(User)} method. Adds two new cash flows using the data access object.
+	 */
+	@Test
+	public void testCreateTwoCashFlows() {
+		User user1 = UserServiceFactory.getUserService().getCurrentUser();
+
+		User user2 = new User("email2@example.com", "localhost");
+
+		CashFlow cashflow1 = dao.createCashFlow(user1);
+
+		// ensure the cash flows match
+		assertEquals(dao.getCashFlow(user1).getKey(), cashflow1.getKey());
+
+		assertNull(dao.getCashFlow(user2));
+
+		CashFlow cashflow2 = dao.createCashFlow(user2);
+
+		// ensure the cash flows match
+		assertEquals(dao.getCashFlow(user2).getKey(), cashflow2.getKey());
+
+		// ensure the two cashflows are different
+		assertThat(cashflow2.getKey(), Matchers.is(Matchers.not(Matchers.equalTo(cashflow1.getKey()))));
+
 	}
 
 }

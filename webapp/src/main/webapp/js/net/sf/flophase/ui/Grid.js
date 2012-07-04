@@ -159,7 +159,7 @@ define(["dojo/dom",
                         this.id,
                         key,
                         value);
-            }}(transaction.details.key, transaction.details.name);
+            };}(transaction.details.key, transaction.details.name);
 
             //put the name in the cell
             xactionNameCell.appendChild(document.createTextNode(transaction.details.name));
@@ -188,7 +188,7 @@ define(["dojo/dom",
                     if (this.isValid() && this.get('value') != value) {
                         app.editEntryAmount(this.get('value'), xactionKey, acctKey);
                     }
-                }}(value, xactionKey, acctKey),
+                };}(value, xactionKey, acctKey),
                 onFocus: function() {
                 	dijit.byId('entryInput_'+acctKey+'_'+xactionKey).focusNode.select();
                 },
@@ -203,7 +203,7 @@ define(["dojo/dom",
                     	this.set('value', value);
                     	dijit.byId('entryInput_'+acctKey+'_'+xactionKey).focusNode.blur();
                     }
-                }}(value, xactionKey, acctKey)
+                };}(value, xactionKey, acctKey)
             };
 
             var entryAmountTextBox = new CurrencyTextBox(props);
@@ -228,7 +228,7 @@ define(["dojo/dom",
                 value: transaction.details.date,
                 onChange: function(xaction) {return function(newValue) {
                     app.editTransactionDate(xaction.details.key, newValue, xaction.details.date);
-                }}(transaction)
+                };}(transaction)
             };
             var xactionDateTextBox = new DateTextBox(props);
 
@@ -310,7 +310,7 @@ define(["dojo/dom",
                             this.id,
                             key,
                             value);
-                }}(accounts[i].key, accounts[i].name);
+                };}(accounts[i].key, accounts[i].name);
 
                 accountText = document.createTextNode(accounts[i].name);
 
@@ -329,7 +329,7 @@ define(["dojo/dom",
                             this.id,
                             key,
                             value);
-                }}(accounts[i].key, accounts[i].name);
+                };}(accounts[i].key, accounts[i].name);
 
                 accountText = document.createTextNode(accounts[i].name);
 
@@ -389,10 +389,10 @@ define(["dojo/dom",
                     if (this.isValid() && this.get('value') != acct.balance) {
                         app.editAccountBalance(acct.key, this.get('value'));
                     }
-                }}(account),
+                };}(account),
                 onFocus: function(acct) {return function( event ) {
                 	dijit.byId('currbalInput_'+acct.key).focusNode.select();
-                }}(account),
+                };}(account),
                 onKeyDown: function(acct) {return function( event ) {
                     if (event.keyCode == 13) {
                     	if (this.isValid() && this.get('value') != acct.balance) {
@@ -404,7 +404,7 @@ define(["dojo/dom",
                     	this.set('value', acct.balance);
                     	dijit.byId('currbalInput_'+acct.key).focusNode.blur();
                     }
-                }}(account)
+                };}(account)
             };
             var currentBalanceTextBox = new CurrencyTextBox(props);
 
@@ -437,7 +437,7 @@ define(["dojo/dom",
                         this.id,
                         key,
                         value);
-            }}(account.key, account.name);
+            };}(account.key, account.name);
 
             //create the entries header cell
             var accountHeader = document.createElement("th");
@@ -550,7 +550,7 @@ define(["dojo/dom",
                             this.id,
                             key,
                             value);
-                }}(account.key, account.name);
+                };}(account.key, account.name);
             accountHeader.replaceChild(
                 document.createTextNode(account.name),
                 accountHeader.firstChild
@@ -563,7 +563,7 @@ define(["dojo/dom",
                             this.id,
                             key,
                             value);
-                }}(account.key, account.name);
+                };}(account.key, account.name);
             accountHeader.replaceChild(
                 document.createTextNode(account.name),
                 accountHeader.firstChild
@@ -689,7 +689,7 @@ define(["dojo/dom",
             		(prevRow == null && xaction.details.date < currentDate) ||
             		(nextRow == null && xaction.details.date > currentDate)) {
             
-	            var tbody = xactionRow.parentNode
+	            var tbody = xactionRow.parentNode;
 	            tbody.removeChild(xactionRow);
 	            
 	            if (tbody.firstChild == null) {

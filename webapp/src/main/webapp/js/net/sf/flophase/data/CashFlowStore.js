@@ -24,7 +24,7 @@ define([
      */
     var _xactionSorter = function(a, b) {
         return (a.details.date > b.details.date) ? 1 : ((a.details.date < b.details.date) ? -1 : 0);
-    }
+    };
 
     return {
         /**

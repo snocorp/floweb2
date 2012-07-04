@@ -230,7 +230,7 @@ define([
                 error: function(message) { 
                 	_this.notify(message); 
                 }
-            })
+            });
         },
         /**
          * Edits the current balance of an account.
@@ -320,7 +320,7 @@ define([
                     success: function(xaction) {
                         eventBus.fireTransactionUpdate(xaction);
 
-                        eventBus.fireBalanceUpdate(_this.getCashflow().getTransactions())
+                        eventBus.fireBalanceUpdate(_this.getCashflow().getTransactions());
                     },
                     error: function(message) { 
                     	_this.notify(message); 

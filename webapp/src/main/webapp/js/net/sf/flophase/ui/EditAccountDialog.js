@@ -60,7 +60,7 @@ define([
             accountNameField.select();
 
             $(document).unbind();
-            $(document).click(function() { app.hideEditAccount() });
+            $(document).click(function() { app.hideEditAccount(); });
     	},
     	hide: function() {
     		$('#'+floweb.editAccountDialog.nodeRef).fadeOut(250);

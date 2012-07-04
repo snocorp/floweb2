@@ -11,9 +11,9 @@ import com.google.appengine.api.users.UserService;
 public class FloUserStore implements UserStore {
 
 	/**
-	 * The logged in user.
+	 * The user service.
 	 */
-	private final User user;
+	private final UserService userService;
 
 	/**
 	 * Creates a mew FlowUserStore instance.
@@ -23,12 +23,12 @@ public class FloUserStore implements UserStore {
 	 */
 	@Inject
 	public FloUserStore(UserService userService) {
-		this.user = userService.getCurrentUser();
+		this.userService = userService;
 	}
 
 	@Override
 	public User getUser() {
-		return user;
+		return userService.getCurrentUser();
 	}
 
 }

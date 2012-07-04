@@ -4,6 +4,7 @@ import net.sf.flophase.floweb.account.AccountQueryServlet;
 import net.sf.flophase.floweb.account.AddAccountServlet;
 import net.sf.flophase.floweb.account.DeleteAccountServlet;
 import net.sf.flophase.floweb.account.EditAccountServlet;
+import net.sf.flophase.floweb.cashflow.CashFlowQueryServlet;
 import net.sf.flophase.floweb.entry.EditEntryServlet;
 import net.sf.flophase.floweb.xaction.AddTransactionServlet;
 import net.sf.flophase.floweb.xaction.DeleteTransactionServlet;
@@ -18,6 +19,8 @@ import com.google.inject.servlet.ServletModule;
 public class FloServletModule extends ServletModule {
 	@Override
 	protected void configureServlets() {
+		serve("/cashflow/q").with(CashFlowQueryServlet.class);
+
 		serve("/account/add").with(AddAccountServlet.class);
 		serve("/account/delete").with(DeleteAccountServlet.class);
 		serve("/account/edit").with(EditAccountServlet.class);

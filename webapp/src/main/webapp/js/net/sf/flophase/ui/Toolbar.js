@@ -27,7 +27,7 @@ define([
 			var upcomingMonth = locale.format(endMonth, {selector:'date', datePattern: pattern});
 			
 			
-			var loadEarlierButton = $('#'+floweb.toolbar.loadEarlierRef)
+			var loadEarlierButton = $('#'+floweb.toolbar.loadEarlierRef);
 			loadEarlierButton.html(earlierMonth);
 			loadEarlierButton.click(function() {
 				app.loadEarlier(); 
@@ -58,7 +58,7 @@ define([
 			var upcomingMonth = locale.format(endMonth, {selector:'date', datePattern: pattern});
 			
 			
-			var loadEarlierButton = $('#'+floweb.toolbar.loadEarlierRef)
+			var loadEarlierButton = $('#'+floweb.toolbar.loadEarlierRef);
 			loadEarlierButton.html(earlierMonth);
 			var loadUpcomingButton = $('#'+floweb.toolbar.loadUpcomingRef);
 			loadUpcomingButton.html(upcomingMonth);
