@@ -2,8 +2,10 @@
 	<head>
         <title>flophase - api</title>
         <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+        <link href="prettify/prettify.css" type="text/css" rel="stylesheet" />
+		<script type="text/javascript" src="prettify/prettify.js"></script>
     </head>
-	<body>
+	<body onload="prettyPrint();">
         <div class="navbar">
    			<div class="navbar-inner">
    				<div class="container">
@@ -19,6 +21,7 @@
 		<div class="container">
 	        <ul class="nav nav-pills">
        			<li><a href="#accounts">Accounts</a></li>
+       			<li><a href="#cashflow">Cash Flow</a></li>
        			<li><a href="#entries">Entries</a></li>
        			<li><a href="#transactions">Transactions</a></li>
        		</ul>
@@ -34,16 +37,38 @@
 					</ul>
 				</li>
 				<li>Response:<br/>
-			<textarea rows="4" class="xxlarge">{
-	result: &lt;0|1&gt;,
-	messages: [<message0>, <message1>, ...],
-	content: {
-		key: <accountKey>,
-		name: <accountName>,
-		balance: <accountBalance>
-	}
-}</textarea>
+					<pre class="prettyprint lang-js">{
+   result: &lt;0|1&gt;,
+   messages: [&lt;message0&gt;, &lt;message1&gt;, ...],
+   content: {
+      key: &lt;accountKey&gt;,
+      name: &lt;accountName&gt;,
+      balance: &lt;accountBalance&gt;
+   }
+}</pre>
 				</li>
+			</ul>
+			<h2>Edit Account</h2>
+			<ul>
+				<li>Description: Updates an existing account</li>
+				<li>Command: account/edit</li>
+				<li>Parameters:
+					<ul>
+						<li>key: The key of the account</li>
+						<li>name: The new name of the account</li>
+						<li>balance; The new balance of the account</li>
+					</ul>
+				</li>
+				<li>Response:<br/>
+					<pre class="prettyprint lang-js">{
+   result: &lt;0|1&gt;,
+   messages: [&lt;message0&gt;, &lt;message1&gt;, ...],
+   content: {
+      key: &lt;accountKey&gt;,
+      name: &lt;accountName&gt;,
+      balance: &lt;accountBalance&gt;
+   }
+}</pre>
 			</ul>
 			<h2>Query Accounts</h2>
 			<ul>
@@ -51,22 +76,33 @@
 				<li>Command: account/q</li>
 				<li>Parameters:
 					<ul>
-						<li><i>none</i></li>
+						<li><em>none</em></li>
 					</ul>
 				</li>
 				<li>Response:<br/>
-					<textarea rows="12" class="xxlarge">{
-	result: <0|1>,
-	messages: [<message0>, <message1>, ...],
-	content: [
-		{
-			key: <accountKey>,
-			name: <accountName>,
-			balance: <accountBalance>
-		},
-		...
-	]
-}</textarea>
+					<pre class="prettyprint lang-js">{
+   result: &lt;0|1&gt;,
+   messages: [&lt;message0&gt;, &lt;message1&gt;, ...],
+   content: [
+      {
+         key: &lt;accountKey&gt;,
+         name: &lt;accountName&gt;,
+         balance: &lt;accountBalance&gt;
+      },
+      ...
+   ]
+}</pre>
+				</li>
+			</ul>
+			<h1 id="cashflow">Cash Flow</h1>
+			<h2>Query Cash Flow</h2>
+			<ul>
+				<li>Description: Queries the server for information about the cash flow.</li>
+				<li>Command: cashflow/q</li>
+				<li>Parameters:
+					<ul>
+						<li><em>none</em></li>
+					</ul>
 				</li>
 			</ul>
 			<h1 id="entries">Entries</h1>

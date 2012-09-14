@@ -60,7 +60,7 @@ public class LoginTest {
 	 */
 	@Test
 	public void testLogin() {
-		driver.get("http://localhost:8080/");
+		helper.start();
 		helper.login(username);
 
 		WebElement userIdentifierElem = driver.findElement(By.id("userIdentifier"));

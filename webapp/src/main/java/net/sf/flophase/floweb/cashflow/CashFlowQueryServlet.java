@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 import net.sf.flophase.floweb.common.Constants;
 import net.sf.flophase.floweb.common.Response;
 
-import com.google.appengine.api.users.User;
 import com.google.gson.Gson;
 import com.google.inject.Singleton;
 
@@ -30,7 +29,7 @@ public class CashFlowQueryServlet extends HttpServlet {
 	 * The account service to handle the logic.
 	 */
 	@Inject
-	private CashFlowStore cashflowStore;
+	private CashFlowService cashflowService;
 
 	/**
 	 * JSON formatter.
@@ -40,7 +39,7 @@ public class CashFlowQueryServlet extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		Response<User> response = new Response<User>(Response.RESULT_SUCCESS, cashflowStore.getCashFlow().getUser());
+		Response<CashFlow> response = cashflowService.getCashFlow();
 
 		String output = gson.toJson(response);
 

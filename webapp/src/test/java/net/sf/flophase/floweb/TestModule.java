@@ -1,13 +1,15 @@
 package net.sf.flophase.floweb;
 
 import net.sf.flophase.floweb.account.AccountService;
+import net.sf.flophase.floweb.cashflow.CashFlowService;
 import net.sf.flophase.floweb.entry.EntryService;
 import net.sf.flophase.floweb.xaction.TransactionService;
 
 import org.jmock.Mockery;
 
 /**
- * This modules binds the service classes to mock instances for dependency injection.
+ * This modules binds the service classes to mock instances for dependency
+ * injection.
  */
 public class TestModule extends FloModule {
 
@@ -32,6 +34,11 @@ public class TestModule extends FloModule {
 	private EntryService entryService;
 
 	/**
+	 * The cash flow service.
+	 */
+	private CashFlowService cashFlowService;
+
+	/**
 	 * Creates a new TestModule instance.
 	 * 
 	 * @param context
@@ -47,11 +54,13 @@ public class TestModule extends FloModule {
 		accountService = context.mock(AccountService.class);
 		transactionService = context.mock(TransactionService.class);
 		entryService = context.mock(EntryService.class);
+		cashFlowService = context.mock(CashFlowService.class);
 
 		// bind the services to the instances
 		bind(AccountService.class).toInstance(accountService);
 		bind(TransactionService.class).toInstance(transactionService);
 		bind(EntryService.class).toInstance(entryService);
+		bind(CashFlowService.class).toInstance(cashFlowService);
 	}
 
 	@Override
@@ -84,6 +93,15 @@ public class TestModule extends FloModule {
 	 */
 	public EntryService getEntryService() {
 		return entryService;
+	}
+
+	/**
+	 * Returns the mock cash flow service.
+	 * 
+	 * @return The cash flow service
+	 */
+	public CashFlowService getCashFlowService() {
+		return cashFlowService;
 	}
 
 }
