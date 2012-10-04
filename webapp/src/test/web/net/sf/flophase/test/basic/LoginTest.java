@@ -3,6 +3,8 @@ package net.sf.flophase.test.basic;
 import static org.junit.Assert.*;
 import net.sf.flophase.test.util.FloWebHelper;
 
+import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -39,6 +41,11 @@ public class LoginTest {
 		helper = new FloWebHelper(driver);
 	}
 
+	@AfterClass
+	public static void tearDownAfterClass() throws Exception {
+		driver.close();
+	}
+
 	/**
 	 * The username for login
 	 */
@@ -53,6 +60,11 @@ public class LoginTest {
 	@Before
 	public void setUp() throws Exception {
 		username = helper.getEmail();
+	}
+
+	@After
+	public void tearDown() throws Exception {
+		helper.logout();
 	}
 
 	/**

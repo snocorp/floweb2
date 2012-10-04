@@ -18,7 +18,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 /**
- * This class tests that logging in works.
+ * This class tests that updating the account balance works.
  */
 public class UpdateAccountBalanceTest {
 

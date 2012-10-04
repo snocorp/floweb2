@@ -6,7 +6,9 @@ import net.sf.flophase.floweb.account.AccountStore;
 import net.sf.flophase.floweb.account.FloAccountService;
 import net.sf.flophase.floweb.account.FloAccountStore;
 import net.sf.flophase.floweb.cashflow.CashFlowDAO;
+import net.sf.flophase.floweb.cashflow.CashFlowService;
 import net.sf.flophase.floweb.cashflow.CashFlowStore;
+import net.sf.flophase.floweb.cashflow.FloCashFlowService;
 import net.sf.flophase.floweb.cashflow.FloCashFlowStore;
 import net.sf.flophase.floweb.common.Constants;
 import net.sf.flophase.floweb.common.DAO;
@@ -69,6 +71,7 @@ public class FloModule extends AbstractModule {
 
 		bind(CashFlowDAO.class).toInstance(floDAO);
 		bind(CashFlowStore.class).to(FloCashFlowStore.class);
+		bind(CashFlowService.class).to(FloCashFlowService.class);
 	}
 
 	/**
