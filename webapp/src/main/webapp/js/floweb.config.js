@@ -35,6 +35,8 @@ var floweb = {
     },
     toolbar: {
     	dateButtonGroupRef:'dateButtonGroup',
+    	addAccountRef:'addAccount',
+    	addTransactionRef:'addTransaction',
     	loadEarlierRef:'loadEarlier',
     	loadUpcomingRef:'loadUpcoming'
     }

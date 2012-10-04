@@ -13,7 +13,7 @@ define([
     		//ok button
     		$('#'+floweb.addAccountDialog.okNodeRef).click(function() {
     			var name = $('#'+floweb.addAccountDialog.nameNodeRef).val();
-                var balance = registry.byId(floweb.addAccountDialog.balanceNodeRef).value;
+                var balance = registry.byId(floweb.addAccountDialog.balanceNodeRef).get('value');
                 
                 app.addAccount(name, balance);
     		});
@@ -39,11 +39,18 @@ define([
 
             //reset the values
             $('#'+floweb.addAccountDialog.nameNodeRef).val('');
-            registry.byId(floweb.addAccountDialog.balanceNodeRef).value = 0.0;
+            var balanceInput = registry.byId(floweb.addAccountDialog.balanceNodeRef);
+            balanceInput.set('value', 0.0);
 
             $("#"+floweb.addAccountDialog.nodeRef).dialog('open');
     	},
     	hide: function() {
+
+            //reset the values
+            $('#'+floweb.addAccountDialog.nameNodeRef).val('');
+            var balanceInput = registry.byId(floweb.addAccountDialog.balanceNodeRef);
+            balanceInput.set('value', 0.0);
+            
     		$('#'+floweb.addAccountDialog.nodeRef).dialog('close');
     	},
         /**

@@ -54,17 +54,51 @@ public class FloWebHelper {
 		driver.get(BASE_URL);
 	}
 	
-	public WebElement waitForElement(By by, long milliseconds) {
-		long startTime = System.currentTimeMillis();
+	private WebElement waitForElement(By by, boolean waitForVisible, boolean waitForEnabled, long milliseconds) {
+		final long startTime = System.currentTimeMillis();
+		WebElement element;
 		while (true) {
 			try {
-				return driver.findElement(by);
+				element = driver.findElement(by);
+				
+				break;
 			} catch (NoSuchElementException e) {
 				if (System.currentTimeMillis() > startTime + milliseconds) {
 					throw e;
 				}
 			}
 		}
+		while (waitForVisible) {
+			if (element.isDisplayed() || System.currentTimeMillis() > startTime + milliseconds) {
+				break;
+			}
+		}
+		while (waitForEnabled) {
+			if (element.isEnabled() || System.currentTimeMillis() > startTime + milliseconds) {
+				break;
+			}
+		}
+		return element;
+	}
+	
+	public WebElement waitForElement(By by, long milliseconds) {
+		return waitForElement(by, false, false, milliseconds);
+	}
+	
+	public WebElement waitForEnabledElement(By by) {
+		return waitForElement(by, false, true, 5000);
+	}
+	
+	public WebElement waitForVisibleElement(By by) {
+		return waitForElement(by, true, false, 5000);
+	}
+	
+	public WebElement waitForVisibleEnabledElement(By by) {
+		return waitForElement(by, true, true, 5000);
+	}
+	
+	public WebElement waitForElement(By by) {
+		return waitForElement(by, 5000);
 	}
 
 	public void logout() {

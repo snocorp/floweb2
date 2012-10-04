@@ -11,6 +11,19 @@ define([
 	
 	return {
 		onInit: function() {
+			var addAccountButton = $('#'+floweb.toolbar.addAccountRef);
+			addAccountButton.click(function() {
+				app.showAddAccount();
+				return false;
+			});
+			addAccountButton.removeClass('disabled');
+			var addTransactionButton = $('#'+floweb.toolbar.addTransactionRef);
+			addTransactionButton.click(function() {
+				app.showAddTransaction();
+				return false;
+			});
+			addTransactionButton.removeClass('disabled');
+			
 			var cashflow = app.getCashflow();
 			
 			var startMonth = date.add(cashflow.getStartMonth(), "month", -1);

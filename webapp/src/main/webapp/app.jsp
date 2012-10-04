@@ -41,12 +41,12 @@
 	        	<div class="subnav">
 	        		<div class="btn-toolbar">
 			        	<div class="btn-group">
-			        		<a href="#"
-			        			onclick="app.showAddAccount(); return false;" 
-			        			class="btn">add account</a>
-			        		<a href="#"
-			        			onclick="app.showAddTransaction(); return false;" 
-			        			class="btn">add transaction</a>
+			        		<a id="addAccount"
+			        		    href="#"
+			        			class="btn disabled">add account</a>
+			        		<a id="addTransaction"
+			        		    href="#"
+			        			class="btn disabled">add transaction</a>
 			        	</div>
 			        	<div class="btn-group" id="dateButtonGroup" style="display:none;">
 			        		<a id="loadEarlier"
