@@ -179,4 +179,5 @@
 			</plugins>
 		</pluginManagement>
 	</build>
+	<name>flophase</name>
 </project>

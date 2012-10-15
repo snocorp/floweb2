@@ -89,7 +89,8 @@ public class FloModule extends AbstractModule {
 
 			@Override
 			public boolean shouldSkipField(FieldAttributes f) {
-				// we want to skip this annotation when serializing to JSON as it is not necessary to know the parent.
+				// we want to skip this annotation when serializing to JSON as
+				// it is not necessary to know the parent.
 				return f.getAnnotation(Parent.class) != null;
 			}
 
@@ -99,8 +100,9 @@ public class FloModule extends AbstractModule {
 			}
 		};
 
-		Gson gson = new GsonBuilder().addSerializationExclusionStrategy(strategy)
-		        .setDateFormat(Constants.ISO_DATE_FORMAT).create();
+		Gson gson = new GsonBuilder()
+				.addSerializationExclusionStrategy(strategy)
+				.setDateFormat(Constants.ISO_DATE_FORMAT).create();
 		bind(Gson.class).toInstance(gson);
 	}
 

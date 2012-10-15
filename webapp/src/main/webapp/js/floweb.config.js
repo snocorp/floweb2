@@ -21,7 +21,8 @@ var floweb = {
     	nameNodeRef:'newTransactionName',
     	dateNodeRef:'newTransactionDate',
     	okNodeRef:'addTransactionOk',
-    	cancelNodeRef:'addTransactionCancel'
+    	cancelNodeRef:'addTransactionCancel',
+    	calendarNodeRef:'newTransactionCalendar'
     },
     editAccountDialog: {
     	nodeRef:'accountEditor',

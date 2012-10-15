@@ -81,28 +81,39 @@ public class RenameAccountTest {
 	 */
 	@Test
 	public void testRenameUsingEntryHeader() throws Exception {
-		WebElement accountHeaderRow = helper.waitForElement(
-				By.id("accountHeaderRow"), 5000);
+		// we need to find the header cell for the account
+		// start by finding the header row
+		WebElement accountHeaderRow = helper.waitForElement(By
+				.id("accountHeaderRow"));
+
+		// get the first the cell
 		WebElement accountEntryHeaderCell = accountHeaderRow.findElement(By
 				.tagName("th"));
 
+		// click it to open the edit account dialog
 		accountEntryHeaderCell.click();
 
-		WebElement accountNameInput = helper.waitForElement(
-				By.id("accountName"), 5000);
+		// get the name input
+		WebElement accountNameInput = helper.waitForElement(By
+				.id("accountName"));
 
+		// wait for things to happen
 		Thread.sleep(500);
 
+		// make sure the original account name is as expected
 		assertEquals("My Account", accountNameInput.getAttribute("value"));
 
+		// clear the name and type a new one
 		accountNameInput.clear();
-
 		accountNameInput.sendKeys("New Account Name", Keys.RETURN);
 
+		// reload the first cell
 		accountEntryHeaderCell = accountHeaderRow.findElement(By.tagName("th"));
 
+		// wait for things to happen
 		Thread.sleep(500);
 
+		// make sure the name has been updated
 		assertEquals("New Account Name", accountEntryHeaderCell.getText());
 	}
 

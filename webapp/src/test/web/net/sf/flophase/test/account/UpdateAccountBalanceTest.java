@@ -75,26 +75,48 @@ public class UpdateAccountBalanceTest {
 
 	/**
 	 * Logs in a user.
-	 * @throws Exception 
+	 * 
+	 * @throws Exception
 	 */
 	@Test
 	public void testUpdateAccountBalance() throws Exception {
-		
-		WebElement currentRow = helper.waitForElement(By.id("currentRow"), 5000);
-		List<WebElement> currentRowCells = currentRow.findElements(By.tagName("td"));
-		
+		// we need to find the current balance cell for the account
+		// start by finding the current row
+		WebElement currentRow = helper.waitForElement(By.id("currentRow"));
+		List<WebElement> currentRowCells = currentRow.findElements(By
+				.tagName("td"));
+
+		//the row should have 3 cells: a label, the date and the balance
 		assertEquals(3, currentRowCells.size());
-		
+
+		//get the last cell
 		WebElement currentBalanceCell = currentRowCells.get(2);
 		String currentBalanceCellId = currentBalanceCell.getAttribute("id");
-		
-		String accountId = currentBalanceCellId.substring(currentBalanceCellId.indexOf('_')+1);
-		
-		WebElement currbalInput = currentBalanceCell.findElement(By.id("currbalInput_" + accountId));
-		
+
+		//determine the id of the account
+		String accountId = currentBalanceCellId.substring(currentBalanceCellId
+				.indexOf('_') + 1);
+
+		//use the id to find the balance input
+		WebElement currbalInput = currentBalanceCell.findElement(By
+				.id("currbalInput_" + accountId));
+
+		//clear the input and send a new balance
 		currbalInput.clear();
-		
 		currbalInput.sendKeys("123.45", Keys.RETURN);
+		
+		//refresh the page, if the balance was persisted, it will appear as the current balance
+		driver.navigate().refresh();
+
+		// wait for things to happen
+		Thread.sleep(1000);
+		
+		//get the balance input again
+		currbalInput = helper.waitForElement(By
+				.id("currbalInput_" + accountId));
+		
+		//make sure the value is right
+		assertEquals("$123.45", currbalInput.getAttribute("value"));
 	}
 
 }

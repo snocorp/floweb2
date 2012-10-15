@@ -6,7 +6,7 @@ import com.google.appengine.api.users.User;
 import com.googlecode.objectify.Key;
 
 /**
- * This class represents a cash flow. This is a parent object for all of the other objects in the system.
+ * This class represents a cash flow. This is a container object for all of the other objects in the system.
  */
 public class CashFlow {
 

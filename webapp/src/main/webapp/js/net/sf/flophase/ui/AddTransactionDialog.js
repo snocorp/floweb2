@@ -2,11 +2,31 @@
  * AddAccountDialog
  */
 define([
-	], function() {
+        "dijit/Calendar",
+        "dojo/date"
+	], function(
+			Calendar,
+			date
+			) {
 
+	var calendar;
 
     return {
     	onInit: function() {
+    		//calendar
+    		calendar = new Calendar({
+	    	        onChange: function(value) {
+	    	        	dojo.byId(floweb.addTransactionDialog.dateNodeRef).value =
+	    	        		date.locale.format(
+	    	        				value, 
+	    	        				{datePattern:'yyyy-MM-dd', selector:'date'}
+	    	        			);
+	    	        	
+	    	        }
+    	        }, 
+    	        floweb.addTransactionDialog.calendarNodeRef
+    	    );
+    		
     		//ok button
     		$('#'+floweb.addTransactionDialog.okNodeRef).click(function() {
     			var name = $('#'+floweb.addTransactionDialog.nameNodeRef).val();
@@ -36,7 +56,8 @@ define([
     		
             //clear the values
     		$('#'+floweb.addTransactionDialog.nameNodeRef).val('');
-            $('#'+floweb.addTransactionDialog.dateNodeRef).val('');
+            $('#'+floweb.addTransactionDialog.dateNodeRef).val('');            
+            calendar.set('value', null);
 
             $('#'+floweb.addTransactionDialog.nodeRef).dialog('open');
     	},

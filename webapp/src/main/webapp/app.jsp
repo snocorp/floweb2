@@ -104,7 +104,7 @@
             <label for="newTransactionName">Description:</label>
             <input class="xactionname" type="text" id="newTransactionName" name="name"/><br/>
             <label for="newTransactionDate">Date:</label><br/>
-            <div data-dojo-type="dijit.Calendar" data-dojo-props="onChange:function(){dojo.byId('newTransactionDate').value=dojo.date.locale.format(arguments[0], {datePattern:'yyyy-MM-dd', selector:'date'});}"></div>
+            <div id="newTransactionCalendar"></div>
             <input type="hidden" id="newTransactionDate" name="date" />
             <div id="addTransactionError" class="flo-dialog-error" style="display:none;"></div>
             <div class="flo-dialog-buttonbar">
