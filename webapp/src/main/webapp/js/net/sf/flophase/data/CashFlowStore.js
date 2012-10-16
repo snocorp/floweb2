@@ -23,7 +23,17 @@ define([
      * @param b The second transaction
      */
     var _xactionSorter = function(a, b) {
-        return (a.details.date > b.details.date) ? 1 : ((a.details.date < b.details.date) ? -1 : 0);
+    	if (a.details.date > b.details.date) {
+    		return 1;
+    	} else if (a.details.date < b.details.date) {
+    		return -1;
+    	} else if (a.details.key > b.details.key) {
+    		return 1;
+    	} else if (a.details.key < b.details.key) {
+    		return -1;
+    	} else {
+    		return 0;
+    	}
     };
 
     return {

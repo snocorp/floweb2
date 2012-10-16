@@ -71,7 +71,7 @@ define(["dojo/dom",
                 if (!foundCurrentRow) {
                     var xactionDate = stamp.fromISOString(transactions[i].details.date);
 
-                    //if this transactions date if after the current date
+                    //if this transactions date is after the current date
                     if (xactionDate > currentDate) {
                     	if ($(activeBody).children().length == 0) {
                     		$(activeBody).hide();
@@ -737,8 +737,12 @@ define(["dojo/dom",
             for (var i = 0; i < tbody.rows.length; i++) {
                 var xactionKey = tbody.rows[i].id.substring(8); //evertything after 'xaction_'
                 var date = dojo.date.stamp.toISOString(dijit.byId('dateInput_'+xactionKey).value, {selector: 'date'});
-                if (xaction.details.date <= date) {
+                if (xaction.details.date < date) {
                     tbody.insertBefore(xactionRow, tbody.rows[i]);
+                    found = true;
+                    break;
+                } else if (xaction.details.date == date && xaction.details.key < xactionKey) {
+                	tbody.insertBefore(xactionRow, tbody.rows[i]);
                     found = true;
                     break;
                 }

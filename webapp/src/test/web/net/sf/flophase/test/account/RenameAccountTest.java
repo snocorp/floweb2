@@ -136,24 +136,31 @@ public class RenameAccountTest {
 		// the balance header cell is the second one
 		WebElement accountBalanceHeaderCell = accountHeaderCells.get(1);
 
+		// click it to open the edit account dialog
 		accountBalanceHeaderCell.click();
 
+		//get the account name input
 		WebElement accountNameInput = helper.waitForElement(
-				By.id("accountName"), 5000);
+				By.id("accountName"));
 
+		//wait for things to happen
 		Thread.sleep(500);
 
+		//make sure the existing name is correct
 		assertEquals("My Account", accountNameInput.getAttribute("value"));
 
+		//clear the input and enter a new name
 		accountNameInput.clear();
-
 		accountNameInput.sendKeys("New Account Name", Keys.RETURN);
 
+		//get the header cell again
 		accountBalanceHeaderCell = accountHeaderRow.findElement(By
 				.tagName("th"));
 
+		//wait for things to happen
 		Thread.sleep(500);
-
+		
+		//make sure the cell now has the new name
 		assertEquals("New Account Name", accountBalanceHeaderCell.getText());
 	}
 

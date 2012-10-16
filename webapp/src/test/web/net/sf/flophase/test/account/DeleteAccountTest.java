@@ -86,45 +86,7 @@ public class DeleteAccountTest {
 	 */
 	@Test
 	public void testDeleteSecondAccount() throws Exception {
-		// we need to time this case to allow a timeout if certain interactions
-		// fail
-		final long startTime = System.currentTimeMillis();
-
-		// get the add account button
-		WebElement addAccountButton = helper
-				.waitForElement(By.id("addAccount"));
-
-		// while the button is marked as disabled (css class)
-		while (addAccountButton.getAttribute("class").contains("disabled")) {
-			if (System.currentTimeMillis() > startTime + 5000) {
-				fail("Add account button did not become enabled");
-			}
-		}
-
-		// click the add account button to open the add account dialog
-		addAccountButton.click();
-
-		// get the input for the account name
-		WebElement newAccountNameInput = helper.waitForVisibleEnabledElement(By
-				.id("newAccountName"));
-
-		// clear the input and type an account name
-		newAccountNameInput.clear();
-		newAccountNameInput.sendKeys("New Account");
-
-		// get the input for the account balance
-		WebElement newAccountBalanceInput = driver.findElement(By
-				.id("newAccountBalance"));
-
-		// clear the input and type a new balance
-		newAccountBalanceInput.clear();
-		newAccountBalanceInput.sendKeys("12.34");
-
-		// click the OK button
-		driver.findElement(By.id("addAccountOk")).click();
-
-		// wait for things to happen
-		Thread.sleep(2000);
+		helper.addAccount("New Account", 12.34);
 
 		// we need to find the header cell for the new account
 		// start by finding the header row
@@ -168,45 +130,7 @@ public class DeleteAccountTest {
 	 */
 	@Test
 	public void testDeleteFirstAccount() throws Exception {
-		// we need to time this case to allow a timeout if certain interactions
-		// fail
-		final long startTime = System.currentTimeMillis();
-
-		// get the add account button
-		WebElement addAccountButton = helper
-				.waitForElement(By.id("addAccount"));
-
-		// while the button is marked as disabled (css class)
-		while (addAccountButton.getAttribute("class").contains("disabled")) {
-			if (System.currentTimeMillis() > startTime + 5000) {
-				fail("Add account button did not become enabled");
-			}
-		}
-
-		// click the add account button to open the add account dialog
-		addAccountButton.click();
-
-		// get the input for the account name
-		WebElement newAccountNameInput = helper.waitForVisibleEnabledElement(By
-				.id("newAccountName"));
-
-		// clear the input and type a new name
-		newAccountNameInput.clear();
-		newAccountNameInput.sendKeys("New Account");
-
-		// get the input for the account balance
-		WebElement newAccountBalanceInput = driver.findElement(By
-				.id("newAccountBalance"));
-
-		// clear the input and type a new balance
-		newAccountBalanceInput.clear();
-		newAccountBalanceInput.sendKeys("12.34");
-
-		// click the OK button
-		driver.findElement(By.id("addAccountOk")).click();
-
-		// wait for things to happen
-		Thread.sleep(2000);
+		helper.addAccount("New Account", 12.34);
 
 		// we need to find the header cell for the new account
 		// start by finding the header row
