@@ -133,20 +133,31 @@ public class FloAccountService implements AccountService {
 
 		// if the user was logged in
 		if (userService.isUserLoggedIn()) {
-			try {
-				// try to parse the given key
-				long id = Long.parseLong(key);
-
-				// delete the account
-				acctStore.deleteAccount(id);
+			
+			//if there are two or more accounts
+			if (acctStore.getAccounts().size() > 1) {
+				try {
+					// try to parse the given key
+					long id = Long.parseLong(key);
+	
+					// delete the account
+					acctStore.deleteAccount(id);
+				}
+				// if the key could not be parsed
+				catch (NumberFormatException e) {
+					// respond with failure
+					response.setResult(Response.RESULT_FAILURE);
+	
+					// indicate the key is not valid
+					response.addMessage("The key is not valid");
+				}
 			}
-			// if the key could not be parsed
-			catch (NumberFormatException e) {
+			else {
 				// respond with failure
 				response.setResult(Response.RESULT_FAILURE);
 
 				// indicate the key is not valid
-				response.addMessage("The key is not valid");
+				response.addMessage("The last account cannot be deleted. Create a new account before deleting the account.");
 			}
 		}
 		// the user was not logged in

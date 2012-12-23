@@ -40,7 +40,7 @@ public class FloWebHelper {
 	 *            The user's email address
 	 */
 	public void login(String email) {
-		driver.findElement(By.linkText("login")).click();
+		waitForElement(By.linkText("login")).click();
 		waitForElement(By.id("email"), 2000).clear();
 		driver.findElement(By.id("email")).sendKeys(email);
 		driver.findElement(By.name("action")).click();
@@ -110,7 +110,7 @@ public class FloWebHelper {
 	}
 
 	public void logout() {
-		WebElement logoutLink = driver.findElement(By.id("logoutLink"));
+		WebElement logoutLink = waitForElement(By.id("logoutLink"));
 		logoutLink.click();
 	}
 
@@ -159,7 +159,32 @@ public class FloWebHelper {
 		Thread.sleep(2000);
 	}
 
+	/**
+	 * Adds a transaction to the system with the given name for today's date.
+	 * 
+	 * @param name
+	 *            The transaction's name
+	 * @throws Exception
+	 *             If an error occurs.
+	 */
 	public void addTransaction(String name) throws Exception {
+		Calendar cal = Calendar.getInstance();
+
+		addTransaction(name, cal);
+	}
+
+	/**
+	 * Adds a transaction to the system with the given name on the calendar's
+	 * date.
+	 * 
+	 * @param name
+	 *            The transaction name
+	 * @param cal
+	 *            The calendar
+	 * @throws Exception
+	 *             If an error occurs
+	 */
+	public void addTransaction(String name, Calendar cal) throws Exception {
 		// we need to time this case to allow a timeout if certain interactions
 		// fail
 		final long startTime = System.currentTimeMillis();
@@ -185,9 +210,39 @@ public class FloWebHelper {
 		// clear the value and input a new name
 		newTransactionNameInput.clear();
 		newTransactionNameInput.sendKeys("Transaction 1");
+		
+		String year = String.valueOf(cal.get(Calendar.YEAR));
+		
+		WebElement displayedYear = driver.findElement(
+				By.id("newTransactionCalendar_year"));
+		
+		int compare;
+		while ((compare = year.compareTo(displayedYear.getText())) != 0) {
+			WebElement yearElement = driver.findElement(By.cssSelector(compare < 0 ? "span.dijitCalendarPreviousYear" : "span.dijitCalendarNextYear"));
+			yearElement.click();
+			
+			//wait a little bit
+			Thread.sleep(200);
+		}
+
+		int month = cal.get(Calendar.MONTH);
+
+		// open the month selector
+		driver.findElement(
+				By.cssSelector("#newTransactionCalendar span.dijitArrowButtonInner"))
+				.click();
+
+		// wait for things to happen
+		Thread.sleep(500);
+
+		driver.findElement(
+				By.xpath("//div[@id='newTransactionCalendar_mddb_mdd']/div[@month='"
+						+ month + "']")).click();
+
+		// wait for things to happen
+		Thread.sleep(500);
 
 		// find the week and day of the week for today
-		Calendar cal = Calendar.getInstance();
 		int week = cal.get(Calendar.WEEK_OF_MONTH);
 		int day = cal.get(Calendar.DAY_OF_WEEK);
 
@@ -197,12 +252,12 @@ public class FloWebHelper {
 						+ week + "]/td[" + day + "]/span")).click();
 
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		String today = format.format(cal.getTime());
+		String date = format.format(cal.getTime());
 
 		// ensure the hidden input was updated
 		WebElement newTransactionDateInput = waitForElement(By
 				.id("newTransactionDate"));
-		assertEquals(today, newTransactionDateInput.getAttribute("value"));
+		assertEquals(date, newTransactionDateInput.getAttribute("value"));
 
 		// click the ok button
 		driver.findElement(By.id("addTransactionOk")).click();

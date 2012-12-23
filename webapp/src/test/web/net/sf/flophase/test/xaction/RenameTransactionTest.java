@@ -81,56 +81,8 @@ public class RenameTransactionTest {
 	 *             If an error occurs
 	 */
 	@Test
-	public void testAddTransactionBeforeToday() throws Exception {
-		// we need to time this case to allow a timeout if certain interactions
-		// fail
-		final long startTime = System.currentTimeMillis();
-
-		// get the add transaction button
-		WebElement addTransactionButton = helper.waitForElement(By
-				.id("addTransaction"));
-
-		// while the button is marked as disabled (css class)
-		while (addTransactionButton.getAttribute("class").contains("disabled")) {
-			if (System.currentTimeMillis() > startTime + 5000) {
-				fail("Add transaction button did not become enabled");
-			}
-		}
-
-		// click the add transaction button
-		addTransactionButton.click();
-
-		// get the transaction name input
-		WebElement newTransactionNameInput = helper
-				.waitForVisibleEnabledElement(By.id("newTransactionName"));
-
-		// clear the value and input a new name
-		newTransactionNameInput.clear();
-		newTransactionNameInput.sendKeys("Transaction 1");
-
-		// find the week and day of the week for today
-		Calendar cal = Calendar.getInstance();
-		int week = cal.get(Calendar.WEEK_OF_MONTH);
-		int day = cal.get(Calendar.DAY_OF_WEEK);
-
-		// find the date on the calendar
-		driver.findElement(
-				By.xpath("//table[@id='newTransactionCalendar']/tbody/tr["
-						+ week + "]/td[" + day + "]/span")).click();
-
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		String today = format.format(cal.getTime());
-
-		// ensure the hidden input was updated
-		WebElement newTransactionDateInput = helper.waitForElement(By
-				.id("newTransactionDate"));
-		assertEquals(today, newTransactionDateInput.getAttribute("value"));
-
-		// click the ok button
-		driver.findElement(By.id("addTransactionOk")).click();
-
-		// wait for things to happen
-		Thread.sleep(2000);
+	public void testRenameTransaction() throws Exception {
+		helper.addTransaction("Transaction 1");
 
 		// find the transaction name cell that was created
 		WebElement xactionNameCell = driver.findElement(By

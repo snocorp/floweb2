@@ -49,6 +49,11 @@ public class FloAccountServiceTest {
 	 * The message returned when there is no name.
 	 */
 	private static final String MSG_MISSING_NAME = "Name is required";
+	
+	/**
+	 * Message returned when attempting to delete the last account.
+	 */
+	private static final String MSG_LAST_ACCOUNT = "The last account cannot be deleted. Create a new account before deleting the account.";
 
 	/**
 	 * An invalid account balance.
@@ -101,7 +106,8 @@ public class FloAccountServiceTest {
 	private AccountStore acctStore;
 
 	/**
-	 * Sets up the test case. Creates mock user service and account store. Creates the service to be tested.
+	 * Sets up the test case. Creates mock user service and account store.
+	 * Creates the service to be tested.
 	 */
 	@Before
 	public void setUp() {
@@ -138,7 +144,8 @@ public class FloAccountServiceTest {
 	}
 
 	/**
-	 * Tests the {@link FloAccountService#getAccounts()} method when there is no logged in user.
+	 * Tests the {@link FloAccountService#getAccounts()} method when there is no
+	 * logged in user.
 	 */
 	@Test
 	public void testGetAccountsWithNoLoggedInUser() {
@@ -160,8 +167,8 @@ public class FloAccountServiceTest {
 	}
 
 	/**
-	 * Tests the {@link FloAccountService#addAccount(String, String)} method. Ensures that the account store is called
-	 * with the correct parameters.
+	 * Tests the {@link FloAccountService#addAccount(String, String)} method.
+	 * Ensures that the account store is called with the correct parameters.
 	 */
 	@Test
 	public void testAddAccount() {
@@ -177,7 +184,8 @@ public class FloAccountServiceTest {
 			}
 		});
 
-		Response<Account> response = service.addAccount(ACCOUNT_NAME, String.valueOf(ACCOUNT_BALANCE));
+		Response<Account> response = service.addAccount(ACCOUNT_NAME,
+				String.valueOf(ACCOUNT_BALANCE));
 
 		assertThat(response.getResult(), is(equalTo(Response.RESULT_SUCCESS)));
 
@@ -189,8 +197,9 @@ public class FloAccountServiceTest {
 	}
 
 	/**
-	 * Tests the {@link FloAccountService#addAccount(String, String)} method with no logged in user. Ensures that a
-	 * failure response is returned with the correct message.
+	 * Tests the {@link FloAccountService#addAccount(String, String)} method
+	 * with no logged in user. Ensures that a failure response is returned with
+	 * the correct message.
 	 */
 	@Test
 	public void testAddAccountWithNoLoggedInUser() {
@@ -201,7 +210,8 @@ public class FloAccountServiceTest {
 			}
 		});
 
-		Response<Account> response = service.addAccount(ACCOUNT_NAME, String.valueOf(ACCOUNT_BALANCE));
+		Response<Account> response = service.addAccount(ACCOUNT_NAME,
+				String.valueOf(ACCOUNT_BALANCE));
 
 		assertThat(response.getResult(), is(equalTo(Response.RESULT_FAILURE)));
 
@@ -211,8 +221,9 @@ public class FloAccountServiceTest {
 	}
 
 	/**
-	 * Tests the {@link FloAccountService#addAccount(String, String)} method with an invalid balance. Ensures that a
-	 * failure response is returned with the correct message.
+	 * Tests the {@link FloAccountService#addAccount(String, String)} method
+	 * with an invalid balance. Ensures that a failure response is returned with
+	 * the correct message.
 	 */
 	@Test
 	public void testAddAccountWithInvalidBalance() {
@@ -223,7 +234,8 @@ public class FloAccountServiceTest {
 			}
 		});
 
-		Response<Account> response = service.addAccount(ACCOUNT_NAME, INVALID_ACCOUNT_BALANCE);
+		Response<Account> response = service.addAccount(ACCOUNT_NAME,
+				INVALID_ACCOUNT_BALANCE);
 
 		assertThat(response.getResult(), is(equalTo(Response.RESULT_FAILURE)));
 
@@ -235,8 +247,9 @@ public class FloAccountServiceTest {
 	}
 
 	/**
-	 * Tests the {@link FloAccountService#addAccount(String, String)} method with a null balance. Ensures that a failure
-	 * response is returned with the correct message.
+	 * Tests the {@link FloAccountService#addAccount(String, String)} method
+	 * with a null balance. Ensures that a failure response is returned with the
+	 * correct message.
 	 */
 	@Test
 	public void testAddAccountWithNullBalance() {
@@ -259,8 +272,9 @@ public class FloAccountServiceTest {
 	}
 
 	/**
-	 * Tests the {@link FloAccountService#addAccount(String, String)} method with a null name. Ensures that a failure
-	 * response is returned with the correct message.
+	 * Tests the {@link FloAccountService#addAccount(String, String)} method
+	 * with a null name. Ensures that a failure response is returned with the
+	 * correct message.
 	 */
 	@Test
 	public void testAddAccountWithNullName() {
@@ -271,7 +285,8 @@ public class FloAccountServiceTest {
 			}
 		});
 
-		Response<Account> response = service.addAccount(null, String.valueOf(ACCOUNT_BALANCE));
+		Response<Account> response = service.addAccount(null,
+				String.valueOf(ACCOUNT_BALANCE));
 
 		assertThat(response.getResult(), is(equalTo(Response.RESULT_FAILURE)));
 
@@ -283,8 +298,9 @@ public class FloAccountServiceTest {
 	}
 
 	/**
-	 * Tests the {@link FloAccountService#addAccount(String, String)} method with an empty name. Ensures that a failure
-	 * response is returned with the correct message.
+	 * Tests the {@link FloAccountService#addAccount(String, String)} method
+	 * with an empty name. Ensures that a failure response is returned with the
+	 * correct message.
 	 */
 	@Test
 	public void testAddAccountWithEmptyName() {
@@ -295,7 +311,8 @@ public class FloAccountServiceTest {
 			}
 		});
 
-		Response<Account> response = service.addAccount("", String.valueOf(ACCOUNT_BALANCE));
+		Response<Account> response = service.addAccount("",
+				String.valueOf(ACCOUNT_BALANCE));
 
 		assertThat(response.getResult(), is(equalTo(Response.RESULT_FAILURE)));
 
@@ -307,8 +324,9 @@ public class FloAccountServiceTest {
 	}
 
 	/**
-	 * Tests the {@link FloAccountService#addAccount(String, String)} method with a name that is too long. Ensures that
-	 * a failure response is returned with the correct message.
+	 * Tests the {@link FloAccountService#addAccount(String, String)} method
+	 * with a name that is too long. Ensures that a failure response is returned
+	 * with the correct message.
 	 */
 	@Test
 	public void testAddAccountWithNameTooLong() {
@@ -319,7 +337,8 @@ public class FloAccountServiceTest {
 			}
 		});
 
-		Response<Account> response = service.addAccount(INVALID_ACCOUNT_NAME_TOO_LONG, String.valueOf(ACCOUNT_BALANCE));
+		Response<Account> response = service.addAccount(
+				INVALID_ACCOUNT_NAME_TOO_LONG, String.valueOf(ACCOUNT_BALANCE));
 
 		assertThat(response.getResult(), is(equalTo(Response.RESULT_FAILURE)));
 
@@ -331,15 +350,22 @@ public class FloAccountServiceTest {
 	}
 
 	/**
-	 * Tests the {@link FloAccountService#deleteAccount(String)} method. Ensures that the account store is called with
-	 * the correct parameters.
+	 * Tests the {@link FloAccountService#deleteAccount(String)} method. Ensures
+	 * that the account store is called with the correct parameters.
 	 */
 	@Test
 	public void testDeleteAccount() {
+		final List<Account> accounts = new ArrayList<Account>();
+		accounts.add(new Account());
+		accounts.add(new Account());
+		
 		context.checking(new Expectations() {
 			{
 				one(userService).isUserLoggedIn();
 				will(returnValue(true));
+				
+				one(acctStore).getAccounts();
+				will(returnValue(accounts));
 
 				one(acctStore).deleteAccount(Long.parseLong(ACCOUNT_KEY));
 			}
@@ -355,8 +381,38 @@ public class FloAccountServiceTest {
 	}
 
 	/**
-	 * Tests the {@link FloAccountService#deleteAccount(String)} method with no logged in user. Ensures that a failure
-	 * response is returned with the correct message.
+	 * Tests the {@link FloAccountService#deleteAccount(String)} method on the
+	 * last account. Ensures that a failure response is returned with the
+	 * correct message.
+	 */
+	@Test
+	public void testDeleteLastAccount() {
+		final List<Account> accounts = new ArrayList<Account>();
+		accounts.add(new Account());
+		
+		context.checking(new Expectations() {
+			{
+				one(userService).isUserLoggedIn();
+				will(returnValue(true));
+				
+				one(acctStore).getAccounts();
+				will(returnValue(accounts));
+			}
+		});
+
+		Response<Void> response = service.deleteAccount(ACCOUNT_KEY);
+
+		assertThat(response.getResult(), is(equalTo(Response.RESULT_FAILURE)));
+
+		assertThat(MSG_LAST_ACCOUNT, isIn(response.getMessages()));
+
+		context.assertIsSatisfied();
+	}
+
+	/**
+	 * Tests the {@link FloAccountService#deleteAccount(String)} method with no
+	 * logged in user. Ensures that a failure response is returned with the
+	 * correct message.
 	 */
 	@Test
 	public void testDeleteAccountWithNoLoggedInUser() {
@@ -377,15 +433,23 @@ public class FloAccountServiceTest {
 	}
 
 	/**
-	 * Tests the {@link FloAccountService#deleteAccount(String)} method with an invalid key. Ensures that a failure
-	 * response is returned with the correct message.
+	 * Tests the {@link FloAccountService#deleteAccount(String)} method with an
+	 * invalid key. Ensures that a failure response is returned with the correct
+	 * message.
 	 */
 	@Test
 	public void testDeleteAccountWithInvalidKey() {
+		final List<Account> accounts = new ArrayList<Account>();
+		accounts.add(new Account());
+		accounts.add(new Account());
+		
 		context.checking(new Expectations() {
 			{
 				one(userService).isUserLoggedIn();
 				will(returnValue(true));
+				
+				one(acctStore).getAccounts();
+				will(returnValue(accounts));
 			}
 		});
 
@@ -399,15 +463,23 @@ public class FloAccountServiceTest {
 	}
 
 	/**
-	 * Tests the {@link FloAccountService#deleteAccount(String)} method with an null key. Ensures that a failure
-	 * response is returned with the correct message.
+	 * Tests the {@link FloAccountService#deleteAccount(String)} method with an
+	 * null key. Ensures that a failure response is returned with the correct
+	 * message.
 	 */
 	@Test
 	public void testDeleteAccountWithNullKey() {
+		final List<Account> accounts = new ArrayList<Account>();
+		accounts.add(new Account());
+		accounts.add(new Account());
+		
 		context.checking(new Expectations() {
 			{
 				one(userService).isUserLoggedIn();
 				will(returnValue(true));
+				
+				one(acctStore).getAccounts();
+				will(returnValue(accounts));
 			}
 		});
 
@@ -421,15 +493,23 @@ public class FloAccountServiceTest {
 	}
 
 	/**
-	 * Tests the {@link FloAccountService#deleteAccount(String)} method with an empty key. Ensures that a failure
-	 * response is returned with the correct message.
+	 * Tests the {@link FloAccountService#deleteAccount(String)} method with an
+	 * empty key. Ensures that a failure response is returned with the correct
+	 * message.
 	 */
 	@Test
 	public void testDeleteAccountWithEmptyKey() {
+		final List<Account> accounts = new ArrayList<Account>();
+		accounts.add(new Account());
+		accounts.add(new Account());
+		
 		context.checking(new Expectations() {
 			{
 				one(userService).isUserLoggedIn();
 				will(returnValue(true));
+				
+				one(acctStore).getAccounts();
+				will(returnValue(accounts));
 			}
 		});
 
@@ -443,8 +523,9 @@ public class FloAccountServiceTest {
 	}
 
 	/**
-	 * Tests the {@link FloAccountService#editAccount(String, String, String)} method. Ensures that the account store is
-	 * called with the correct parameters.
+	 * Tests the {@link FloAccountService#editAccount(String, String, String)}
+	 * method. Ensures that the account store is called with the correct
+	 * parameters.
 	 */
 	@Test
 	public void testEditAccount() {
@@ -455,12 +536,14 @@ public class FloAccountServiceTest {
 				one(userService).isUserLoggedIn();
 				will(returnValue(true));
 
-				one(acctStore).editAccount(Long.parseLong(ACCOUNT_KEY), ACCOUNT_NAME, ACCOUNT_BALANCE);
+				one(acctStore).editAccount(Long.parseLong(ACCOUNT_KEY),
+						ACCOUNT_NAME, ACCOUNT_BALANCE);
 				will(returnValue(account));
 			}
 		});
 
-		Response<Account> response = service.editAccount(ACCOUNT_KEY, ACCOUNT_NAME, String.valueOf(ACCOUNT_BALANCE));
+		Response<Account> response = service.editAccount(ACCOUNT_KEY,
+				ACCOUNT_NAME, String.valueOf(ACCOUNT_BALANCE));
 
 		assertThat(response.getResult(), is(equalTo(Response.RESULT_SUCCESS)));
 
@@ -472,8 +555,9 @@ public class FloAccountServiceTest {
 	}
 
 	/**
-	 * Tests the {@link FloAccountService#editAccount(String, String, String)} method with no logged in user. Ensures
-	 * that a failure response is returned with the correct message.
+	 * Tests the {@link FloAccountService#editAccount(String, String, String)}
+	 * method with no logged in user. Ensures that a failure response is
+	 * returned with the correct message.
 	 */
 	@Test
 	public void testEditAccountWithNoLoggedInUser() {
@@ -484,7 +568,8 @@ public class FloAccountServiceTest {
 			}
 		});
 
-		Response<Account> response = service.editAccount(ACCOUNT_KEY, ACCOUNT_NAME, String.valueOf(ACCOUNT_BALANCE));
+		Response<Account> response = service.editAccount(ACCOUNT_KEY,
+				ACCOUNT_NAME, String.valueOf(ACCOUNT_BALANCE));
 
 		assertThat(response.getResult(), is(equalTo(Response.RESULT_FAILURE)));
 
@@ -494,8 +579,9 @@ public class FloAccountServiceTest {
 	}
 
 	/**
-	 * Tests the {@link FloAccountService#editAccount(String, String, String)} method with an invalid balance. Ensures
-	 * that a failure response is returned with the correct message.
+	 * Tests the {@link FloAccountService#editAccount(String, String, String)}
+	 * method with an invalid balance. Ensures that a failure response is
+	 * returned with the correct message.
 	 */
 	@Test
 	public void testEditAccountWithInvalidBalance() {
@@ -506,7 +592,8 @@ public class FloAccountServiceTest {
 			}
 		});
 
-		Response<Account> response = service.editAccount(ACCOUNT_KEY, ACCOUNT_NAME, INVALID_ACCOUNT_BALANCE);
+		Response<Account> response = service.editAccount(ACCOUNT_KEY,
+				ACCOUNT_NAME, INVALID_ACCOUNT_BALANCE);
 
 		assertThat(response.getResult(), is(equalTo(Response.RESULT_FAILURE)));
 
@@ -518,8 +605,9 @@ public class FloAccountServiceTest {
 	}
 
 	/**
-	 * Tests the {@link FloAccountService#editAccount(String, String, String)} method with a null balance. Ensures that
-	 * a failure response is returned with the correct message.
+	 * Tests the {@link FloAccountService#editAccount(String, String, String)}
+	 * method with a null balance. Ensures that a failure response is returned
+	 * with the correct message.
 	 */
 	@Test
 	public void testEditAccountWithNullBalance() {
@@ -530,7 +618,8 @@ public class FloAccountServiceTest {
 			}
 		});
 
-		Response<Account> response = service.editAccount(ACCOUNT_KEY, ACCOUNT_NAME, null);
+		Response<Account> response = service.editAccount(ACCOUNT_KEY,
+				ACCOUNT_NAME, null);
 
 		assertThat(response.getResult(), is(equalTo(Response.RESULT_FAILURE)));
 
@@ -542,8 +631,9 @@ public class FloAccountServiceTest {
 	}
 
 	/**
-	 * Tests the {@link FloAccountService#editAccount(String, String, String)} method with an empty balance. Ensures
-	 * that a failure response is returned with the correct message.
+	 * Tests the {@link FloAccountService#editAccount(String, String, String)}
+	 * method with an empty balance. Ensures that a failure response is returned
+	 * with the correct message.
 	 */
 	@Test
 	public void testEditAccountWithEmptyBalance() {
@@ -554,7 +644,8 @@ public class FloAccountServiceTest {
 			}
 		});
 
-		Response<Account> response = service.editAccount(ACCOUNT_KEY, ACCOUNT_NAME, "");
+		Response<Account> response = service.editAccount(ACCOUNT_KEY,
+				ACCOUNT_NAME, "");
 
 		assertThat(response.getResult(), is(equalTo(Response.RESULT_FAILURE)));
 
@@ -566,8 +657,9 @@ public class FloAccountServiceTest {
 	}
 
 	/**
-	 * Tests the {@link FloAccountService#editAccount(String, String, String)} method with a null name. Ensures that a
-	 * failure response is returned with the correct message.
+	 * Tests the {@link FloAccountService#editAccount(String, String, String)}
+	 * method with a null name. Ensures that a failure response is returned with
+	 * the correct message.
 	 */
 	@Test
 	public void testEditAccountWithNullName() {
@@ -578,7 +670,8 @@ public class FloAccountServiceTest {
 			}
 		});
 
-		Response<Account> response = service.editAccount(ACCOUNT_KEY, null, String.valueOf(ACCOUNT_BALANCE));
+		Response<Account> response = service.editAccount(ACCOUNT_KEY, null,
+				String.valueOf(ACCOUNT_BALANCE));
 
 		assertThat(response.getResult(), is(equalTo(Response.RESULT_FAILURE)));
 
@@ -590,8 +683,9 @@ public class FloAccountServiceTest {
 	}
 
 	/**
-	 * Tests the {@link FloAccountService#editAccount(String, String, String)} method with an empty name. Ensures that a
-	 * failure response is returned with the correct message.
+	 * Tests the {@link FloAccountService#editAccount(String, String, String)}
+	 * method with an empty name. Ensures that a failure response is returned
+	 * with the correct message.
 	 */
 	@Test
 	public void testEditAccountWithEmptyName() {
@@ -602,7 +696,8 @@ public class FloAccountServiceTest {
 			}
 		});
 
-		Response<Account> response = service.editAccount(ACCOUNT_KEY, "", String.valueOf(ACCOUNT_BALANCE));
+		Response<Account> response = service.editAccount(ACCOUNT_KEY, "",
+				String.valueOf(ACCOUNT_BALANCE));
 
 		assertThat(response.getResult(), is(equalTo(Response.RESULT_FAILURE)));
 
@@ -614,8 +709,9 @@ public class FloAccountServiceTest {
 	}
 
 	/**
-	 * Tests the {@link FloAccountService#editAccount(String, String, String)} method with a name that is too long.
-	 * Ensures that a failure response is returned with the correct message.
+	 * Tests the {@link FloAccountService#editAccount(String, String, String)}
+	 * method with a name that is too long. Ensures that a failure response is
+	 * returned with the correct message.
 	 */
 	@Test
 	public void testEditAccountWithNameTooLong() {
@@ -626,8 +722,8 @@ public class FloAccountServiceTest {
 			}
 		});
 
-		Response<Account> response = service.editAccount(ACCOUNT_KEY, INVALID_ACCOUNT_NAME_TOO_LONG,
-		        String.valueOf(ACCOUNT_BALANCE));
+		Response<Account> response = service.editAccount(ACCOUNT_KEY,
+				INVALID_ACCOUNT_NAME_TOO_LONG, String.valueOf(ACCOUNT_BALANCE));
 
 		assertThat(response.getResult(), is(equalTo(Response.RESULT_FAILURE)));
 
@@ -639,8 +735,9 @@ public class FloAccountServiceTest {
 	}
 
 	/**
-	 * Tests the {@link FloAccountService#editAccount(String, String, String)} method with an invalid key. Ensures that
-	 * a failure response is returned with the correct message.
+	 * Tests the {@link FloAccountService#editAccount(String, String, String)}
+	 * method with an invalid key. Ensures that a failure response is returned
+	 * with the correct message.
 	 */
 	@Test
 	public void testEditAccountWithInvalidKey() {
@@ -651,8 +748,8 @@ public class FloAccountServiceTest {
 			}
 		});
 
-		Response<Account> response = service.editAccount(INVALID_ACCOUNT_KEY, ACCOUNT_NAME,
-		        String.valueOf(ACCOUNT_BALANCE));
+		Response<Account> response = service.editAccount(INVALID_ACCOUNT_KEY,
+				ACCOUNT_NAME, String.valueOf(ACCOUNT_BALANCE));
 
 		assertThat(response.getResult(), is(equalTo(Response.RESULT_FAILURE)));
 
@@ -662,8 +759,9 @@ public class FloAccountServiceTest {
 	}
 
 	/**
-	 * Tests the {@link FloAccountService#editAccount(String, String, String)} method with a null key. Ensures that a
-	 * failure response is returned with the correct message.
+	 * Tests the {@link FloAccountService#editAccount(String, String, String)}
+	 * method with a null key. Ensures that a failure response is returned with
+	 * the correct message.
 	 */
 	@Test
 	public void testEditAccountWithNullKey() {
@@ -674,7 +772,8 @@ public class FloAccountServiceTest {
 			}
 		});
 
-		Response<Account> response = service.editAccount(null, ACCOUNT_NAME, String.valueOf(ACCOUNT_BALANCE));
+		Response<Account> response = service.editAccount(null, ACCOUNT_NAME,
+				String.valueOf(ACCOUNT_BALANCE));
 
 		assertThat(response.getResult(), is(equalTo(Response.RESULT_FAILURE)));
 
@@ -684,8 +783,9 @@ public class FloAccountServiceTest {
 	}
 
 	/**
-	 * Tests the {@link FloAccountService#editAccount(String, String, String)} method with an empty key. Ensures that a
-	 * failure response is returned with the correct message.
+	 * Tests the {@link FloAccountService#editAccount(String, String, String)}
+	 * method with an empty key. Ensures that a failure response is returned
+	 * with the correct message.
 	 */
 	@Test
 	public void testEditAccountWithEmptyKey() {
@@ -696,7 +796,8 @@ public class FloAccountServiceTest {
 			}
 		});
 
-		Response<Account> response = service.editAccount("", ACCOUNT_NAME, String.valueOf(ACCOUNT_BALANCE));
+		Response<Account> response = service.editAccount("", ACCOUNT_NAME,
+				String.valueOf(ACCOUNT_BALANCE));
 
 		assertThat(response.getResult(), is(equalTo(Response.RESULT_FAILURE)));
 

@@ -2,11 +2,12 @@
  * Grid
  */
 define(["dojo/dom", 
-    "dojo/date/locale",
-    "dojo/date/stamp",
-    "dijit/registry",
-    "dijit/form/CurrencyTextBox",
-    "dijit/form/DateTextBox"], function(dom, locale, stamp, registry, CurrencyTextBox, DateTextBox) {
+        "dojo/date",
+        "dojo/date/locale",
+        "dojo/date/stamp",
+        "dijit/registry",
+        "dijit/form/CurrencyTextBox",
+        "dijit/form/DateTextBox"], function(dom, date, locale, stamp, registry, CurrencyTextBox, DateTextBox) {
 
 
     return {
@@ -301,7 +302,7 @@ define(["dojo/dom",
             for (var i in accounts) {
                 accountHeader = document.createElement("th");
                 accountHeader.id = 'account_'+accounts[i].key;
-                accountHeader.className = 'accountheader';
+                accountHeader.className = 'flo-accountheader';
 
                 //when the user clicks the cell, it will become editable
                 accountHeader.onclick = function(key, value) {return function(event) {
@@ -320,7 +321,7 @@ define(["dojo/dom",
             for (i in accounts) {
                 accountHeader = document.createElement("th");
                 accountHeader.id = 'accountbal_'+accounts[i].key;
-                accountHeader.className = 'accountheader';
+                accountHeader.className = 'flo-accountheader';
 
                 //when the user clicks the cell, it will become editable
                 accountHeader.onclick = function(key, value) {return function(event) {
@@ -442,7 +443,7 @@ define(["dojo/dom",
             //create the entries header cell
             var accountHeader = document.createElement("th");
             accountHeader.id = 'account_'+account.key;
-            accountHeader.className = 'accountheader';
+            accountHeader.className = 'flo-accountheader';
 
             //when the user clicks the cell, it will become editable
             accountHeader.onclick = clickHandler;
@@ -469,7 +470,7 @@ define(["dojo/dom",
             //create the balance cell
             accountHeader = document.createElement("th");
             accountHeader.id = 'accountbal_'+account.key;
-            accountHeader.className = 'accountheader';
+            accountHeader.className = 'flo-accountheader';
 
             //when the user clicks the cell, it will become editable
             accountHeader.onclick = clickHandler;
@@ -630,14 +631,25 @@ define(["dojo/dom",
          * @param xaction The transaction that was added
          */
         onTransactionAdd: function(xaction) {
-            //get the current list of accounts
-            var accounts = app.getCashflow().getAccounts();
-
-            var xactionRow = this.createTransactionRow(xaction, accounts);
-
-            var tbody = this.attachTransactionRow(xactionRow, xaction);
-            
-            $(tbody).show();
+        	var cashflow = app.getCashflow();
+        	
+        	var startMonth = locale.format(cashflow.getStartMonth(), {selector:'date', datePattern: "yyyy-MM-dd"});
+        	
+        	var endMonth = date.add(cashflow.getEndMonth(), "month", 1);
+        	endMonth = locale.format(endMonth, {selector:'date', datePattern: "yyyy-MM-dd"});
+        	
+        	if (xaction.details.date >= startMonth && xaction.details.date < endMonth) {
+	            //get the current list of accounts
+	            var accounts = app.getCashflow().getAccounts();
+	
+	            var xactionRow = this.createTransactionRow(xaction, accounts);
+	
+	            var tbody = this.attachTransactionRow(xactionRow, xaction);
+	            
+	            $(tbody).show();
+        	} else {
+        		console.log('xaction created outside range: [' + startMonth + ' to ' + endMonth + ')');
+        	}
         },
         /**
          * This method is invoked when a transaction is deleted.

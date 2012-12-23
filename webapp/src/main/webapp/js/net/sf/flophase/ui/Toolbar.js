@@ -31,7 +31,7 @@ define([
 			
 			var pattern;
 			if (startMonth.getFullYear() != endMonth.getFullYear()) {
-				pattern = "MMMM, yyyy";
+				pattern = "MMMM yyyy";
 			} else {
 				pattern = "MMMM";
 			}

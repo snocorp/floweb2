@@ -262,6 +262,7 @@ define([
                 success: function(xaction) {
                     var xactions = cashflow.getTransactions();
                     xactions.push(xaction);
+                    xactions.sort(_xactionSorter);
                     cashflow.setTransactions(xactions);
 
                     _this.updateBalances();

@@ -36,14 +36,16 @@ table.flo-cashflow th {
     color: #000;
     padding: 2px;
 }
+table.flo-cashflow th.flo-accountheader {
+	width: 6em;
+}
 
 td.flo-xactionname, td.flo-xactionbalance, #current, #currentDate {
     padding-left: 4px !important;
     padding-right: 4px !important;
 }
 
-table.flo-cashflow th.accountheader:hover,
-table.flo-cashflow td.xactionentry:hover,
+table.flo-cashflow th.flo-accountheader:hover,
 table.flo-cashflow td.flo-xactionname:hover {
     background-color: #3AAACF;
     cursor: default;
@@ -60,7 +62,7 @@ table.flo-cashflow td.flo-xactionbalance {
 
 table.flo-cashflow td.flo-entry div.dijitTextBox,
 table.flo-cashflow td.flo-currentbalance div.dijitTextBox {
-    width: 6em !important;
+	width: auto !important;
 }
 
 table.flo-cashflow td.flo-xactiondate div.dijitTextBox {
