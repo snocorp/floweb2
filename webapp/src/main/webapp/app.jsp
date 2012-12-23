@@ -16,8 +16,9 @@
     <head>
         <title>flophase</title>
         <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
-        <link rel="stylesheet" href="jquery/redmond/jquery-ui-1.8.17.custom.css">
-        <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/dojo/1.7/dijit/themes/claro/claro.css" />        
+        <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/themes/humanity/jquery-ui.css" type="text/css" media="all" />
+        <!-- <link rel="stylesheet" href="jquery/redmond/jquery-ui-1.8.17.custom.css"> -->
+        <link rel="stylesheet" type="text/css" href="//ajax.googleapis.com/ajax/libs/dojo/1.7/dijit/themes/claro/claro.css" />        
         <link rel="stylesheet" href="css/floweb.css">
     </head>
     <body class="claro">
@@ -96,8 +97,8 @@
                 value="0"/><br/>
             <div id="addAccountError" class="flo-dialog-error" style="display:none;"></div>
             <div class="flo-dialog-buttonbar">
-                <button id="addAccountOk" type="button" data-dojo-type="dijit.form.Button">OK</button>
-                <button id="addAccountCancel" type="button" data-dojo-type="dijit.form.Button">Cancel</button>
+                <button id="addAccountOk" type="button" class="btn">OK</button>
+                <button id="addAccountCancel" type="button" class="btn">Cancel</button>
             </div>
         </div>
         <div id="addTransactionDialog" class="flo-off-screen">
@@ -108,14 +109,14 @@
             <input type="hidden" id="newTransactionDate" name="date" />
             <div id="addTransactionError" class="flo-dialog-error" style="display:none;"></div>
             <div class="flo-dialog-buttonbar">
-                <button id="addTransactionOk" type="button" data-dojo-type="dijit.form.Button">OK</button>
-                <button id="addTransactionCancel" type="button" data-dojo-type="dijit.form.Button">Cancel</button>
+                <button id="addTransactionOk" type="button" class="btn">OK</button>
+                <button id="addTransactionCancel" type="button" class="btn">Cancel</button>
             </div>
         </div>
         
         <!-- Placed at the end of the document so the page loads faster -->
-    	<script src="jquery/jquery-1.7.1.min.js" type="text/javascript"></script>
-    	<script src="jquery/jquery-ui-1.8.17.custom.min.js" type="text/javascript"></script>
+    	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    	<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js" type="text/javascript"></script>
     	<script src="jquery/jquery.jmNotify.js" type="text/javascript"></script>
 		
     	

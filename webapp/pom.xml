@@ -14,7 +14,7 @@
 		<gae.home>${user.home}/.m2/repository/com/google/appengine/appengine-java-sdk/${gae.version}/appengine-java-sdk-${gae.version}</gae.home>
 		<gae.application.version>1</gae.application.version>
 
-		<gae.version>1.7.2</gae.version>
+		<gae.version>1.7.4</gae.version>
 		<skip.tests>true</skip.tests>
 	</properties>
 

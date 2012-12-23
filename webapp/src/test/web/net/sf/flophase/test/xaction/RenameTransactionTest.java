@@ -1,10 +1,6 @@
 package net.sf.flophase.test.xaction;
 
 import static org.junit.Assert.*;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-
 import net.sf.flophase.test.util.FloWebHelper;
 
 import org.junit.After;
