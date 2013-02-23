@@ -20,6 +20,13 @@
 			body {
 		        padding-top: 60px;
 		    }
+		    .footer {
+			    background-color: #F5F5F5;
+			    border-top: 1px solid #E5E5E5;
+			    margin-top: 70px;
+			    padding: 30px 0;
+			    text-align: center;
+			}
 		</style>
     </head>
     <body>
@@ -36,9 +43,11 @@
         <div class="container">
         	<div class="hero-unit">
         		<h1>cash flow</h1>
-        		<h2>management system</h2>
+       			<h2>management system</h2>
+       			<a class="btn btn-primary" href="<%=loginUrl %>">Sign in with Google</a>
         	</div>
         </div>
+        <footer class="footer">&copy; 2013 David Sewell</footer>
     </body>
 </html>
 <%

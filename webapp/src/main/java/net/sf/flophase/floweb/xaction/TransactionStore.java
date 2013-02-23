@@ -56,4 +56,17 @@ public interface TransactionStore {
 	 * @return The transaction.
 	 */
 	public Transaction getTransaction(long id);
+
+	/**
+	 * Copies the transaction with the given id.
+	 * 
+	 * @param id
+	 *            The id of the transaction to copy
+	 * @param name
+	 *            The new name
+	 * @param date
+	 *            The new date
+	 * @return The new transaction
+	 */
+	public FinancialTransaction copyTransaction(long id, String name, Date date);
 }

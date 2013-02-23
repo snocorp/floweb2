@@ -30,6 +30,19 @@ public interface TransactionService {
 	public abstract Response<FinancialTransaction> addTransaction(String name, String date);
 
 	/**
+	 * Copies a transaction.
+	 * 
+	 * @param key
+	 *            The key of the transaction to be copied
+	 * @param name
+	 *            The new name
+	 * @param date
+	 *            The new date in ISO 8601 format
+	 * @return A response containing the copy of the transaction.
+	 */
+	public abstract Response<FinancialTransaction> copyTransaction(String key, String name, String date);
+
+	/**
 	 * Deletes a transaction.
 	 * 
 	 * @param key

@@ -48,6 +48,21 @@
 }</pre>
 				</li>
 			</ul>
+			<h2>Delete Account</h2>
+			<ul>
+				<li>Description: Deletes an existing account</li>
+				<li>Command: account/delete</li>
+				<li>Parameters:
+					<ul>
+						<li>key: The key of the account</li>
+					</ul>
+				</li>
+				<li>Response:<br/>
+					<pre class="prettyprint lang-js">{
+   result: &lt;0|1&gt;,
+   messages: [&lt;message0&gt;, &lt;message1&gt;, ...]
+}</pre>
+			</ul>
 			<h2>Edit Account</h2>
 			<ul>
 				<li>Description: Updates an existing account</li>
@@ -56,7 +71,7 @@
 					<ul>
 						<li>key: The key of the account</li>
 						<li>name: The new name of the account</li>
-						<li>balance; The new balance of the account</li>
+						<li>balance: The new balance of the account</li>
 					</ul>
 				</li>
 				<li>Response:<br/>
@@ -104,23 +119,139 @@
 						<li><em>none</em></li>
 					</ul>
 				</li>
+				<li>Response:<br/>
+					<pre class="prettyprint lang-js">{
+   result: &lt;0|1&gt;,
+   messages: [&lt;message0&gt;, &lt;message1&gt;, ...],
+   content: {
+      key: &lt;cashflowKey&gt;,
+      user: {
+         email: &lt;userEmail&gt;,
+         authDomain: &lt;authDomain&gt;,
+         userId: &lt;userId&gt;
+      }
+   }
+}</pre>
+				</li>
 			</ul>
 			<h1 id="entries">Entries</h1>
-			<p>Lorem ipsum dolor sit amet, magna vel donec vel in urna wisi, mattis risus ligula curabitur purus nulla orci, eros anim vivamus fermentum ipsum sunt, neque curabitur. Vel nunc et, vestibulum posuere ut, vestibulum tempus, ante mi est velit, non cras. Aenean nec scelerisque et curabitur vitae, risus enim purus mi, eu lacus enim. Dapibus amet et vitae nisl laoreet pellentesque, diam lorem sapien nonummy orci volutpat, nisl dictum arcu, tellus vel et dolor quos justo aliquam. Penatibus taciti, nisl commodo neque interdum placerat, tortor aliquam vel erat, rhoncus inceptos id, vel lobortis sit sit porta vitae maecenas.</p>
-
-<p>Dapibus mi in massa dui quisque pede, ultrices tempus ipsum phasellus sodales mattis eu. Pharetra tellus. Nibh in nibh posuere neque luctus nonummy, libero iaculis mattis pharetra luctus vestibulum vestibulum, sit nulla donec, neque condimentum pulvinar suspendisse, enim turpis sed vestibulum facilisis elit. Lacus nullam suspendisse vitae wisi rutrum. Odio volutpat velit ut, in nulla dignissim. Orci ut libero interdum, et integer in dui sed et, elit dictum montes, odio eu morbi elit ultricies molestie. Mauris turpis at montes, suscipit nunc, arcu a sollicitudin nunc leo vitae volutpat. Felis fames mi wisi, non vel felis nibh. Dolor ut vel ante et, feugiat egestas ligula purus turpis in mauris, occaecati diam libero non, iaculis turpis urna tincidunt sed lectus et, lectus lectus odio. Pellentesque in commodo ultrices vel, mauris ut ornare orci et mollis. Ut sollicitudin.</p>
-
-<p>Id pellentesque tortor molestie euismod erat, vitae lectus arcu nibh enim, turpis erat nisl id bibendum fermentum, semper tellus lobortis integer dui sit. Sed massa massa nec vel, lorem arcu, aliquam excepturi volutpat elit. Tortor leo in, eu a wisi ultrices in eu, aliquam sit, scelerisque habitasse orci tortor dictum viverra. Mollis ac quam. Nunc metus. Euismod risus, felis adipiscing sit mauris. Dis malesuada sed id. Nullam pellentesque vel elit tincidunt. Risus modi, nec turpis eros congue aliquam animi eleifend, diam ac proident ornare suscipit, luctus molestie nulla.</p>
-
-<p>Ultrices non facilisis possimus vestibulum ligula ipsum. Sollicitudin duis suspendisse, consectetuer magnis nam orci fringilla pede. Rhoncus ac curabitur vel, tellus a nisl eleifend nisl, pharetra fringilla non praesent, quam pellentesque mollis, proin elementum sed massa lobortis vitae. Laoreet vulputate lobortis pede eget a suspendisse, ligula sed. Odio nec, congue placerat in at libero, at cum scelerisque eu nam velit aenean. Vestibulum per, proin adipiscing eu tincidunt et, convallis sollicitudin nunc integer ante parturient. Donec eget eleifend quam ipsum est, porttitor nonummy conubia neque sit netus eu. Ante elit nulla vivamus eu phasellus, nulla rutrum tristique magna luctus.</p>
+			<h2>Edit Entry</h2>
+			<ul>
+				<li>Description: Edits or adds an entry to a transaction for an account.</li>
+				<li>Command: entry/edit</li>
+				<li>Parameters:
+					<ul>
+						<li>account: The key of the account</li>
+						<li>xaction: The key of the transaction</li>
+						<li>amount: The amount of the entry</li>
+					</ul>
+				</li>
+				<li>Response:<br/>
+					<pre class="prettyprint lang-js">{
+   result: &lt;0|1&gt;,
+   messages: [&lt;message0&gt;, &lt;message1&gt;, ...],
+   content: {
+      key: &lt;entryKey&gt;,
+      account: &lt;accountKey&gt;,
+      amount: &lt;entryAmount&gt;
+   }
+}</pre>
+				</li>
+			</ul>
 			<h1 id="transactions">Transactions</h1>
-			<p>Lorem ipsum dolor sit amet, magna vel donec vel in urna wisi, mattis risus ligula curabitur purus nulla orci, eros anim vivamus fermentum ipsum sunt, neque curabitur. Vel nunc et, vestibulum posuere ut, vestibulum tempus, ante mi est velit, non cras. Aenean nec scelerisque et curabitur vitae, risus enim purus mi, eu lacus enim. Dapibus amet et vitae nisl laoreet pellentesque, diam lorem sapien nonummy orci volutpat, nisl dictum arcu, tellus vel et dolor quos justo aliquam. Penatibus taciti, nisl commodo neque interdum placerat, tortor aliquam vel erat, rhoncus inceptos id, vel lobortis sit sit porta vitae maecenas.</p>
-
-<p>Dapibus mi in massa dui quisque pede, ultrices tempus ipsum phasellus sodales mattis eu. Pharetra tellus. Nibh in nibh posuere neque luctus nonummy, libero iaculis mattis pharetra luctus vestibulum vestibulum, sit nulla donec, neque condimentum pulvinar suspendisse, enim turpis sed vestibulum facilisis elit. Lacus nullam suspendisse vitae wisi rutrum. Odio volutpat velit ut, in nulla dignissim. Orci ut libero interdum, et integer in dui sed et, elit dictum montes, odio eu morbi elit ultricies molestie. Mauris turpis at montes, suscipit nunc, arcu a sollicitudin nunc leo vitae volutpat. Felis fames mi wisi, non vel felis nibh. Dolor ut vel ante et, feugiat egestas ligula purus turpis in mauris, occaecati diam libero non, iaculis turpis urna tincidunt sed lectus et, lectus lectus odio. Pellentesque in commodo ultrices vel, mauris ut ornare orci et mollis. Ut sollicitudin.</p>
-
-<p>Id pellentesque tortor molestie euismod erat, vitae lectus arcu nibh enim, turpis erat nisl id bibendum fermentum, semper tellus lobortis integer dui sit. Sed massa massa nec vel, lorem arcu, aliquam excepturi volutpat elit. Tortor leo in, eu a wisi ultrices in eu, aliquam sit, scelerisque habitasse orci tortor dictum viverra. Mollis ac quam. Nunc metus. Euismod risus, felis adipiscing sit mauris. Dis malesuada sed id. Nullam pellentesque vel elit tincidunt. Risus modi, nec turpis eros congue aliquam animi eleifend, diam ac proident ornare suscipit, luctus molestie nulla.</p>
-
-<p>Ultrices non facilisis possimus vestibulum ligula ipsum. Sollicitudin duis suspendisse, consectetuer magnis nam orci fringilla pede. Rhoncus ac curabitur vel, tellus a nisl eleifend nisl, pharetra fringilla non praesent, quam pellentesque mollis, proin elementum sed massa lobortis vitae. Laoreet vulputate lobortis pede eget a suspendisse, ligula sed. Odio nec, congue placerat in at libero, at cum scelerisque eu nam velit aenean. Vestibulum per, proin adipiscing eu tincidunt et, convallis sollicitudin nunc integer ante parturient. Donec eget eleifend quam ipsum est, porttitor nonummy conubia neque sit netus eu. Ante elit nulla vivamus eu phasellus, nulla rutrum tristique magna luctus.</p>
+			<h2>Add Transaction</h2>
+			<ul>
+				<li>Description: Creates a new transaction.</li>
+				<li>Command: xaction/add</li>
+				<li>Parameters:
+					<ul>
+						<li>name: The name of the transaction</li>
+						<li>date: The date of the transaction (YYYY-MM-DD format)</li>
+					</ul>
+				</li>
+				<li>Response:<br/>
+					<pre class="prettyprint lang-js">{
+   result: &lt;0|1&gt;,
+   messages: [&lt;message0&gt;, &lt;message1&gt;, ...],
+   content: {
+      details: {
+         key: &lt;xactionKey&gt;,
+         name: &lt;xactionName&gt;,
+         date: &lt;xationDate&gt;
+      },
+      entries: { }
+   }
+}</pre>
+				</li>
+			</ul>
+			<h2>Delete Transaction</h2>
+			<ul>
+				<li>Description: Deletes an existing transaction</li>
+				<li>Command: xaction/delete</li>
+				<li>Parameters:
+					<ul>
+						<li>key: The key of the transaction</li>
+					</ul>
+				</li>
+				<li>Response:<br/>
+					<pre class="prettyprint lang-js">{
+   result: &lt;0|1&gt;,
+   messages: [&lt;message0&gt;, &lt;message1&gt;, ...]
+}</pre>
+			</ul>
+			<h2>Edit Transaction</h2>
+			<ul>
+				<li>Description: Updates an existing transaction</li>
+				<li>Command: xaction/edit</li>
+				<li>Parameters:
+					<ul>
+						<li>key: The key of the transaction</li>
+						<li>name: The new name of the transaction</li>
+						<li>date: The new date of the transaction</li>
+					</ul>
+				</li>
+				<li>Response:<br/>
+					<pre class="prettyprint lang-js">{
+   result: &lt;0|1&gt;,
+   messages: [&lt;message0&gt;, &lt;message1&gt;, ...],
+   content: {
+      key: &lt;xactionKey&gt;,
+      name: &lt;xactionName&gt;,
+      date: &lt;xactionDate&gt;
+   }
+}</pre>
+			</ul>
+			<h2>Query Transactions</h2>
+			<ul>
+				<li>Description: Queries the server for a list of accounts.</li>
+				<li>Command: account/q</li>
+				<li>Parameters:
+					<ul>
+						<li>month: The month containing the transactions to be returned</li>
+					</ul>
+				</li>
+				<li>Response:<br/>
+					<pre class="prettyprint lang-js">{
+   result: &lt;0|1&gt;,
+   messages: [&lt;message0&gt;, &lt;message1&gt;, ...],
+   content: [
+      {
+         details: {
+            key: &lt;xactionKey&gt;,
+            name: &lt;xactionName&gt;,
+            date: &lt;xationDate&gt;
+         },
+         entries: {
+            &lt;accountKey0&gt;: &lt;entryAmount0&gt;,
+            &lt;accountKey1&gt;: &lt;entryAmount1&gt;,
+            ...
+         }
+      },
+      ...
+   ]      
+}</pre>
+				</li>
+			</ul>
 		</div>
 	</body>
 </html>

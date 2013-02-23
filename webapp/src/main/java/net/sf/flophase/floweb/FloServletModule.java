@@ -7,6 +7,7 @@ import net.sf.flophase.floweb.account.EditAccountServlet;
 import net.sf.flophase.floweb.cashflow.CashFlowQueryServlet;
 import net.sf.flophase.floweb.entry.EditEntryServlet;
 import net.sf.flophase.floweb.xaction.AddTransactionServlet;
+import net.sf.flophase.floweb.xaction.CopyTransactionServlet;
 import net.sf.flophase.floweb.xaction.DeleteTransactionServlet;
 import net.sf.flophase.floweb.xaction.EditTransactionServlet;
 import net.sf.flophase.floweb.xaction.TransactionQueryServlet;
@@ -28,10 +29,10 @@ public class FloServletModule extends ServletModule {
 
 		serve("/xaction/q").with(TransactionQueryServlet.class);
 		serve("/xaction/add").with(AddTransactionServlet.class);
+		serve("/xaction/copy").with(CopyTransactionServlet.class);
 		serve("/xaction/delete").with(DeleteTransactionServlet.class);
 		serve("/xaction/edit").with(EditTransactionServlet.class);
 
-		serve("/entry/add").with(EditEntryServlet.class);
 		serve("/entry/edit").with(EditEntryServlet.class);
 	}
 

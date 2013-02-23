@@ -631,14 +631,9 @@ define(["dojo/dom",
          * @param xaction The transaction that was added
          */
         onTransactionAdd: function(xaction) {
-        	var cashflow = app.getCashflow();
+        	var dateRange = app.getCashflow().getCurrentDateRange();
         	
-        	var startMonth = locale.format(cashflow.getStartMonth(), {selector:'date', datePattern: "yyyy-MM-dd"});
-        	
-        	var endMonth = date.add(cashflow.getEndMonth(), "month", 1);
-        	endMonth = locale.format(endMonth, {selector:'date', datePattern: "yyyy-MM-dd"});
-        	
-        	if (xaction.details.date >= startMonth && xaction.details.date < endMonth) {
+        	if (xaction.details.date >= dateRange.start && xaction.details.date < dateRange.end) {
 	            //get the current list of accounts
 	            var accounts = app.getCashflow().getAccounts();
 	
@@ -648,7 +643,7 @@ define(["dojo/dom",
 	            
 	            $(tbody).show();
         	} else {
-        		console.log('xaction created outside range: [' + startMonth + ' to ' + endMonth + ')');
+        		console.log('xaction created outside range: [' + dateRange.start + ' to ' + dateRange.end + ')');
         	}
         },
         /**
@@ -660,6 +655,11 @@ define(["dojo/dom",
             var xactionRow = dom.byId('xaction_'+xactionKey);
 
             xactionRow.parentNode.removeChild(xactionRow);
+            
+            var widgets = dijit.findWidgets(xactionRow);
+            dojo.forEach(widgets, function(w) {
+                w.destroyRecursive(true);
+            });
         },
         /**
          * This method is invoked when a transaction is updated
@@ -667,50 +667,65 @@ define(["dojo/dom",
          * @param xaction The transaction that was updated
          */
         onTransactionUpdate: function(xaction) {
-            //ensure the name is up to date
-            var xactionNameCell = dom.byId('name_'+xaction.details.key);
-            xactionNameCell.replaceChild(
-                    document.createTextNode(xaction.details.name),
-                    xactionNameCell.firstChild
-                );
-
-            var xactionRow = dom.byId('xaction_'+xaction.details.key);
-            
-            //first check if it's already in the right spot
-            var prevDate = null;
-            var nextDate = null;
-            
-            var prevRow = xactionRow.previousSibling;
-            if (prevRow != null) {
-            	var prevXactionKey = prevRow.id.substring(8); //evertything after 'xaction_'
-            	prevDate = dojo.date.stamp.toISOString(dijit.byId('dateInput_'+prevXactionKey).value, {selector: 'date'});
-            }
-            
-            var nextRow = xactionRow.nextSibling;
-            if (nextRow != null) {
-            	var nextXactionKey = nextRow.id.substring(8); //evertything after 'xaction_'
-            	nextDate = dojo.date.stamp.toISOString(dijit.byId('dateInput_'+nextXactionKey).value, {selector: 'date'});
-            }
-            
-            var currentDate = dojo.date.stamp.toISOString(new Date(), {selector: 'date'});
-            
-            //if the xaction is not between the right rows
-            if (
-            		(prevRow != null && prevDate > xaction.details.date) || 
-            		(nextRow != null && nextDate < xaction.details.date) ||
-            		(prevRow == null && xaction.details.date < currentDate) ||
-            		(nextRow == null && xaction.details.date > currentDate)) {
-            
-	            var tbody = xactionRow.parentNode;
-	            tbody.removeChild(xactionRow);
+        	var xactionRow = dom.byId('xaction_'+xaction.details.key);
+        	
+        	var dateRange = app.getCashflow().getCurrentDateRange();
+        	
+        	//if the transaction is between the currently displayed dates
+        	if (xaction.details.date >= dateRange.start && xaction.details.date < dateRange.end) {
+	            //ensure the name is up to date
+	            var xactionNameCell = dom.byId('name_'+xaction.details.key);
+	            xactionNameCell.replaceChild(
+	                    document.createTextNode(xaction.details.name),
+	                    xactionNameCell.firstChild
+	                );
 	            
-	            if (tbody.firstChild == null) {
-	            	$(tbody).hide();
+	            //first check if it's already in the right spot
+	            var prevDate = null;
+	            var nextDate = null;
+	            
+	            var prevRow = xactionRow.previousSibling;
+	            if (prevRow != null) {
+	            	var prevXactionKey = prevRow.id.substring(8); //evertything after 'xaction_'
+	            	prevDate = dojo.date.stamp.toISOString(dijit.byId('dateInput_'+prevXactionKey).value, {selector: 'date'});
 	            }
 	            
-	            //move the table row to the correct spot
-	            this.attachTransactionRow(xactionRow, xaction);
-            }
+	            var nextRow = xactionRow.nextSibling;
+	            if (nextRow != null) {
+	            	var nextXactionKey = nextRow.id.substring(8); //evertything after 'xaction_'
+	            	nextDate = dojo.date.stamp.toISOString(dijit.byId('dateInput_'+nextXactionKey).value, {selector: 'date'});
+	            }
+	            
+	            var currentDate = dojo.date.stamp.toISOString(new Date(), {selector: 'date'});
+	            
+	            
+	            
+	            //if the xaction is not between the right rows
+	            if (
+	            		(prevRow != null && prevDate > xaction.details.date) || 
+	            		(nextRow != null && nextDate < xaction.details.date) ||
+	            		(prevRow == null && xaction.details.date <= currentDate) ||
+	            		(nextRow == null && xaction.details.date > currentDate)) {
+	            
+		            var tbody = xactionRow.parentNode;
+		            tbody.removeChild(xactionRow);
+		            
+		            if (tbody.firstChild == null) {
+		            	$(tbody).hide();
+		            }
+		            
+		            //move the table row to the correct spot
+		            this.attachTransactionRow(xactionRow, xaction);
+	            }
+        	} else {
+        		var tbody = xactionRow.parentNode;
+	            tbody.removeChild(xactionRow);
+	            
+	            var widgets = dijit.findWidgets(xactionRow);
+	            dojo.forEach(widgets, function(w) {
+	                w.destroyRecursive(true);
+	            });
+        	}
         },
         onTransactionLoad: function(cashflow) {
         	var xactions = cashflow.getTransactions();

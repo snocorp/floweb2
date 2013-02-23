@@ -145,6 +145,75 @@ public class FloTransactionService implements TransactionService {
 	}
 
 	@Override
+	public Response<FinancialTransaction> copyTransaction(String key, String name, String date) {
+		Response<FinancialTransaction> response = 
+				new Response<FinancialTransaction>(Response.RESULT_SUCCESS);
+
+		// if the user is logged in
+		if (userService.isUserLoggedIn()) {
+			if (name == null || name.length() == 0) {
+				response.setResult(Response.RESULT_FAILURE);
+
+				response.addMessage("Description is required");
+			} else if (name.length() > MAX_NAME_LENGTH) {
+				// respond with failure
+				response.setResult(Response.RESULT_FAILURE);
+
+				// indicate the name is missing
+				response.addMessage("Description must be no longer than " + MAX_NAME_LENGTH + " characters");
+			}
+
+			Date xactionDate = null;
+			if (date == null || date.length() == 0) {
+				response.setResult(Response.RESULT_FAILURE);
+
+				response.addMessage("Date is required");
+			} else {
+				// attempt to parse the date
+				SimpleDateFormat format = new SimpleDateFormat(Constants.ISO_DATE_FORMAT);
+				try {
+					xactionDate = format.parse(date);
+				} catch (ParseException e) {
+					response.setResult(Response.RESULT_FAILURE);
+
+					response.addMessage("Date was not in the correct format (" + Constants.ISO_DATE_FORMAT + ")");
+				}
+			}
+
+			long id = Long.MIN_VALUE;
+			try {
+				// try to parse the given key
+				id = Long.parseLong(key);
+			}
+			// if the key could not be parsed
+			catch (NumberFormatException e) {
+				// respond with failure
+				response.setResult(Response.RESULT_FAILURE);
+
+				// indicate the key is not valid
+				response.addMessage("The key is not valid");
+			}
+
+			if (response.getResult() == Response.RESULT_SUCCESS) {
+				// create the transaction
+				FinancialTransaction xaction = xactionStore.copyTransaction(id, name, xactionDate);
+
+				response.setContent(xaction);
+			}
+		}
+		// if the user is not logged in
+		else {
+			// response with failure
+			response.setResult(Response.RESULT_FAILURE);
+
+			// indicate permission was denied
+			response.addMessage("Permission denied");
+		}
+
+		return response;
+	}
+
+	@Override
 	public Response<Void> deleteTransaction(String key) {
 		Response<Void> response = new Response<Void>(Response.RESULT_SUCCESS);
 

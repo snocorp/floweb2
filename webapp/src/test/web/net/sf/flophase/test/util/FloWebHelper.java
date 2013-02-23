@@ -209,7 +209,7 @@ public class FloWebHelper {
 
 		// clear the value and input a new name
 		newTransactionNameInput.clear();
-		newTransactionNameInput.sendKeys("Transaction 1");
+		newTransactionNameInput.sendKeys(name);
 		
 		String year = String.valueOf(cal.get(Calendar.YEAR));
 		

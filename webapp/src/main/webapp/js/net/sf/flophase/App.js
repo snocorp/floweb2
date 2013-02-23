@@ -6,6 +6,7 @@ define([
         "net/sf/flophase/ui/Grid",
         "net/sf/flophase/ui/AddAccountDialog",
         "net/sf/flophase/ui/AddTransactionDialog",
+        "net/sf/flophase/ui/CopyTransactionDialog",
         "net/sf/flophase/ui/EditAccountDialog",
         "net/sf/flophase/ui/EditTransactionDialog",
         "net/sf/flophase/ui/Toolbar",
@@ -18,6 +19,7 @@ define([
     		grid, 
     		addAccountDialog,
     		addTransactionDialog,
+    		copyTransactionDialog,
     		editAccountDialog,
     		editTransactionDialog,
     		toolbar,
@@ -37,6 +39,7 @@ define([
         	                       grid,
         	                       addAccountDialog,
         	                       addTransactionDialog,
+        	                       copyTransactionDialog,
         	                       editAccountDialog,
         	                       editTransactionDialog,
         	                       toolbar
@@ -115,6 +118,13 @@ define([
             addTransactionDialog.show();
         },
         /**
+         * Shows the copy transaction dialog.
+         * @param xactionKey The transaction key to be copied
+         */
+        showCopyTransaction: function(xactionKey) {
+            copyTransactionDialog.show(xactionKey);
+        },
+        /**
          * Shows the edit account popup.
          */
         showEditAccount: function( event, acctHeaderCellNodeRef, acctKey, acctName ) {
@@ -143,6 +153,12 @@ define([
          */
         hideAddTransaction: function() {
         	addTransactionDialog.hide();
+        },
+        /**
+         * Hides the copy transaction dialog.
+         */
+        hideCopyTransaction: function() {
+        	copyTransactionDialog.hide();
         },
         /**
          * Hides the edit account name popup.
@@ -208,6 +224,32 @@ define([
                error: function(message) {
                    _this.notify(message);
                }
+            });
+        },
+        /**
+         * Copies a transaction.
+         *
+         * @param xactionKey The key of the transaction to be copied.
+         * @param name       The new name of the transaction.
+         * @param date       The new date of the transaction.
+         */
+        copyTransaction: function(xactionKey, name, date) {
+            var _this = this; //store a reference to this
+
+            cashFlowStore.copyTransaction({
+                key: xactionKey,
+                name: name,
+                date: date,
+                success: function(xaction) {
+                    _this.hideCopyTransaction();
+
+                    eventBus.fireTransactionAdd(xaction);
+
+                    eventBus.fireBalanceUpdate(_this.getCashflow().getTransactions());
+                },
+                error: function(message) { 
+                	_this.notify(message); 
+                }
             });
         },
         /**

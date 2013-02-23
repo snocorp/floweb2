@@ -66,6 +66,38 @@ define([], function() {
             });
         },
         /**
+         * Copies a transaction.
+         *
+         * @param options.key The key of the transaction to be copied
+         * @param options.name The name of the transaction
+         * @param options.date The date of the transaction
+         * @param options.success The function to invoke upon success. Takes the new
+         *                        new transaction as a parameter
+         * @param options.error The function to invoke upon error, takes a single
+         *                      string parameter
+         */
+        copyTransaction: function(options) {
+            dojo.xhrGet({
+                url: "xaction/copy",
+                content: {
+                	key: options.key,
+                    name: options.name,
+                    date: options.date
+                },
+                handleAs: "json",
+                load: function(jsonData) {
+                    if (jsonData.result == 1) { //SUCCESS
+                        options.success(jsonData.content);
+                    } else {
+                        options.error(jsonData.messages);
+                    }
+               },
+               error: function() {
+                   options.error("Unable to copy transaction.");
+               }
+            });
+        },
+        /**
          * Deletes a transaction.
          *
          * @param options.key The transaction key

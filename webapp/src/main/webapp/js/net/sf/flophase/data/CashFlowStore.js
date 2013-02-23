@@ -273,6 +273,43 @@ define([
             });
         },
         /**
+         * Copies a transaction from the cashflow.
+         *
+         * @param options.key The key of the transaction to be copied
+         * @param options.name The name of the transaction
+         * @param options.date The date of the transaction
+         * @param options.success The function to invoke upon success. Takes the new
+         *                        new transaction as a parameter
+         * @param options.error The function to invoke upon error
+         */
+        copyTransaction: function(options) {
+            var _this = this; //store a reference to this for use in the callback
+
+            xactionStore.copyTransaction({
+            	key: options.key,
+                name: options.name,
+                date: options.date,
+                success: function(xaction) {
+                	var dateRange = cashflow.getCurrentDateRange();
+                	
+                	//if the date is inside the current range
+                	if (xaction.details.date >= dateRange.start && xaction.details.date < dateRange.end) {
+                		
+                		//add it to the stored set
+	                    var xactions = cashflow.getTransactions();
+	                    xactions.push(xaction);
+	                    xactions.sort(_xactionSorter);
+	                    cashflow.setTransactions(xactions);
+	
+	                    _this.updateBalances();
+                	}
+
+                    options.success(xaction);
+                },
+                error: options.error
+            });
+        },
+        /**
          * Deletes a transaction from the cashflow.
          *
          * @param options.key The transaction key
@@ -287,8 +324,8 @@ define([
                 success: function() {
                     var xactions = cashflow.getTransactions();
                     for (var i in xactions) {
-                        if (xactions[i].key == options.key) {
-                            xactions = xactions.splice(i, 1);
+                        if (xactions[i].details.key == options.key) {
+                            xactions.splice(i, 1);
                             break;
                         }
                     }
@@ -331,6 +368,22 @@ define([
                     //re-sort the transactions
                     var xactions = cashflow.getTransactions();
                     xactions.sort(_xactionSorter);
+                    
+                    var dateRange = cashflow.getCurrentDateRange();
+                    
+                    //if the date is outside the current range
+                    if (xaction.details.date < dateRange.start || xaction.details.date >= dateRange.end) {
+                    	
+                    	//remove the transaction from the stored set
+                    	var xactions = cashflow.getTransactions();
+                        for (var i in xactions) {
+                            if (xactions[i].details.key == options.key) {
+                                xactions.splice(i, 1);
+                                break;
+                            }
+                        }
+                        cashflow.setTransactions(xactions);
+                    }
 
                     _this.updateBalances();
                 	

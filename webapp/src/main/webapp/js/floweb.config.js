@@ -24,6 +24,16 @@ var floweb = {
     	cancelNodeRef:'addTransactionCancel',
     	calendarNodeRef:'newTransactionCalendar'
     },
+    copyTransactionDialog: {
+    	nodeRef:'copyTransactionDialog',
+    	errorNodeRef:'copyTransactionError',
+    	keyNodeRef:'copyTransactionKey',
+    	nameNodeRef:'copyTransactionName',
+    	dateNodeRef:'copyTransactionDate',
+    	okNodeRef:'copyTransactionOk',
+    	cancelNodeRef:'copyTransactionCancel',
+    	calendarNodeRef:'copyTransactionCalendar'
+    },
     editAccountDialog: {
     	nodeRef:'accountEditor',
     	nameNodeRef:'accountName',
@@ -32,6 +42,7 @@ var floweb = {
     editTransactionDialog: {
     	nodeRef:'xactionEditor',
     	nameNodeRef:'xactionName',
+    	copyNodeRef:'xactionCopy',
     	deleteNodeRef:'xactionDelete'
     },
     toolbar: {

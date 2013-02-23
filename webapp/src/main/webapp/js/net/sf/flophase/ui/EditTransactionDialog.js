@@ -10,9 +10,16 @@ define([
 
     return {
     	show: function(nameCellNodeRef, xactionKey, xactionName) {
-            $('#'+floweb.editTransactionDialog.deleteNodeRef).unbind();
+            //reset and bind the delete button
+    		$('#'+floweb.editTransactionDialog.deleteNodeRef).unbind();
             $('#'+floweb.editTransactionDialog.deleteNodeRef).click([ xactionKey ], function(event) {
                 app.deleteTransaction(event.data);
+            });
+            
+            //reset and bind the copy button
+            $('#'+floweb.editTransactionDialog.copyNodeRef).unbind();
+            $('#'+floweb.editTransactionDialog.copyNodeRef).click([ xactionKey ], function(event) {
+                app.showCopyTransaction(event.data);
             });
 
             var xactionNameField = $('#'+floweb.editTransactionDialog.nameNodeRef);

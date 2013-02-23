@@ -66,6 +66,7 @@
 	            </div>
             </section>
         </div>
+        <footer class="footer">&copy; 2013 David Sewell</footer>
         <div id="notification" class="flo-notification" style="display: none;">
             <span id="notificationMsg"></span>
             <a class="jm-close" href="#"></a>
@@ -73,10 +74,12 @@
         <div id="accountEditor" class="flo-editor flo-off-screen">
             <input class="accountname" type="text" id="accountName" data-dojo-type="dijit.form.TextBox"/><br/>
             <button data-dojo-type="dijit.form.Button" type="button" id="accountDelete">Delete</button>
+            
         </div>
         <div id="xactionEditor" class="flo-editor flo-off-screen">
             <input class="xactionname" type="text" id="xactionName" data-dojo-type="dijit.form.TextBox"/><br/>
-            <button data-dojo-type="dijit.form.Button" type="button" id="xactionDelete" class="deletebutton">Delete</button>
+            <button data-dojo-type="dijit.form.Button" type="button" id="xactionCopy">Copy</button>
+            <button data-dojo-type="dijit.form.Button" type="button" id="xactionDelete">Delete</button>
         </div>
         <div id="addAccountDialog" class="flo-off-screen">
             <label for="newAccountName">Name:</label>
@@ -111,6 +114,19 @@
             <div class="flo-dialog-buttonbar">
                 <button id="addTransactionOk" type="button" class="btn">OK</button>
                 <button id="addTransactionCancel" type="button" class="btn">Cancel</button>
+            </div>
+        </div>
+        <div id="copyTransactionDialog" class="flo-off-screen">
+        	<input type="hidden" id="copyTransactionKey" name="key" />
+            <label for="copyTransactionName">Description:</label>
+            <input type="text" id="copyTransactionName" name="name"/><br/>
+            <label for="copyTransactionDate">Date:</label><br/>
+            <div id="copyTransactionCalendar"></div>
+            <input type="hidden" id="copyTransactionDate" name="date" />
+            <div id="copyTransactionError" class="flo-dialog-error" style="display:none;"></div>
+            <div class="flo-dialog-buttonbar">
+                <button id="copyTransactionOk" type="button" class="btn">OK</button>
+                <button id="copyTransactionCancel" type="button" class="btn">Cancel</button>
             </div>
         </div>
         
@@ -154,8 +170,11 @@
             })();
         </script>
 
+        <!-- <script
+        	src="http://download.dojotoolkit.org/release-1.7.2/dojo.js.uncompressed.js"
+            type="text/javascript"></script> -->
         <script
-            src="https://ajax.googleapis.com/ajax/libs/dojo/1.7.2/dojo/dojo.js"
+        	src="https://ajax.googleapis.com/ajax/libs/dojo/1.7.2/dojo/dojo.js"
             type="text/javascript"></script>
         <script
             src="js/floweb.config.js"

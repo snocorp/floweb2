@@ -5,7 +5,8 @@
  * accounts and the transactions as well as key value maps of accounts and
  * transactions.
  */
-define([], function() {
+define(["dojo/date",
+        "dojo/date/locale"], function(date, locale) {
 	
 	/**
 	 * The first day in the earliest month that is loaded.
@@ -48,6 +49,24 @@ define([], function() {
          */
         getStartMonth: function() {
         	return startMonth; 
+        },
+        /**
+         * Creates a range { start, end } that describes the current start to end dates.
+         * 
+         * @returns A range from the current start date (inclusive) 
+         *           to the current end date (exclusive),
+         */
+        getCurrentDateRange: function() {
+        	return { 
+    			start: locale.format(
+    					this.getStartMonth(), 
+    					{selector:'date', datePattern: "yyyy-MM-dd"}
+    				),
+    			end: locale.format(
+    					date.add(this.getEndMonth(), "month", 1), 
+    					{selector:'date', datePattern: "yyyy-MM-dd"}
+    				)
+    		};
         },
         /**
          * Returns the transaction with the given key.

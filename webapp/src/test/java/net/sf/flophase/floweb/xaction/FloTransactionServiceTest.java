@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.sf.flophase.floweb.common.Constants;
 import net.sf.flophase.floweb.common.Response;
@@ -601,6 +602,289 @@ public class FloTransactionServiceTest {
 	}
 
 	/**
+	 * Tests the {@link FloTransactionService#copyTransaction(String, String, String)} method. Ensures the transaction
+	 * store is called with the correct parameters.
+	 * 
+	 * @throws Exception
+	 *             If an error occurs.
+	 */
+	@Test
+	public void testCopyTransaction() throws Exception {
+		final SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.ISO_DATE_FORMAT);
+
+		final Date date = dateFormat.parse(DATE_FEB_12_2012);
+
+		final Map<Long, Entry> entries = new HashMap<Long, Entry>();
+		final FinancialTransaction xaction = new FinancialTransaction( new Transaction(null, TRANSACTION_NAME, date), entries );
+
+		context.checking(new Expectations() {
+			{
+				one(userService).isUserLoggedIn();
+				will(returnValue(true));
+
+				one(xactionStore).copyTransaction(TRANSACTION_KEY, TRANSACTION_NAME, date);
+				will(returnValue(xaction));
+			}
+		});
+
+		Response<FinancialTransaction> response = service.copyTransaction(String.valueOf(TRANSACTION_KEY), TRANSACTION_NAME,
+		        DATE_FEB_12_2012);
+
+		assertThat(response.getResult(), is(equalTo(Response.RESULT_SUCCESS)));
+
+		assertThat(response.getContent(), is(equalTo(xaction)));
+
+		assertTrue(response.getMessages().isEmpty());
+
+		context.assertIsSatisfied();
+	}
+
+	/**
+	 * Tests the {@link FloTransactionService#copyTransaction(String, String, String)} method with no logged in user.
+	 * Ensures a failure response is returned with the correct message.
+	 */
+	@Test
+	public void testCopyTransactionWithNoLoggedInUser() {
+		context.checking(new Expectations() {
+			{
+				one(userService).isUserLoggedIn();
+				will(returnValue(false));
+			}
+		});
+
+		Response<FinancialTransaction> response = service.copyTransaction(String.valueOf(TRANSACTION_KEY), TRANSACTION_NAME,
+		        DATE_FEB_12_2012);
+
+		assertThat(response.getResult(), is(equalTo(Response.RESULT_FAILURE)));
+
+		assertThat(response.getContent(), is(nullValue()));
+
+		assertThat(MSG_PERMISSION_DENIED, isIn(response.getMessages()));
+
+		context.assertIsSatisfied();
+	}
+
+	/**
+	 * Tests the {@link FloTransactionService#copyTransaction(String, String, String)} method with an invalid key.
+	 * Ensures a failure response is returned with the correct message.
+	 */
+	@Test
+	public void testCopyTransactionWithInvalidKey() {
+		context.checking(new Expectations() {
+			{
+				one(userService).isUserLoggedIn();
+				will(returnValue(true));
+			}
+		});
+
+		Response<FinancialTransaction> response = service.copyTransaction(INVALID_KEY, TRANSACTION_NAME, DATE_FEB_12_2012);
+
+		assertThat(response.getResult(), is(equalTo(Response.RESULT_FAILURE)));
+
+		assertThat(response.getContent(), is(nullValue()));
+
+		assertThat(MSG_INVALID_KEY, isIn(response.getMessages()));
+
+		context.assertIsSatisfied();
+	}
+
+	/**
+	 * Tests the {@link FloTransactionService#copyTransaction(String, String, String)} method with a null key. Ensures a
+	 * failure response is returned with the correct message.
+	 */
+	@Test
+	public void testCopyTransactionWithNullKey() {
+		context.checking(new Expectations() {
+			{
+				one(userService).isUserLoggedIn();
+				will(returnValue(true));
+			}
+		});
+
+		Response<FinancialTransaction> response = service.copyTransaction(null, TRANSACTION_NAME, DATE_FEB_12_2012);
+
+		assertThat(response.getResult(), is(equalTo(Response.RESULT_FAILURE)));
+
+		assertThat(response.getContent(), is(nullValue()));
+
+		assertThat(MSG_INVALID_KEY, isIn(response.getMessages()));
+
+		context.assertIsSatisfied();
+	}
+
+	/**
+	 * Tests the {@link FloTransactionService#copyTransaction(String, String, String)} method with an empty key. Ensures
+	 * a failure response is returned with the correct message.
+	 */
+	@Test
+	public void testCopyTransactionWithEmptyKey() {
+		context.checking(new Expectations() {
+			{
+				one(userService).isUserLoggedIn();
+				will(returnValue(true));
+			}
+		});
+
+		Response<FinancialTransaction> response = service.copyTransaction("", TRANSACTION_NAME, DATE_FEB_12_2012);
+
+		assertThat(response.getResult(), is(equalTo(Response.RESULT_FAILURE)));
+
+		assertThat(response.getContent(), is(nullValue()));
+
+		assertThat(MSG_INVALID_KEY, isIn(response.getMessages()));
+
+		context.assertIsSatisfied();
+	}
+
+	/**
+	 * Tests the {@link FloTransactionService#copyTransaction(String, String, String)} method when there is an invalid
+	 * date. Ensures the response indicates failure and the proper message is returned.
+	 */
+	@Test
+	public void testCopyTransactionWithInvalidDate() {
+		context.checking(new Expectations() {
+			{
+				one(userService).isUserLoggedIn();
+				will(returnValue(true));
+			}
+		});
+
+		Response<FinancialTransaction> response = service.copyTransaction(String.valueOf(TRANSACTION_KEY), TRANSACTION_NAME,
+		        INVALID_DATE);
+
+		assertThat(response.getResult(), is(equalTo(Response.RESULT_FAILURE)));
+
+		assertThat(response.getContent(), is(nullValue()));
+
+		assertThat(MSG_INVALID_DATE, isIn(response.getMessages()));
+
+		context.assertIsSatisfied();
+	}
+
+	/**
+	 * Tests the {@link FloTransactionService#copyTransaction(String, String, String)} method when there is a null date.
+	 * Ensures the response indicates failure and the proper message is returned.
+	 */
+	@Test
+	public void testCopyTransactionWithNullDate() {
+		context.checking(new Expectations() {
+			{
+				one(userService).isUserLoggedIn();
+				will(returnValue(true));
+			}
+		});
+
+		Response<FinancialTransaction> response = service.copyTransaction(String.valueOf(TRANSACTION_KEY), TRANSACTION_NAME,
+		        null);
+
+		assertThat(response.getResult(), is(equalTo(Response.RESULT_FAILURE)));
+
+		assertThat(response.getContent(), is(nullValue()));
+
+		assertThat(MSG_MISSING_DATE, isIn(response.getMessages()));
+
+		context.assertIsSatisfied();
+	}
+
+	/**
+	 * Tests the {@link FloTransactionService#copyTransaction(String, String, String)} method when there is an empty
+	 * date. Ensures the response indicates failure and the proper message is returned.
+	 */
+	@Test
+	public void testCopyTransactionWithEmptyDate() {
+		context.checking(new Expectations() {
+			{
+				one(userService).isUserLoggedIn();
+				will(returnValue(true));
+			}
+		});
+
+		Response<FinancialTransaction> response = service.copyTransaction(String.valueOf(TRANSACTION_KEY), TRANSACTION_NAME, "");
+
+		assertThat(response.getResult(), is(equalTo(Response.RESULT_FAILURE)));
+
+		assertThat(response.getContent(), is(nullValue()));
+
+		assertThat(MSG_MISSING_DATE, isIn(response.getMessages()));
+
+		context.assertIsSatisfied();
+	}
+
+	/**
+	 * Tests the {@link FloTransactionService#copyTransaction(String, String, String)} method when there is a null name.
+	 * Ensures the response indicates failure and the proper message is returned.
+	 */
+	@Test
+	public void testCopyTransactionWithNullName() {
+		context.checking(new Expectations() {
+			{
+				one(userService).isUserLoggedIn();
+				will(returnValue(true));
+			}
+		});
+
+		Response<FinancialTransaction> response = service.copyTransaction(String.valueOf(TRANSACTION_KEY), null,
+		        DATE_FEB_12_2012);
+
+		assertThat(response.getResult(), is(equalTo(Response.RESULT_FAILURE)));
+
+		assertThat(response.getContent(), is(nullValue()));
+
+		assertThat(MSG_MISSING_NAME, isIn(response.getMessages()));
+
+		context.assertIsSatisfied();
+	}
+
+	/**
+	 * Tests the {@link FloTransactionService#copyTransaction(String, String, String)} method when there is an empty
+	 * name. Ensures the response indicates failure and the proper message is returned.
+	 */
+	@Test
+	public void testCopyTransactionWithEmptyName() {
+		context.checking(new Expectations() {
+			{
+				one(userService).isUserLoggedIn();
+				will(returnValue(true));
+			}
+		});
+
+		Response<FinancialTransaction> response = service.copyTransaction(String.valueOf(TRANSACTION_KEY), "", DATE_FEB_12_2012);
+
+		assertThat(response.getResult(), is(equalTo(Response.RESULT_FAILURE)));
+
+		assertThat(response.getContent(), is(nullValue()));
+
+		assertThat(MSG_MISSING_NAME, isIn(response.getMessages()));
+
+		context.assertIsSatisfied();
+	}
+
+	/**
+	 * Tests the {@link FloTransactionService#copyTransaction(String, String, String)} method when there is an empty
+	 * name. Ensures the response indicates failure and the proper message is returned.
+	 */
+	@Test
+	public void testCopyTransactionWithNameTooLong() {
+		context.checking(new Expectations() {
+			{
+				one(userService).isUserLoggedIn();
+				will(returnValue(true));
+			}
+		});
+
+		Response<FinancialTransaction> response = service.copyTransaction(String.valueOf(TRANSACTION_KEY),
+		        INVALID_TRANSACTION_NAME_TOO_LONG, DATE_FEB_12_2012);
+
+		assertThat(response.getResult(), is(equalTo(Response.RESULT_FAILURE)));
+
+		assertThat(response.getContent(), is(nullValue()));
+
+		assertThat(MSG_NAME_TOO_LONG, isIn(response.getMessages()));
+
+		context.assertIsSatisfied();
+	}
+
+	/**
 	 * Tests the {@link FloTransactionService#editTransaction(String, String, String)} method. Ensures the transaction
 	 * store is called with the correct parameters.
 	 * 
@@ -610,30 +894,30 @@ public class FloTransactionServiceTest {
 	@Test
 	public void testEditTransaction() throws Exception {
 		final SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.ISO_DATE_FORMAT);
-
+	
 		final Date date = dateFormat.parse(DATE_FEB_12_2012);
-
+	
 		final Transaction xaction = new Transaction(null, TRANSACTION_NAME, date);
-
+	
 		context.checking(new Expectations() {
 			{
 				one(userService).isUserLoggedIn();
 				will(returnValue(true));
-
+	
 				one(xactionStore).editTransaction(TRANSACTION_KEY, TRANSACTION_NAME, date);
 				will(returnValue(xaction));
 			}
 		});
-
+	
 		Response<Transaction> response = service.editTransaction(String.valueOf(TRANSACTION_KEY), TRANSACTION_NAME,
 		        DATE_FEB_12_2012);
-
+	
 		assertThat(response.getResult(), is(equalTo(Response.RESULT_SUCCESS)));
-
+	
 		assertThat(response.getContent(), is(equalTo(xaction)));
-
+	
 		assertTrue(response.getMessages().isEmpty());
-
+	
 		context.assertIsSatisfied();
 	}
 
@@ -649,16 +933,16 @@ public class FloTransactionServiceTest {
 				will(returnValue(false));
 			}
 		});
-
+	
 		Response<Transaction> response = service.editTransaction(String.valueOf(TRANSACTION_KEY), TRANSACTION_NAME,
 		        DATE_FEB_12_2012);
-
+	
 		assertThat(response.getResult(), is(equalTo(Response.RESULT_FAILURE)));
-
+	
 		assertThat(response.getContent(), is(nullValue()));
-
+	
 		assertThat(MSG_PERMISSION_DENIED, isIn(response.getMessages()));
-
+	
 		context.assertIsSatisfied();
 	}
 
@@ -674,15 +958,15 @@ public class FloTransactionServiceTest {
 				will(returnValue(true));
 			}
 		});
-
+	
 		Response<Transaction> response = service.editTransaction(INVALID_KEY, TRANSACTION_NAME, DATE_FEB_12_2012);
-
+	
 		assertThat(response.getResult(), is(equalTo(Response.RESULT_FAILURE)));
-
+	
 		assertThat(response.getContent(), is(nullValue()));
-
+	
 		assertThat(MSG_INVALID_KEY, isIn(response.getMessages()));
-
+	
 		context.assertIsSatisfied();
 	}
 
@@ -698,15 +982,15 @@ public class FloTransactionServiceTest {
 				will(returnValue(true));
 			}
 		});
-
+	
 		Response<Transaction> response = service.editTransaction(null, TRANSACTION_NAME, DATE_FEB_12_2012);
-
+	
 		assertThat(response.getResult(), is(equalTo(Response.RESULT_FAILURE)));
-
+	
 		assertThat(response.getContent(), is(nullValue()));
-
+	
 		assertThat(MSG_INVALID_KEY, isIn(response.getMessages()));
-
+	
 		context.assertIsSatisfied();
 	}
 
@@ -722,15 +1006,15 @@ public class FloTransactionServiceTest {
 				will(returnValue(true));
 			}
 		});
-
+	
 		Response<Transaction> response = service.editTransaction("", TRANSACTION_NAME, DATE_FEB_12_2012);
-
+	
 		assertThat(response.getResult(), is(equalTo(Response.RESULT_FAILURE)));
-
+	
 		assertThat(response.getContent(), is(nullValue()));
-
+	
 		assertThat(MSG_INVALID_KEY, isIn(response.getMessages()));
-
+	
 		context.assertIsSatisfied();
 	}
 
@@ -746,16 +1030,16 @@ public class FloTransactionServiceTest {
 				will(returnValue(true));
 			}
 		});
-
+	
 		Response<Transaction> response = service.editTransaction(String.valueOf(TRANSACTION_KEY), TRANSACTION_NAME,
 		        INVALID_DATE);
-
+	
 		assertThat(response.getResult(), is(equalTo(Response.RESULT_FAILURE)));
-
+	
 		assertThat(response.getContent(), is(nullValue()));
-
+	
 		assertThat(MSG_INVALID_DATE, isIn(response.getMessages()));
-
+	
 		context.assertIsSatisfied();
 	}
 
@@ -771,16 +1055,16 @@ public class FloTransactionServiceTest {
 				will(returnValue(true));
 			}
 		});
-
+	
 		Response<Transaction> response = service.editTransaction(String.valueOf(TRANSACTION_KEY), TRANSACTION_NAME,
 		        null);
-
+	
 		assertThat(response.getResult(), is(equalTo(Response.RESULT_FAILURE)));
-
+	
 		assertThat(response.getContent(), is(nullValue()));
-
+	
 		assertThat(MSG_MISSING_DATE, isIn(response.getMessages()));
-
+	
 		context.assertIsSatisfied();
 	}
 
@@ -796,15 +1080,15 @@ public class FloTransactionServiceTest {
 				will(returnValue(true));
 			}
 		});
-
+	
 		Response<Transaction> response = service.editTransaction(String.valueOf(TRANSACTION_KEY), TRANSACTION_NAME, "");
-
+	
 		assertThat(response.getResult(), is(equalTo(Response.RESULT_FAILURE)));
-
+	
 		assertThat(response.getContent(), is(nullValue()));
-
+	
 		assertThat(MSG_MISSING_DATE, isIn(response.getMessages()));
-
+	
 		context.assertIsSatisfied();
 	}
 
@@ -820,16 +1104,16 @@ public class FloTransactionServiceTest {
 				will(returnValue(true));
 			}
 		});
-
+	
 		Response<Transaction> response = service.editTransaction(String.valueOf(TRANSACTION_KEY), null,
 		        DATE_FEB_12_2012);
-
+	
 		assertThat(response.getResult(), is(equalTo(Response.RESULT_FAILURE)));
-
+	
 		assertThat(response.getContent(), is(nullValue()));
-
+	
 		assertThat(MSG_MISSING_NAME, isIn(response.getMessages()));
-
+	
 		context.assertIsSatisfied();
 	}
 
@@ -845,15 +1129,15 @@ public class FloTransactionServiceTest {
 				will(returnValue(true));
 			}
 		});
-
+	
 		Response<Transaction> response = service.editTransaction(String.valueOf(TRANSACTION_KEY), "", DATE_FEB_12_2012);
-
+	
 		assertThat(response.getResult(), is(equalTo(Response.RESULT_FAILURE)));
-
+	
 		assertThat(response.getContent(), is(nullValue()));
-
+	
 		assertThat(MSG_MISSING_NAME, isIn(response.getMessages()));
-
+	
 		context.assertIsSatisfied();
 	}
 
@@ -869,16 +1153,16 @@ public class FloTransactionServiceTest {
 				will(returnValue(true));
 			}
 		});
-
+	
 		Response<Transaction> response = service.editTransaction(String.valueOf(TRANSACTION_KEY),
 		        INVALID_TRANSACTION_NAME_TOO_LONG, DATE_FEB_12_2012);
-
+	
 		assertThat(response.getResult(), is(equalTo(Response.RESULT_FAILURE)));
-
+	
 		assertThat(response.getContent(), is(nullValue()));
-
+	
 		assertThat(MSG_NAME_TOO_LONG, isIn(response.getMessages()));
-
+	
 		context.assertIsSatisfied();
 	}
 

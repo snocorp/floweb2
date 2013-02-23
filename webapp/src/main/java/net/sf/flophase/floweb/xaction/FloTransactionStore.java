@@ -73,6 +73,26 @@ public class FloTransactionStore implements TransactionStore {
 	}
 
 	@Override
+	public FinancialTransaction copyTransaction(long id, String name, Date date) {
+		// get the user's cash flow
+		CashFlow cashflow = cashflowStore.getCashFlow();
+				
+		Key<Transaction> key = new Key<Transaction>(cashflow.getKey(), Transaction.class, id);
+		Transaction original = dao.getTransaction(key);
+		Map<Long, Entry> origEntries = entryStore.getEntries(original);
+		
+		Transaction copy = dao.createTransaction(cashflow, name, date);
+		final long copyId = copy.getKey().getId();
+		
+		//copy all the entries
+		for (Map.Entry<Long,Entry> entry : origEntries.entrySet()) {
+			entryStore.editEntry(entry.getKey(), copyId, entry.getValue().getAmount());
+		}
+
+		return new FinancialTransaction( copy, entryStore.getEntries(copy));
+	}
+
+	@Override
 	public Transaction editTransaction(long id, String name, Date date) {
 		// get the user's cash flow
 		CashFlow cashflow = cashflowStore.getCashFlow();

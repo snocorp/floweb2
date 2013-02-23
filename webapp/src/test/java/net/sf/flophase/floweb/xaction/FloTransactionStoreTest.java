@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import net.sf.flophase.floweb.account.Account;
 import net.sf.flophase.floweb.cashflow.CashFlow;
 import net.sf.flophase.floweb.cashflow.CashFlowStore;
 import net.sf.flophase.floweb.entry.Entry;
@@ -32,7 +32,12 @@ public class FloTransactionStoreTest {
 	/**
 	 * The transaction name.
 	 */
-	private static final String TRANSACTION_NAME = "Transaction1";
+	private static final String TRANSACTION_NAME_1 = "Transaction1";
+
+	/**
+	 * The second transaction name.
+	 */
+	private static final String TRANSACTION_NAME_2 = "Transaction2";
 
 	/**
 	 * The cash flow id.
@@ -42,7 +47,22 @@ public class FloTransactionStoreTest {
 	/**
 	 * The transaction id.
 	 */
-	private static final long TRANSACTION_ID = 2L;
+	private static final long TRANSACTION_ID_1 = 2L;
+
+	/**
+	 * The transaction id.
+	 */
+	private static final long TRANSACTION_ID_2 = 4L;
+
+	/**
+	 * The account id.
+	 */
+	private static final long ACCOUNT_ID = 3L;
+	
+	/**
+	 * The entry amount.
+	 */
+	private static final double ENTRY_AMOUNT = 1.23;
 
 	/**
 	 * The mock context.
@@ -119,12 +139,12 @@ public class FloTransactionStoreTest {
 				one(cashflowStore).getCashFlow();
 				will(returnValue(cashflow));
 
-				one(xactionDAO).createTransaction(cashflow, TRANSACTION_NAME, date);
+				one(xactionDAO).createTransaction(cashflow, TRANSACTION_NAME_1, date);
 				will(returnValue(xaction));
 			}
 		});
 
-		Transaction transaction = store.createTransaction(TRANSACTION_NAME, date);
+		Transaction transaction = store.createTransaction(TRANSACTION_NAME_1, date);
 
 		assertThat(transaction, is(equalTo(xaction)));
 
@@ -138,7 +158,7 @@ public class FloTransactionStoreTest {
 	@Test
 	public void testDeleteTransaction() {
 		final CashFlow cashflow = getMockCashFlow();
-		final Key<Transaction> key = new Key<Transaction>(cashflow.getKey(), Transaction.class, TRANSACTION_ID);
+		final Key<Transaction> key = new Key<Transaction>(cashflow.getKey(), Transaction.class, TRANSACTION_ID_1);
 
 		context.checking(new Expectations() {
 			{
@@ -149,7 +169,7 @@ public class FloTransactionStoreTest {
 			}
 		});
 
-		store.deleteTransaction(TRANSACTION_ID);
+		store.deleteTransaction(TRANSACTION_ID_1);
 
 		context.assertIsSatisfied();
 	}
@@ -161,7 +181,7 @@ public class FloTransactionStoreTest {
 	@Test
 	public void testEditTransaction() {
 		final CashFlow cashflow = getMockCashFlow();
-		final Key<Transaction> key = new Key<Transaction>(cashflow.getKey(), Transaction.class, TRANSACTION_ID);
+		final Key<Transaction> key = new Key<Transaction>(cashflow.getKey(), Transaction.class, TRANSACTION_ID_1);
 		final Date date = new Date();
 
 		final Transaction xaction = new Transaction();
@@ -171,12 +191,12 @@ public class FloTransactionStoreTest {
 				one(cashflowStore).getCashFlow();
 				will(returnValue(cashflow));
 
-				one(xactionDAO).editTransaction(with(equal(key)), with(equal(TRANSACTION_NAME)), with(equal(date)));
+				one(xactionDAO).editTransaction(with(equal(key)), with(equal(TRANSACTION_NAME_1)), with(equal(date)));
 				will(returnValue(xaction));
 			}
 		});
 
-		Transaction transaction = store.editTransaction(TRANSACTION_ID, TRANSACTION_NAME, date);
+		Transaction transaction = store.editTransaction(TRANSACTION_ID_1, TRANSACTION_NAME_1, date);
 
 		assertThat(transaction, is(equalTo(xaction)));
 
@@ -191,7 +211,7 @@ public class FloTransactionStoreTest {
 	public void testGetTransactions() {
 		final CashFlow cashflow = new CashFlow();
 		final Date date = new Date();
-		final Transaction transaction = new Transaction(null, TRANSACTION_NAME, date);
+		final Transaction transaction = new Transaction(null, TRANSACTION_NAME_1, date);
 
 		final List<Transaction> xactions = new ArrayList<Transaction>();
 		xactions.add(transaction);
@@ -205,7 +225,7 @@ public class FloTransactionStoreTest {
 				will(returnValue(xactions));
 
 				one(entryStore).getEntries(transaction);
-				will(returnValue(new HashMap<Key<Account>, Entry>()));
+				will(returnValue(new HashMap<Long, Entry>()));
 			}
 		});
 
@@ -226,7 +246,7 @@ public class FloTransactionStoreTest {
 	public void testGetTransaction() {
 		final CashFlow cashflow = getMockCashFlow();
 
-		final Key<Transaction> key = new Key<Transaction>(cashflow.getKey(), Transaction.class, TRANSACTION_ID);
+		final Key<Transaction> key = new Key<Transaction>(cashflow.getKey(), Transaction.class, TRANSACTION_ID_1);
 
 		final Transaction xaction = new Transaction();
 
@@ -240,10 +260,62 @@ public class FloTransactionStoreTest {
 			}
 		});
 
-		Transaction transaction = store.getTransaction(TRANSACTION_ID);
+		Transaction transaction = store.getTransaction(TRANSACTION_ID_1);
 
 		assertThat(transaction, is(equalTo(xaction)));
 
+		context.assertIsSatisfied();
+	}
+	
+	
+	@Test
+	public void testCopyTransaction() throws Exception {
+		final CashFlow cashflow = getMockCashFlow();
+		final Key<Transaction> origKey = new Key<Transaction>(cashflow.getKey(), Transaction.class, TRANSACTION_ID_1);
+		final Key<Transaction> copyKey = new Key<Transaction>(cashflow.getKey(), Transaction.class, TRANSACTION_ID_2);
+		final Date date = new Date();
+		
+		final Transaction original = new Transaction();
+		final Map<Long, Entry> origEntries = new HashMap<Long, Entry>();
+		origEntries.put(ACCOUNT_ID, new Entry(origKey, ACCOUNT_ID, ENTRY_AMOUNT));
+		
+		final Transaction copy = new Transaction() {
+
+			@Override
+			public Key<Transaction> getKey() {
+				return copyKey;
+			}
+			
+		};
+		final Map<Long, Entry> copyEntries = new HashMap<Long, Entry>();
+		copyEntries.put(ACCOUNT_ID, new Entry(copyKey, ACCOUNT_ID, ENTRY_AMOUNT));
+		
+		context.checking(new Expectations() {
+			{
+				one(cashflowStore).getCashFlow();
+				will(returnValue(cashflow));
+
+				one(xactionDAO).getTransaction(origKey);
+				will(returnValue(original));
+				
+				one(entryStore).getEntries(original);
+				will(returnValue(origEntries));
+				
+				one(xactionDAO).createTransaction(cashflow, TRANSACTION_NAME_2, date);
+				will(returnValue(copy));
+				
+				one(entryStore).editEntry(ACCOUNT_ID, TRANSACTION_ID_2, ENTRY_AMOUNT);
+				
+				one(entryStore).getEntries(copy);
+				will(returnValue(copyEntries));
+			}
+		});
+		
+		FinancialTransaction actualCopy = store.copyTransaction(TRANSACTION_ID_1, TRANSACTION_NAME_2, date);
+		
+		assertThat( actualCopy.getDetails().getKey(), is(equalTo(copyKey)));
+		assertThat(actualCopy.getEntries(), is(equalTo(copyEntries)));
+		
 		context.assertIsSatisfied();
 	}
 
