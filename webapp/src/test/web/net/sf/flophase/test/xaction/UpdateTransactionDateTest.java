@@ -4,8 +4,6 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 import static org.junit.Assume.*;
 
-import java.text.DateFormat;
-import java.text.FieldPosition;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
@@ -111,10 +109,10 @@ public class UpdateTransactionDateTest {
 		assertNotNull("Expected transaction row in historic section", xactionRow);
 
 		String rowCellId = xactionRow.getAttribute("id");
-		String accountId = rowCellId.substring(rowCellId.indexOf('_') + 1);
+		String xactionId = rowCellId.substring(rowCellId.indexOf('_') + 1);
 
 		WebElement dateInput = helper.waitForElement(By.id("dateInput_"
-				+ accountId));
+				+ xactionId));
 		dateInput.click();
 
 		// select tomorrow by the keyboard
@@ -132,7 +130,7 @@ public class UpdateTransactionDateTest {
 		assertNotNull("Expected transaction row in upcoming section", xactionRow);
 
 		// get the input again
-		dateInput = helper.waitForElement(By.id("dateInput_" + accountId));
+		dateInput = helper.waitForElement(By.id("dateInput_" + xactionId));
 
 		// point the calendar to today
 		cal.add(Calendar.DATE, 2);
@@ -205,7 +203,55 @@ public class UpdateTransactionDateTest {
 	}
 
 	/**
-	 * Creates a transaction for today and sets its date to yesterday.
+	 * Creates a transaction for today and sets its date to next month.
+	 * 
+	 * @throws Exception
+	 *             If an error occurs
+	 */
+	@Test
+	public void testUpdateDateFromTodayToNextMonth() throws Exception {
+		Calendar cal = Calendar.getInstance();
+		calendarHelper.setToMidnight(cal);
+
+		// add the transaction
+		helper.addTransaction("Transaction 1", cal);
+
+		// point the calendar to next month
+		cal.add(Calendar.MONTH, 1);
+
+		// find the transaction row that was created
+		WebElement xactionRow = driver
+				.findElement(By
+						.xpath("//table[@id='cashFlowTable']/tbody[@id='historicBody']/tr"));
+		
+		assertNotNull("Expected transaction row in historic section", xactionRow);
+
+		String rowCellId = xactionRow.getAttribute("id");
+		String xactionId = rowCellId.substring(rowCellId.indexOf('_') + 1);
+		
+		helper.updateTransaction(xactionId, cal);
+
+		// get the input again
+		List<WebElement> dateInputsAfterUpdate = driver.findElements(By.id("dateInput_" + xactionId));
+		
+		assertTrue("Expected transaction to be out of range", dateInputsAfterUpdate.isEmpty());
+		
+		driver.findElement(By.id("loadUpcoming")).click();
+		
+		//wait a little bit
+		Thread.sleep(250);
+
+		// get the input again
+		WebElement dateInput = helper.waitForElement(By.id("dateInput_" + xactionId));
+
+		// make sure the transaction date is changed
+		assertEquals(
+				new SimpleDateFormat(FloCalendarHelper.ARIANOW_DATE_FORMAT).format(cal
+						.getTime()), dateInput.getAttribute("aria-valuenow"));
+	}
+
+	/**
+	 * Creates a transaction for today and sets its date to last month.
 	 * 
 	 * @throws Exception
 	 *             If an error occurs
@@ -230,42 +276,8 @@ public class UpdateTransactionDateTest {
 
 		String rowCellId = xactionRow.getAttribute("id");
 		String xactionId = rowCellId.substring(rowCellId.indexOf('_') + 1);
-
-		WebElement dateInput = helper.waitForElement(By.id("dateInput_"
-				+ xactionId));
-		dateInput.click();
-
-		// wait for things to happen
-		Thread.sleep(500);
-
-		int month = cal.get(Calendar.MONTH);
-
-		// open the month selector
-		driver.findElement(
-				By.cssSelector("#widget_dateInput_" + xactionId + "_dropdown span.dijitArrowButtonInner"))
-				.click();
-
-		// wait for things to happen
-		Thread.sleep(500);
-
-		driver.findElement(
-				By.xpath("//div[@id='dateInput_" + xactionId + "_popup_mddb_mdd']/div[@month='"
-						+ month + "']")).click();
-
-		// wait for things to happen
-		Thread.sleep(500);
-
-		// find the week and day of the week for today
-		int week = cal.get(Calendar.WEEK_OF_MONTH);
-		int day = cal.get(Calendar.DAY_OF_WEEK);
-
-		// find the date on the calendar
-		driver.findElement(
-				By.xpath("//table[@id='dateInput_"+xactionId+"_popup']/tbody/tr["
-						+ week + "]/td[" + day + "]/span")).click();
-
-		// wait for things to happen
-		Thread.sleep(1000);
+		
+		helper.updateTransaction(xactionId, cal);
 
 		// get the input again
 		List<WebElement> dateInputsAfterUpdate = driver.findElements(By.id("dateInput_" + xactionId));
@@ -278,7 +290,7 @@ public class UpdateTransactionDateTest {
 		Thread.sleep(250);
 
 		// get the input again
-		dateInput = helper.waitForElement(By.id("dateInput_" + xactionId));
+		WebElement dateInput = helper.waitForElement(By.id("dateInput_" + xactionId));
 
 		// make sure the transaction date is changed
 		assertEquals(

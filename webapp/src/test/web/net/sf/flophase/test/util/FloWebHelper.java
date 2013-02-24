@@ -265,4 +265,57 @@ public class FloWebHelper {
 		// wait for things to happen
 		Thread.sleep(2000);
 	}
+	
+	public void updateTransaction(String xactionId, Calendar cal) throws Exception {
+
+		WebElement dateInput = waitForElement(By.id("dateInput_"
+				+ xactionId));
+		dateInput.click();
+
+		// wait for things to happen
+		Thread.sleep(500);
+		
+		String year = String.valueOf(cal.get(Calendar.YEAR));
+		
+		WebElement displayedYear = driver.findElement(
+				By.id("dateInput_" + xactionId + "_popup_year"));
+		
+		int compare;
+		while ((compare = year.compareTo(displayedYear.getText())) != 0) {
+			WebElement yearElement = driver.findElement(By.cssSelector(compare < 0 ? "span.dijitCalendarPreviousYear" : "span.dijitCalendarNextYear"));
+			yearElement.click();
+			
+			//wait a little bit
+			Thread.sleep(200);
+		}
+
+		int month = cal.get(Calendar.MONTH);
+
+		// open the month selector
+		driver.findElement(
+				By.cssSelector("#widget_dateInput_" + xactionId + "_dropdown span.dijitArrowButtonInner"))
+				.click();
+
+		// wait for things to happen
+		Thread.sleep(500);
+
+		driver.findElement(
+				By.xpath("//div[@id='dateInput_" + xactionId + "_popup_mddb_mdd']/div[@month='"
+						+ month + "']")).click();
+
+		// wait for things to happen
+		Thread.sleep(500);
+
+		// find the week and day of the week for today
+		int week = cal.get(Calendar.WEEK_OF_MONTH);
+		int day = cal.get(Calendar.DAY_OF_WEEK);
+
+		// find the date on the calendar
+		driver.findElement(
+				By.xpath("//table[@id='dateInput_"+xactionId+"_popup']/tbody/tr["
+						+ week + "]/td[" + day + "]/span")).click();
+
+		// wait for things to happen
+		Thread.sleep(500);
+	}
 }
