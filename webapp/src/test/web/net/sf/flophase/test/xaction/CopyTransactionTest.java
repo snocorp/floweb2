@@ -2,6 +2,7 @@ package net.sf.flophase.test.xaction;
 
 import static org.junit.Assert.*;
 
+import java.util.Calendar;
 import java.util.List;
 
 import net.sf.flophase.test.util.FloWebHelper;
@@ -17,9 +18,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 /**
- * This class tests that deleting transactions works.
+ * This class tests that copying transactions works.
  */
-public class DeleteTransactionTest {
+public class CopyTransactionTest {
 
 	/**
 	 * The selenium web driver
@@ -73,13 +74,13 @@ public class DeleteTransactionTest {
 	}
 
 	/**
-	 * Creates two transactions for today and deletes the first one.
+	 * Creates a transaction for today and copies it to today.
 	 * 
 	 * @throws Exception
 	 *             If an error occurs
 	 */
 	@Test
-	public void testDeleteTransactionToday() throws Exception {
+	public void testCopyTransactionToToday() throws Exception {
 		helper.addTransaction("Transaction 1");
 
 		// find the transaction name cell that was created
@@ -89,40 +90,28 @@ public class DeleteTransactionTest {
 		// make sure the transaction name is correct
 		assertEquals("Transaction 1", xactionNameCell.getText());
 		
-		//create another transaction
-		helper.addTransaction("Transaction 2");
-		
-		//click the cell to open the edit transaction dialog
-		xactionNameCell.click();
-		
-		//get the name input
-		WebElement xactionDeleteButton = helper.waitForVisibleElement(By.id("xactionDelete"));
-		
-		//click the button
-		xactionDeleteButton.click();
-
-		// wait for things to happen
-		Thread.sleep(2000);
+		helper.copyTransaction(xactionNameCell, "Transaction 1 Copy", Calendar.getInstance());
 		
 		//get the cell again
 		List<WebElement> xactionNameCells = driver.findElements(By
 				.className("flo-xactionname"));
 
-		// make sure the transaction is gone, and only one left
-		assertEquals(1, xactionNameCells.size());
+		// make sure the transaction is copied
+		assertEquals(2, xactionNameCells.size());
 		
-		// make sure the leftover transaction name is correct
-		assertEquals("Transaction 2", xactionNameCells.get(0).getText());
+		// make sure the transaction names are correct
+		assertEquals("Transaction 1", xactionNameCells.get(0).getText());
+		assertEquals("Transaction 1 Copy", xactionNameCells.get(1).getText());
 	}
 
 	/**
-	 * Creates a transaction and deletes it.
+	 * Creates a transaction for today and copies it to next month.
 	 * 
 	 * @throws Exception
 	 *             If an error occurs
 	 */
 	@Test
-	public void testDeleteLastTransaction() throws Exception {
+	public void testCopyTransactionToNextMonth() throws Exception {
 		helper.addTransaction("Transaction 1");
 
 		// find the transaction name cell that was created
@@ -132,24 +121,23 @@ public class DeleteTransactionTest {
 		// make sure the transaction name is correct
 		assertEquals("Transaction 1", xactionNameCell.getText());
 		
-		//click the cell to open the edit transaction dialog
-		xactionNameCell.click();
+		final Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.MONTH, 1);
 		
-		//get the name input
-		WebElement xactionDeleteButton = helper.waitForVisibleElement(By.id("xactionDelete"));
-		
-		//click the button
-		xactionDeleteButton.click();
-
-		// wait for things to happen
-		Thread.sleep(2000);
+		helper.copyTransaction(xactionNameCell, "Transaction 1 Copy", cal);
 		
 		//get the cell again
 		List<WebElement> xactionNameCells = driver.findElements(By
 				.className("flo-xactionname"));
 
-		// make sure the transaction is gone
-		assertTrue(xactionNameCells.isEmpty());
+		// make sure the transaction is not shown yet
+		assertEquals(1, xactionNameCells.size());
+		
+		
+		
+		// make sure the transaction names are correct
+		assertEquals("Transaction 1", xactionNameCells.get(0).getText());
+		assertEquals("Transaction 1 Copy", xactionNameCells.get(1).getText());
 	}
 
 }

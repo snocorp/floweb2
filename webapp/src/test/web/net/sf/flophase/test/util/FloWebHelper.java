@@ -174,6 +174,94 @@ public class FloWebHelper {
 	}
 
 	/**
+	 * Copies a transaction with the given name on the calendar's
+	 * date.
+	 * 
+	 * @param name
+	 *            The transaction name
+	 * @param cal
+	 *            The calendar
+	 * @throws Exception
+	 *             If an error occurs
+	 */
+	public void copyTransaction(WebElement xactionNameCell, String name, Calendar cal) throws Exception {
+		
+		//click the cell to open the edit transaction dialog
+		xactionNameCell.click();
+		
+		//get the name input
+		WebElement xactionCopyButton = waitForVisibleElement(By.id("xactionCopy"));
+		
+		//click the button
+		xactionCopyButton.click();
+
+		// wait for things to happen
+		Thread.sleep(1000);
+
+		// get the transaction name input
+		WebElement copyTransactionNameInput = waitForVisibleEnabledElement(By
+				.id("copyTransactionName"));
+
+		// clear the value and input a new name
+		copyTransactionNameInput.clear();
+		copyTransactionNameInput.sendKeys(name);
+		
+		String year = String.valueOf(cal.get(Calendar.YEAR));
+		
+		WebElement displayedYear = driver.findElement(
+				By.id("copyTransactionCalendar_year"));
+		
+		int compare;
+		while ((compare = year.compareTo(displayedYear.getText())) != 0) {
+			WebElement yearElement = driver.findElement(By.cssSelector(compare < 0 ? "span.dijitCalendarPreviousYear" : "span.dijitCalendarNextYear"));
+			yearElement.click();
+			
+			//wait a little bit
+			Thread.sleep(200);
+		}
+
+		int month = cal.get(Calendar.MONTH);
+
+		// open the month selector
+		driver.findElement(
+				By.cssSelector("#copyTransactionCalendar span.dijitArrowButtonInner"))
+				.click();
+
+		// wait for things to happen
+		Thread.sleep(500);
+
+		driver.findElement(
+				By.xpath("//div[@id='copyTransactionCalendar_mddb_mdd']/div[@month='"
+						+ month + "']")).click();
+
+		// wait for things to happen
+		Thread.sleep(500);
+
+		// find the week and day of the week for today
+		int week = cal.get(Calendar.WEEK_OF_MONTH);
+		int day = cal.get(Calendar.DAY_OF_WEEK);
+
+		// find the date on the calendar
+		driver.findElement(
+				By.xpath("//table[@id='copyTransactionCalendar']/tbody/tr["
+						+ week + "]/td[" + day + "]/span")).click();
+
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		String date = format.format(cal.getTime());
+
+		// ensure the hidden input was updated
+		WebElement copyTransactionDateInput = waitForElement(By
+				.id("copyTransactionDate"));
+		assertEquals(date, copyTransactionDateInput.getAttribute("value"));
+
+		// click the ok button
+		driver.findElement(By.id("copyTransactionOk")).click();
+
+		// wait for things to happen
+		Thread.sleep(1000);
+	}
+
+	/**
 	 * Adds a transaction to the system with the given name on the calendar's
 	 * date.
 	 * 
