@@ -188,8 +188,12 @@ define([
 
             var account = cashflow.getAccount(options.key);
             
-            if (!options.name) { options.name = account.name; }
-            if (!options.balance) { options.balance = account.balance; }
+            if (typeof options.name === "undefined") { 
+            	options.name = account.name; 
+            }
+            if (typeof options.balance === "undefined") {
+            	options.balance = account.balance; 
+            }
 
             accountStore.editAccount({
                 key: options.key,
@@ -197,10 +201,9 @@ define([
                 balance: options.balance,
                 success: function() {
                     //update the account object
-                    if (options.name) {
-                        account.name = options.name;
-                    }
-                    if (options.balance) {
+                    account.name = options.name;
+                    
+                    if (options.balance !== account.balance) {
                         account.balance = options.balance;
 
                         _this.updateBalances();
