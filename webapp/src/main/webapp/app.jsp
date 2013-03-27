@@ -17,7 +17,6 @@
         <title>flophase</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
         <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/themes/humanity/jquery-ui.css" type="text/css" media="all" />
         <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.7/dijit/themes/claro/claro.css" type="text/css" />        
         <link rel="stylesheet" href="css/floweb.css" type="text/css">
     </head>
@@ -140,7 +139,6 @@
         
         <!-- Placed at the end of the document so the page loads faster -->
     	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
 		<script type="text/javascript" src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
     	<script type="text/javascript" src="jquery/jquery.jmNotify.js"></script>
 		
