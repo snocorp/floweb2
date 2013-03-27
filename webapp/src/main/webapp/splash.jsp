@@ -18,11 +18,13 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
         <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css" rel="stylesheet">
         <style type="text/css">
-			body {
-		        padding-top: 60px;
+			@media (min-width: 980px) {
+				body {
+			        padding-top: 60px;
+			    }
 		    }
 		    .footer {
-			    background-color: #F5F5F5;
+			    background: linear-gradient(to bottom, #f5f5f5 0%,#ffffff 100%);
 			    border-top: 1px solid #E5E5E5;
 			    margin-top: 70px;
 			    padding: 30px 0;
