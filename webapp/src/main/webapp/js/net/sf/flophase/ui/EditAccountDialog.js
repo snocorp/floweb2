@@ -2,9 +2,7 @@
  * EditAccountDialog
  */
 define([
-        "dijit/registry"
 	], function(
-			registry
 			) {
 
 
@@ -13,13 +11,18 @@ define([
             $('#'+floweb.editAccountDialog.deleteNodeRef).unbind();
 
             if (app.getCashflow().getAccounts().length == 1) {
-                registry.byId(floweb.editAccountDialog.deleteNodeRef).set('disabled', true);
+                $('#'+floweb.editAccountDialog.deleteNodeRef).addClass('disabled');
             } else {
-                registry.byId(floweb.editAccountDialog.deleteNodeRef).set('disabled', false);
+                $('#'+floweb.editAccountDialog.deleteNodeRef).removeClass('disabled');
                 $('#'+floweb.editAccountDialog.deleteNodeRef).click([ acctKey ], function(event) {
                     app.deleteAccount(event.data);
                 });
             }
+            
+            var stopBubble = function( event ) {
+                //prevent bubbling so it doesnt hide
+                event.stopPropagation();
+            };
 
             var accountNameField = $('#'+floweb.editAccountDialog.nameNodeRef);
             accountNameField.unbind();
@@ -33,6 +36,7 @@ define([
                     }
                 }
             );
+            accountNameField.click(stopBubble);
 
 
             //set the existing values
@@ -47,12 +51,7 @@ define([
                 "left": (headerCellPos.left-1) + 'px'
             } );
             acctEditor.unbind();
-            acctEditor.click(
-                function( event ) {
-                    //prevent bubbling so it doesnt hide
-                    event.stopPropagation();
-                }
-            );
+            acctEditor.click(stopBubble);
 
             $(acctEditor).fadeIn(250);
 

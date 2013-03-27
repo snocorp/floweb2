@@ -1,16 +1,19 @@
 <html>
 	<head>
         <title>flophase - api</title>
-        <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
-        <link href="prettify/prettify.css" type="text/css" rel="stylesheet" />
-		<script type="text/javascript" src="prettify/prettify.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css" rel="stylesheet">
+        <link href="//cdnjs.cloudflare.com/ajax/libs/prettify/r224/prettify.css" type="text/css" rel="stylesheet" />
     </head>
 	<body onload="prettyPrint();">
-        <div class="navbar">
+        <div class="navbar navbar-fixed-top">
    			<div class="navbar-inner">
    				<div class="container">
+   					<button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+			            <span class="icon-bar"></span>
+			        </button>
 	   				<a href="index.jsp" class="brand">flophase</a>
-	   				<div class="nav-collapse">
+	   				<div class="nav-collapse collapse">
 	   					<ul class="nav">
 	   						<li class="active"><a href="api.html">API</a></li>
 	   					</ul>
@@ -184,6 +187,36 @@
 }</pre>
 				</li>
 			</ul>
+			<h2>Copy Transaction</h2>
+			<ul>
+				<li>Description: Creates a new transaction based on an existing transaction.</li>
+				<li>Command: xaction/copy</li>
+				<li>Parameters:
+					<ul>
+						<li>key: The key of the existing transaction</li>
+						<li>name: The name of the new transaction</li>
+						<li>date: The date of the new transaction (YYYY-MM-DD format)</li>
+					</ul>
+				</li>
+				<li>Response:<br/>
+					<pre class="prettyprint lang-js">{
+   result: &lt;0|1&gt;,
+   messages: [&lt;message0&gt;, &lt;message1&gt;, ...],
+   content: {
+      details: {
+         key: &lt;xactionKey&gt;,
+         name: &lt;xactionName&gt;,
+         date: &lt;xationDate&gt;
+      },
+      entries: {
+         &lt;accountKey0&gt;: &lt;entryAmount0&gt;,
+         &lt;accountKey1&gt;: &lt;entryAmount1&gt;,
+         ...
+      }
+   }
+}</pre>
+				</li>
+			</ul>
 			<h2>Delete Transaction</h2>
 			<ul>
 				<li>Description: Deletes an existing transaction</li>
@@ -253,5 +286,8 @@
 				</li>
 			</ul>
 		</div>
+		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<script type="text/javascript" src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/prettify/r224/prettify.js"></script>
 	</body>
 </html>

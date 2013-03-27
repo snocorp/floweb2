@@ -213,8 +213,10 @@ public class AddTransactionTest {
 			Thread.sleep(250);
 		}
 		
-		WebElement xactionNameCell = driver
-				.findElement(By
+		//click once more to load the last month of the previous year
+		loadEarlierButton.click();
+		
+		WebElement xactionNameCell = helper.waitForElement(By
 						.xpath("//tbody[@id='historicBody']/tr/td[@class='flo-xactionname']"));
 
 		// use the id to get the transaction id

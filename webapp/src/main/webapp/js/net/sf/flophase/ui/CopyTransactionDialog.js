@@ -42,15 +42,8 @@ define([
     		$('#'+floweb.copyTransactionDialog.cancelNodeRef).click(function() {
     			app.hideCopyTransaction();
     		});
-    		
-    		//jQuery UI Dialog
-            $('#'+floweb.copyTransactionDialog.nodeRef).dialog({ 
-            	autoOpen: false,
-            	title: "Copy Transaction",
-            	modal: true,
-            	resizable: false,
-            	zIndex: 200
-            });
+
+    		app.hideCopyTransaction();
             $('#'+floweb.copyTransactionDialog.nodeRef).removeClass('flo-off-screen');
     	},
     	/**
@@ -70,10 +63,10 @@ define([
             $('#'+floweb.copyTransactionDialog.dateNodeRef).val(xaction.details.date);            
             calendar.set('value', stamp.fromISOString(xaction.details.date));
 
-            $('#'+floweb.copyTransactionDialog.nodeRef).dialog('open');
+            $('#'+floweb.copyTransactionDialog.nodeRef).show();
     	},
     	hide: function() {
-    		$('#'+floweb.copyTransactionDialog.nodeRef).dialog('close');
+    		$('#'+floweb.copyTransactionDialog.nodeRef).hide();
     	},
         /**
          * Displays one or more error messages in an error container.

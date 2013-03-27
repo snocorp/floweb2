@@ -15,7 +15,8 @@
 <html>
     <head>
         <title>flophase</title>
-        <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css" rel="stylesheet">
         <style type="text/css">
 			body {
 		        padding-top: 60px;

@@ -2,9 +2,7 @@
  * EditTransactionDialog
  */
 define([
-        "dijit/registry"
 	], function(
-			registry
 			) {
 
 
@@ -21,6 +19,11 @@ define([
             $('#'+floweb.editTransactionDialog.copyNodeRef).click([ xactionKey ], function(event) {
                 app.showCopyTransaction(event.data);
             });
+            
+            var stopBubble = function( event ) {
+                //prevent bubbling so it doesnt hide
+                event.stopPropagation();
+            };
 
             var xactionNameField = $('#'+floweb.editTransactionDialog.nameNodeRef);
             xactionNameField.unbind();
@@ -37,6 +40,7 @@ define([
                     }
                 }
             );
+            xactionNameField.click(stopBubble);
 
             var nameCell = $('#'+nameCellNodeRef);
 
@@ -52,7 +56,7 @@ define([
                 "top": (nameCellPos.top-1) + 'px',
                 "left": (nameCellPos.left-1) + 'px'
             } );
-
+            xactionEditor.click(stopBubble);
             xactionEditor.fadeIn(250);
 
             //select the transaction name

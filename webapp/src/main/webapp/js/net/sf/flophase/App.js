@@ -128,7 +128,9 @@ define([
          * Shows the edit account popup.
          */
         showEditAccount: function( event, acctHeaderCellNodeRef, acctKey, acctName ) {
-            editAccountDialog.show(acctHeaderCellNodeRef, acctKey, acctName);
+            editTransactionDialog.hide();
+        	
+        	editAccountDialog.show(acctHeaderCellNodeRef, acctKey, acctName);
 
             //prevent bubbling
             event.stopPropagation();
@@ -137,6 +139,8 @@ define([
          * Shows the edit transaction popup.
          */
         showEditTransaction: function( event, nameCellNodeRef, xactionKey, xactionName ) {
+        	editAccountDialog.hide();
+        	
         	editTransactionDialog.show(nameCellNodeRef, xactionKey, xactionName);
 
             //prevent bubbling

@@ -22,15 +22,8 @@ define([
     		$('#'+floweb.addAccountDialog.cancelNodeRef).click(function() {
     			app.hideAddAccount();
     		});
-    		
-    		//jQuery UI dialog
-            $('#'+floweb.addAccountDialog.nodeRef).dialog({ 
-            	autoOpen: false,
-            	title: "Add Account",
-            	modal: true,
-            	resizable: false,
-            	zIndex: 200
-            });
+            
+            app.hideAddAccount();
             $('#'+floweb.addAccountDialog.nodeRef).removeClass('flo-off-screen');
     	},
     	show: function() {
@@ -42,7 +35,7 @@ define([
             var balanceInput = registry.byId(floweb.addAccountDialog.balanceNodeRef);
             balanceInput.set('value', 0.0);
 
-            $("#"+floweb.addAccountDialog.nodeRef).dialog('open');
+            $("#"+floweb.addAccountDialog.nodeRef).show();
     	},
     	hide: function() {
 
@@ -51,7 +44,7 @@ define([
             var balanceInput = registry.byId(floweb.addAccountDialog.balanceNodeRef);
             balanceInput.set('value', 0.0);
             
-    		$('#'+floweb.addAccountDialog.nodeRef).dialog('close');
+    		$('#'+floweb.addAccountDialog.nodeRef).hide();
     	},
         /**
          * Displays one or more error messages in an error container.

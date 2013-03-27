@@ -133,7 +133,15 @@ public class CopyTransactionTest {
 		// make sure the transaction is not shown yet
 		assertEquals(1, xactionNameCells.size());
 		
+		//load next month
+		driver.findElement(By.id("loadUpcoming")).click();
 		
+		//wait a little bit
+		Thread.sleep(250);
+		
+		//get the cells again
+		xactionNameCells = driver.findElements(By
+				.className("flo-xactionname"));
 		
 		// make sure the transaction names are correct
 		assertEquals("Transaction 1", xactionNameCells.get(0).getText());

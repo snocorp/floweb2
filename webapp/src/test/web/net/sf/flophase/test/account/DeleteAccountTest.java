@@ -189,7 +189,7 @@ public class DeleteAccountTest {
 		// click the delete button
 		WebElement deleteButton = helper.waitForVisibleElement(By
 				.id("accountDelete"));
-		assertEquals("true", deleteButton.getAttribute("aria-disabled"));
+		assertTrue(deleteButton.getAttribute("class").contains("disabled"));
 	}
 
 }
