@@ -1,23 +1,27 @@
 /**
  * Grid
  */
-define(["dojo/dom", 
+define(["dojo/dom",
+        "dojo/on",
         "dojo/date",
         "dojo/date/locale",
         "dojo/date/stamp",
         "dijit/registry",
         "dijit/form/CurrencyTextBox",
-        "dijit/form/DateTextBox"], function(dom, date, locale, stamp, registry, CurrencyTextBox, DateTextBox) {
+        "dijit/form/DateTextBox"], function(dom, on, date, locale, stamp, registry, CurrencyTextBox, DateTextBox) {
 
+	
 
     return {
+    	/** An object in which we will store the event handles so they can be removed later. */
+    	_entryHandles: {},
         /**
          * Initializes the grid and adds it to the given DOM node.
          *
          * @param options.cashflow The cashflow the will be represented by the grid
          * @param srcNodeRef The id of the DOM node
          */
-        onInit: function() {
+        onInit: function onInit() {
             var gridContainer = dom.byId(floweb.grid.nodeRef);
 
             gridContainer.appendChild(this.createTable(app.getCashflow()));
@@ -168,6 +172,43 @@ define(["dojo/dom",
             return xactionNameCell;
         },
         /**
+         * Returns a function that handles the blur event.
+         * 
+         * @param value The initial value
+         * @param xactionKey The transaction key
+         * @param acctKey The account key
+         * @returns A function to handle the blur event
+         */
+        handleEntryCellBlur: function(value, xactionKey, acctKey) {return function() {
+            if (this.isValid()) {
+            	if (this.get('value') != value) {
+            		app.editEntryAmount(this.get('value'), xactionKey, acctKey);
+            	}
+            } else {
+            	this.set('value', value);
+            }
+        };},
+        /**
+         * Returns a function that handles the keydown event.
+         * 
+         * @param value The initial value
+         * @param xactionKey The transaction key
+         * @param acctKey The account key
+         * @returns A function to handle the keydown event
+         */
+        handleEntryCellKeyDown: function(value, xactionKey, acctKey) {return function( event ) {
+            if (event.keyCode == 13) {
+            	if (this.isValid() && this.get('value') != value) {
+                    app.editEntryAmount(this.get('value'), xactionKey, acctKey);
+                    dijit.byId('entryInput_'+acctKey+'_'+xactionKey).focusNode.blur();
+                }
+            } else if (event.keyCode == 27) {
+            	//reset the value
+            	this.set('value', value);
+            	dijit.byId('entryInput_'+acctKey+'_'+xactionKey).focusNode.blur();
+            }
+        };},
+        /**
          * Creates a cell for a transaction entry.
          *
          * @param value The value of the entry
@@ -175,7 +216,7 @@ define(["dojo/dom",
          * @param acctKey The key of the account
          */
         createTransactionEntryCell: function(value, xactionKey, acctKey) {
-            var xactionEntryCell = document.createElement("td");
+        	var xactionEntryCell = document.createElement("td");
             xactionEntryCell.id = 'entry_'+acctKey+'_'+xactionKey;
             xactionEntryCell.className = 'flo-entry';
 
@@ -184,32 +225,26 @@ define(["dojo/dom",
                 value: value,
                 lang: 'en-us',
                 currency: "USD",
-                invalidMessage: "Invalid amount",
-                onBlur: function(value, xactionKey, acctKey) {return function() {
-                    if (this.isValid() && this.get('value') != value) {
-                        app.editEntryAmount(this.get('value'), xactionKey, acctKey);
-                    }
-                };}(value, xactionKey, acctKey),
-                onFocus: function() {
-                	dijit.byId('entryInput_'+acctKey+'_'+xactionKey).focusNode.select();
-                },
-                onKeyDown: function(value, xactionKey, acctKey) {return function( event ) {
-                    if (event.keyCode == 13) {
-                    	if (this.isValid() && this.get('value') != value) {
-                            app.editEntryAmount(this.get('value'), xactionKey, acctKey);
-                            dijit.byId('entryInput_'+acctKey+'_'+xactionKey).focusNode.blur();
-                        }
-                    } else if (event.keyCode == 27) {
-                    	//reset the value
-                    	this.set('value', value);
-                    	dijit.byId('entryInput_'+acctKey+'_'+xactionKey).focusNode.blur();
-                    }
-                };}(value, xactionKey, acctKey)
+                invalidMessage: "Invalid amount"
             };
 
             var entryAmountTextBox = new CurrencyTextBox(props);
 
             xactionEntryCell.appendChild(entryAmountTextBox.domNode);
+            
+            var blurHandle = on(entryAmountTextBox, "blur", this.handleEntryCellBlur(value, xactionKey, acctKey));
+            var keydownHandle = on(entryAmountTextBox, "keydown", this.handleEntryCellKeyDown(value, xactionKey, acctKey));
+            this._entryHandles[props.id] = {
+            	"blur": blurHandle,
+            	"keydown": keydownHandle
+            };
+            
+            //set the initial class (pos/neg)
+        	if (value < 0) {
+        		$(entryAmountTextBox.domNode).addClass('negative');
+        	} else if (value > 0) {
+        		$(entryAmountTextBox.domNode).addClass('positive');
+        	}
 
             return xactionEntryCell;
         },
@@ -577,19 +612,40 @@ define(["dojo/dom",
          * @param acctKey The key of the account for the entry
          * @param xactionKey The key of the transaction for the entry
          */
-        onEntryEdit: function(entry, acctKey, xactionKey) {
-            var entryInput = registry.byId('entryInput_'+acctKey+'_'+xactionKey);
+        onEntryEdit: function onEntryEdit(entry, acctKey, xactionKey) {
+        	var widgetId = 'entryInput_'+acctKey+'_'+xactionKey;
+            var entryInput = registry.byId(widgetId);
             if (entryInput) {
                 entryInput.set('id','entryInput_'+entry.key);
             } else {
                 entryInput = registry.byId('entryInput_'+entry.key);
             }
+            
+            //update the class for the new value
+            $(entryInput.domNode).removeClass('negative positive');
+            if (entry.amount < 0) {
+        		$(entryInput.domNode).addClass('negative');
+        	} else if (entry.amount > 0) {
+        		$(entryInput.domNode).addClass('positive');
+        	}
 
-            entryInput.onBlur = function(value, xactionKey, acctKey, entryKey) {return function() {
-                    if (this.isValid() && this.value != value) {
-                        app.editEntryAmount(this.value, xactionKey, acctKey, entryKey);
-                    }
-                };}(entry.amount, xactionKey, acctKey, entry.key);
+            this._entryHandles[widgetId].blur.remove();
+            this._entryHandles[widgetId].keydown.remove();
+            
+            var blurHandle = on(
+            		entryInput, 
+            		"blur", 
+            		this.handleEntryCellBlur(entry.amount, xactionKey, acctKey, entry.key)
+            	);
+            var keydownHandle = on(
+            		entryInput, 
+            		"keydown", 
+            		this.handleEntryCellKeyDown(entry.amount, xactionKey, acctKey, entry.key)
+            	);
+            this._entryHandles[widgetId] = {
+            	"blur": blurHandle,
+            	"keydown": keydownHandle
+            };
         },
         /**
          * This method is invoked when any changes happen to the balances.

@@ -16,6 +16,9 @@ section {
 input[type="text"] {
 	margin-bottom: 0 !important;
 }
+input.dijitArrowButtonInner {
+	cursor: default !important;
+}
 div.modal div.dijitTextBox {
 	margin-bottom: 10px !important;
 }
@@ -62,9 +65,9 @@ td.flo-xactionname, td.flo-xactionbalance, #current, #currentDate {
     padding-left: 4px !important;
     padding-right: 4px !important;
 }
-
+ 
 table.flo-cashflow th.flo-accountheader:hover,
-table.flo-cashflow td.flo-xactionname:hover {
+ table.flo-cashflow td.flo-xactionname:hover {
     background-color: #3AAACF;
     cursor: default;
 }
@@ -86,6 +89,23 @@ table.flo-cashflow td.flo-currentbalance div.dijitTextBox {
 table.flo-cashflow td.flo-xactiondate div.dijitTextBox {
 	width: 7em !important;
 }
+
+/**
+ * Content colors
+ */
+div.dijitCurrencyTextBox.negative {
+	border-color: #c07575 !important;
+}
+div.dijitCurrencyTextBox.positive {
+	border-color: #7cc075 !important;
+}
+div.dijitCurrencyTextBox.dijitTextBoxHover.negative {
+	background-color: #fecfec !important;
+}
+div.dijitCurrencyTextBox.dijitTextBoxHover.positive {
+	background-color: #d2fecf !important;
+}
+
 
 /**
  * Editor Styles
