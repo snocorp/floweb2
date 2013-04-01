@@ -131,7 +131,7 @@ public class FloAccountDAOTest extends AbstractDAOTestCase {
 
 		dao.ofy().put(account);
 
-		Account updatedAccount = dao.editAccount(account.getKey(), "Account2", 2.34);
+		Account updatedAccount = dao.editAccount(account.getKey(), "Account2", 2.34, 99.0, 1000.0);
 
 		assertThat(updatedAccount.getName(), is(equalTo("Account2")));
 		assertThat(updatedAccount.getBalance(), is(equalTo(2.34)));
@@ -140,6 +140,8 @@ public class FloAccountDAOTest extends AbstractDAOTestCase {
 
 		assertThat(updatedAccount.getName(), is(equalTo("Account2")));
 		assertThat(updatedAccount.getBalance(), is(equalTo(2.34)));
+		assertThat(updatedAccount.getNegativeThreshold(), is(equalTo(99.0)));
+		assertThat(updatedAccount.getPositiveThreshold(), is(equalTo(1000.0)));
 	}
 
 	/**

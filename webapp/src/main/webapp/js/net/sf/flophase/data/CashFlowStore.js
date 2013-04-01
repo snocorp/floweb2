@@ -194,23 +194,49 @@ define([
             if (typeof options.balance === "undefined") {
             	options.balance = account.balance; 
             }
+            if (typeof options.negativeThreshold === "undefined") {
+            	options.negativeThreshold = account.negativeThreshold; 
+            }
+            if (typeof options.positiveThreshold === "undefined") {
+            	options.positiveThreshold = account.positiveThreshold; 
+            }
 
             accountStore.editAccount({
-                key: options.key,
-                name: options.name,
-                balance: options.balance,
-                success: function() {
+                "key": options.key,
+                "name": options.name,
+                "balance": options.balance,
+                "negativeThreshold": options.negativeThreshold,
+                "positiveThreshold": options.positiveThreshold,
+                "success": function() {
+                	var updateBalancesFlag = false;
+                	
                     //update the account object
                     account.name = options.name;
                     
                     if (options.balance !== account.balance) {
                         account.balance = options.balance;
+                        
+                        updateBalancesFlag = true;
+                    }
+                    
+                    if (options.negativeThreshold !== account.negativeThreshold) {
+                        account.negativeThreshold = options.negativeThreshold;
+                        
+                        updateBalancesFlag = true;
+                    }
+                    
+                    if (options.positiveThreshold !== account.positiveThreshold) {
+                        account.positiveThreshold = options.positiveThreshold;
+                        
+                        updateBalancesFlag = true;
+                    }
 
+                    if (updateBalancesFlag) {
                         _this.updateBalances();
                     }
                     options.success(account);
                 },
-                error: options.error
+                "error": options.error
             });
         },
         /**

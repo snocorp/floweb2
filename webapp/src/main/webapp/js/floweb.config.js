@@ -37,7 +37,12 @@ var floweb = {
     editAccountDialog: {
     	nodeRef:'accountEditor',
     	nameNodeRef:'accountName',
-    	deleteNodeRef:'accountDelete'
+    	negativeThresholdNodeRef:'negativeThreshold',
+    	positiveThresholdNodeRef:'positiveThreshold',
+    	saveNodeRef:'accountSave',
+    	deleteNodeRef:'accountDelete',
+    	moreNodeRef:'accountMore',
+    	advancedOptionsNodeRef:'accountEditorAdvanced'
     },
     editTransactionDialog: {
     	nodeRef:'xactionEditor',

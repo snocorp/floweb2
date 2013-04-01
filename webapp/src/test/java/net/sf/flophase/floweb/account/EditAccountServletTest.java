@@ -27,6 +27,16 @@ public class EditAccountServletTest extends AbstractServletTest {
 	 * The account name.
 	 */
 	private static final String ACCOUNT_NAME = "Account1";
+
+	/**
+	 * The account negative threshold.
+	 */
+	private static final double ACCOUNT_NEGATIVE_THRESHOLD = 99;
+
+	/**
+	 * The account positive threshold.
+	 */
+	private static final double ACCOUNT_POSITIVE_THRESHOLD = 1000;
 	/**
 	 * The servlet path.
 	 */
@@ -40,21 +50,33 @@ public class EditAccountServletTest extends AbstractServletTest {
 	 */
 	@Test
 	public void testDoGet() throws Exception {
-		final AccountService mockAccountService = testServletContextListener.getModule().getAccountService();
+		final AccountService mockAccountService = testServletContextListener
+				.getModule().getAccountService();
 
 		final Account account = new Account(null, ACCOUNT_NAME, ACCOUNT_BALANCE);
+		account.setNegativeThreshold(ACCOUNT_NEGATIVE_THRESHOLD);
+		account.setPositiveThreshold(ACCOUNT_POSITIVE_THRESHOLD);
 
-		final Response<Account> response = new Response<Account>(Response.RESULT_SUCCESS, account);
+		final Response<Account> response = new Response<Account>(
+				Response.RESULT_SUCCESS, account);
 
 		context.checking(new Expectations() {
 			{
-				one(mockAccountService).editAccount(ACCOUNT_KEY, ACCOUNT_NAME, String.valueOf(ACCOUNT_BALANCE));
+				one(mockAccountService).editAccount(ACCOUNT_KEY, ACCOUNT_NAME,
+						String.valueOf(ACCOUNT_BALANCE),
+						String.valueOf(ACCOUNT_NEGATIVE_THRESHOLD),
+						String.valueOf(ACCOUNT_POSITIVE_THRESHOLD));
 				will(returnValue(response));
 			}
 		});
 
-		assertResponseContent("{\"result\":1,\"messages\":[],\"content\":{\"name\":\"" + ACCOUNT_NAME
-		        + "\",\"balance\":" + String.valueOf(ACCOUNT_BALANCE) + "}}");
+		assertResponseContent("{\"result\":1,\"messages\":[],\"content\":{\"name\":\""
+				+ ACCOUNT_NAME
+				+ "\",\"balance\":"
+				+ ACCOUNT_BALANCE
+				+ ",\"negativeThreshold\":"
+				+ ACCOUNT_NEGATIVE_THRESHOLD
+				+ ",\"positiveThreshold\":" + ACCOUNT_POSITIVE_THRESHOLD + "}}");
 	}
 
 	@Override
@@ -64,7 +86,9 @@ public class EditAccountServletTest extends AbstractServletTest {
 
 	@Override
 	protected String getQuery() {
-		return "?key=" + ACCOUNT_KEY + "&name=" + ACCOUNT_NAME + "&balance=" + String.valueOf(ACCOUNT_BALANCE);
+		return "?key=" + ACCOUNT_KEY + "&name=" + ACCOUNT_NAME + "&balance="
+				+ ACCOUNT_BALANCE + "&neg=" + ACCOUNT_NEGATIVE_THRESHOLD
+				+ "&pos=" + ACCOUNT_POSITIVE_THRESHOLD;
 	}
 
 	@Override

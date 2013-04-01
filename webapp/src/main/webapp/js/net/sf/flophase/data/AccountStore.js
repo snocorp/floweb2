@@ -100,7 +100,9 @@ define([], function() {
                 content: {
                     key: options.key,
                     name: options.name,
-                    balance: options.balance
+                    balance: options.balance,
+                    neg: options.negativeThreshold,
+                    pos: options.positiveThreshold
                 },
                 handleAs: "json",
                 load: function(jsonData) {

@@ -2,12 +2,34 @@
  * EditAccountDialog
  */
 define([
+"dijit/registry"
 	], function(
+			registry
 			) {
 
+	var acctKey;
 
     return {
-    	show: function(acctHeaderCellNodeRef, acctKey, acctName) {
+    	onInit: function() {
+    		var _this = this;
+    		
+    		//options button shows the hidden options
+    		$('#'+floweb.editAccountDialog.moreNodeRef).click(function() {
+    			$('#'+floweb.editAccountDialog.advancedOptionsNodeRef).show();
+    			$(this).attr('disabled', 'disabled');
+    		});
+    		
+    		//save button saves the account
+    		$('#'+floweb.editAccountDialog.saveNodeRef).click(function() {
+    			_this.save();
+    		});
+    	},
+    	show: function(acctHeaderCellNodeRef, account) {
+    		var _this = this;
+    		
+    		//save the account key
+    		acctKey = account.key;
+    		
             $('#'+floweb.editAccountDialog.deleteNodeRef).unbind();
 
             if (app.getCashflow().getAccounts().length == 1) {
@@ -27,10 +49,9 @@ define([
             var accountNameField = $('#'+floweb.editAccountDialog.nameNodeRef);
             accountNameField.unbind();
             accountNameField.keydown(
-                [ acctKey ],
                 function( event ) {
                     if (event.keyCode == 13) {
-                        app.editAccountName(event.data, this.value);
+                        _this.save();
                     } else if (event.keyCode == 27) {
                         app.hideEditAccount();
                     }
@@ -40,7 +61,11 @@ define([
 
 
             //set the existing values
-            accountNameField.val( acctName );
+            accountNameField.val( account.name );
+            registry.byId(floweb.editAccountDialog.negativeThresholdNodeRef).set('value', account.negativeThreshold);
+            registry.byId(floweb.editAccountDialog.positiveThresholdNodeRef).set('value', account.positiveThreshold);
+            
+            //update the width to match
             accountNameField.css( { "width": $('#'+acctHeaderCellNodeRef).width()+7 } );
 
             //find the position of the clicked cell
@@ -63,6 +88,17 @@ define([
     	},
     	hide: function() {
     		$('#'+floweb.editAccountDialog.nodeRef).fadeOut(250);
+    		
+    		//reset the advanced options
+			$('#'+floweb.editAccountDialog.advancedOptionsNodeRef).hide();
+			$('#'+floweb.editAccountDialog.moreNodeRef).removeAttr('disabled');
+    	},
+    	save: function() {
+    		var accountName = $('#'+floweb.editAccountDialog.nameNodeRef).val();
+    		var negativeThreshold = registry.byId(floweb.editAccountDialog.negativeThresholdNodeRef).get('value');
+    		var positiveThreshold = registry.byId(floweb.editAccountDialog.positiveThresholdNodeRef).get('value');
+			
+			app.editAccount(acctKey, accountName, negativeThreshold, positiveThreshold);
     	}
     };
 });

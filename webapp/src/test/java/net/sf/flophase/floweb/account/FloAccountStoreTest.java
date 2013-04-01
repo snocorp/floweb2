@@ -49,6 +49,16 @@ public class FloAccountStoreTest {
 	private static final String ACCOUNT_NAME = "Account1";
 
 	/**
+	 * The account negative threshold.
+	 */
+	private static final double ACCOUNT_NEGATIVE_THRESHOLD = 99;
+
+	/**
+	 * The account positive threshold.
+	 */
+	private static final double ACCOUNT_POSITIVE_THRESHOLD = 1000;
+
+	/**
 	 * The mock context.
 	 */
 	private final Mockery context = new Mockery();
@@ -56,7 +66,8 @@ public class FloAccountStoreTest {
 	/**
 	 * A helper class to allow app engine calls.
 	 */
-	private final LocalServiceTestHelper helper = new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
+	private final LocalServiceTestHelper helper = new LocalServiceTestHelper(
+			new LocalDatastoreServiceTestConfig());
 
 	/**
 	 * The store to be tested.
@@ -74,8 +85,9 @@ public class FloAccountStoreTest {
 	private CashFlowStore cashflowStore;
 
 	/**
-	 * Sets up the test case. Sets up the app engine helper. Creates the mock account data access object and cash flow
-	 * store. Creates the store to be tested.
+	 * Sets up the test case. Sets up the app engine helper. Creates the mock
+	 * account data access object and cash flow store. Creates the store to be
+	 * tested.
 	 * 
 	 * @throws Exception
 	 *             If an error occurs.
@@ -103,14 +115,15 @@ public class FloAccountStoreTest {
 	}
 
 	/**
-	 * Tests the {@link FloAccountStore#getAccounts()} method. Ensures the account data access object is called with the
-	 * appropriate parameters.
+	 * Tests the {@link FloAccountStore#getAccounts()} method. Ensures the
+	 * account data access object is called with the appropriate parameters.
 	 */
 	@Test
 	public void testGetAccounts() {
 		final CashFlow cashflow = new CashFlow();
 		final List<Account> expectedAccounts = new ArrayList<Account>();
-		expectedAccounts.add(new Account(new Key<CashFlow>(CashFlow.class, 1), ACCOUNT_NAME, ACCOUNT_BALANCE));
+		expectedAccounts.add(new Account(new Key<CashFlow>(CashFlow.class, 1),
+				ACCOUNT_NAME, ACCOUNT_BALANCE));
 
 		context.checking(new Expectations() {
 			{
@@ -130,8 +143,8 @@ public class FloAccountStoreTest {
 	}
 
 	/**
-	 * Tests the {@link FloAccountStore#getAccounts()} method. Ensures that when no accounts are returns, a default
-	 * account is created and returned.
+	 * Tests the {@link FloAccountStore#getAccounts()} method. Ensures that when
+	 * no accounts are returns, a default account is created and returned.
 	 */
 	@Test
 	public void testGetAccountsWithNoAccounts() {
@@ -144,9 +157,10 @@ public class FloAccountStoreTest {
 				one(accountDAO).getAccounts(with(any(CashFlow.class)));
 				will(returnValue(expectedAccounts));
 
-				one(accountDAO).createAccount(with(any(CashFlow.class)), with(equal(DEFAULT_ACCOUNT_NAME)),
-				        with(equal(0.0)));
-				will(returnValue(new Account(new Key<CashFlow>(CashFlow.class, 1), DEFAULT_ACCOUNT_NAME, 0.0)));
+				one(accountDAO).createAccount(with(any(CashFlow.class)),
+						with(equal(DEFAULT_ACCOUNT_NAME)), with(equal(0.0)));
+				will(returnValue(new Account(new Key<CashFlow>(CashFlow.class,
+						1), DEFAULT_ACCOUNT_NAME, 0.0)));
 			}
 		});
 
@@ -166,8 +180,9 @@ public class FloAccountStoreTest {
 	}
 
 	/**
-	 * Tests the {@link FloAccountStore#createAccount(String, double)} method. Ensures that the account data access
-	 * object is called with the correct parameters.
+	 * Tests the {@link FloAccountStore#createAccount(String, double)} method.
+	 * Ensures that the account data access object is called with the correct
+	 * parameters.
 	 */
 	@Test
 	public void testCreateAccount() {
@@ -177,9 +192,12 @@ public class FloAccountStoreTest {
 			{
 				allowing(cashflowStore).getCashFlow();
 
-				one(accountDAO).createAccount(with(any(CashFlow.class)), with(equal(ACCOUNT_NAME)),
-				        with(equal(ACCOUNT_BALANCE)));
-				will(returnValue(new Account(cashflow.getKey(), ACCOUNT_NAME, ACCOUNT_BALANCE)));
+				one(accountDAO)
+						.createAccount(with(any(CashFlow.class)),
+								with(equal(ACCOUNT_NAME)),
+								with(equal(ACCOUNT_BALANCE)));
+				will(returnValue(new Account(cashflow.getKey(), ACCOUNT_NAME,
+						ACCOUNT_BALANCE)));
 			}
 		});
 
@@ -197,7 +215,8 @@ public class FloAccountStoreTest {
 	@Test
 	public void testDeleteAccount() {
 		final CashFlow cashflow = getMockCashFlow();
-		final Key<Account> key = new Key<Account>(cashflow.getKey(), Account.class, ACCOUNT_KEY);
+		final Key<Account> key = new Key<Account>(cashflow.getKey(),
+				Account.class, ACCOUNT_KEY);
 
 		context.checking(new Expectations() {
 			{
@@ -214,38 +233,47 @@ public class FloAccountStoreTest {
 	}
 
 	/**
-	 * Tests the {@link FloAccountStore#editAccount(long, String, double)} method. Ensures the account data access
-	 * object is called with the correct parameters.
+	 * Tests the {@link FloAccountStore#editAccount(long, String, double)}
+	 * method. Ensures the account data access object is called with the correct
+	 * parameters.
 	 */
 	@Test
 	public void testEditAccount() {
 		final CashFlow cashflow = getMockCashFlow();
-		final Key<Account> key = new Key<Account>(cashflow.getKey(), Account.class, ACCOUNT_KEY);
+		final Key<Account> key = new Key<Account>(cashflow.getKey(),
+				Account.class, ACCOUNT_KEY);
 
 		context.checking(new Expectations() {
 			{
 				allowing(cashflowStore).getCashFlow();
 				will(returnValue(cashflow));
 
-				one(accountDAO).editAccount(with(equal(key)), with(equal(ACCOUNT_NAME)), with(equal(ACCOUNT_BALANCE)));
+				one(accountDAO).editAccount(with(equal(key)),
+						with(equal(ACCOUNT_NAME)),
+						with(equal(ACCOUNT_BALANCE)),
+						with(equal(ACCOUNT_NEGATIVE_THRESHOLD)),
+						with(equal(ACCOUNT_POSITIVE_THRESHOLD)));
 			}
 		});
 
-		store.editAccount(ACCOUNT_KEY, ACCOUNT_NAME, ACCOUNT_BALANCE);
+		store.editAccount(ACCOUNT_KEY, ACCOUNT_NAME, ACCOUNT_BALANCE,
+				ACCOUNT_NEGATIVE_THRESHOLD, ACCOUNT_POSITIVE_THRESHOLD);
 
 		context.assertIsSatisfied();
 	}
 
 	/**
-	 * Tests the {@link FloAccountStore#getAccount(long)} method. Ensures the account data access object is called with
-	 * the correct parameters.
+	 * Tests the {@link FloAccountStore#getAccount(long)} method. Ensures the
+	 * account data access object is called with the correct parameters.
 	 */
 	@Test
 	public void testGetAccount() {
 		final CashFlow cashflow = getMockCashFlow();
-		final Key<Account> key = new Key<Account>(cashflow.getKey(), Account.class, ACCOUNT_KEY);
+		final Key<Account> key = new Key<Account>(cashflow.getKey(),
+				Account.class, ACCOUNT_KEY);
 
-		final Account expectedAccount = new Account(cashflow.getKey(), ACCOUNT_NAME, ACCOUNT_BALANCE);
+		final Account expectedAccount = new Account(cashflow.getKey(),
+				ACCOUNT_NAME, ACCOUNT_BALANCE);
 
 		context.checking(new Expectations() {
 			{

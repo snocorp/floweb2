@@ -97,14 +97,14 @@ public class FloAccountStore implements AccountStore {
 	}
 
 	@Override
-	public Account editAccount(long id, String name, double balance) {
+	public Account editAccount(long id, String name, double balance, double negativeThreshold, double positiveThreshold) {
 		// get the user's cash flow
 		CashFlow cashflow = cashflowStore.getCashFlow();
 
 		Key<Account> key = new Key<Account>(cashflow.getKey(), Account.class, id);
 
 		// update the account with the given key
-		return dao.editAccount(key, name, balance);
+		return dao.editAccount(key, name, balance, negativeThreshold, positiveThreshold);
 	}
 
 	@Override

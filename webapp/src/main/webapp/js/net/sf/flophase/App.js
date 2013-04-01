@@ -127,10 +127,11 @@ define([
         /**
          * Shows the edit account popup.
          */
-        showEditAccount: function( event, acctHeaderCellNodeRef, acctKey, acctName ) {
+        showEditAccount: function( event, acctHeaderCellNodeRef, acctKey ) {
             editTransactionDialog.hide();
         	
-        	editAccountDialog.show(acctHeaderCellNodeRef, acctKey, acctName);
+            var account = this.getCashflow().getAccount(acctKey);
+        	editAccountDialog.show(acctHeaderCellNodeRef, account);
 
             //prevent bubbling
             event.stopPropagation();
@@ -304,18 +305,20 @@ define([
          * @param acctKey The key of the account.
          * @param name The new name.
          */
-        editAccountName: function(acctKey, name) {
+        editAccount: function(acctKey, name, negativeThreshold, positiveThreshold) {
             var _this = this; //store a reference to this
 
             cashFlowStore.editAccount({
-                key:acctKey,
-                name:name,
-                success: function(account) {
+                "key": acctKey,
+                "name": name,
+                "negativeThreshold": negativeThreshold,
+                "positiveThreshold": positiveThreshold,
+                "success": function(account) {
                     _this.hideEditAccount();
 
                     eventBus.fireAccountUpdate(account);
                 },
-                error: function(messages) { 
+                "error": function(messages) { 
                 	_this.notify(messages); 
                 }
             });

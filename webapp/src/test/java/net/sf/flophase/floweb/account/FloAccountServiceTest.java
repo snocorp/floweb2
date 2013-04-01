@@ -41,6 +41,16 @@ public class FloAccountServiceTest {
 	private static final String MSG_INVALID_BALANCE = "Balance must be a valid number";
 
 	/**
+	 * The message returned when there is an invalid negative threshold.
+	 */
+	private static final String MSG_INVALID_NEGATIVE_THRESHOLD = "Negative threshold must be a valid number";
+
+	/**
+	 * The message returned when there is an invalid positive threshold.
+	 */
+	private static final String MSG_INVALID_POSITIVE_THRESHOLD = "Positive threshold must be a valid number";
+
+	/**
 	 * The message returned when there is no balance.
 	 */
 	private static final String MSG_MISSING_BALANCE = "Balance is required";
@@ -49,7 +59,7 @@ public class FloAccountServiceTest {
 	 * The message returned when there is no name.
 	 */
 	private static final String MSG_MISSING_NAME = "Name is required";
-	
+
 	/**
 	 * Message returned when attempting to delete the last account.
 	 */
@@ -64,6 +74,26 @@ public class FloAccountServiceTest {
 	 * A valid account balance.
 	 */
 	private static final double ACCOUNT_BALANCE = 1.23;
+
+	/**
+	 * The account negative threshold.
+	 */
+	private static final double ACCOUNT_NEGATIVE_THRESHOLD = 99;
+
+	/**
+	 * An invalid account negative threshold.
+	 */
+	private static final String INVALID_ACCOUNT_NEGATIVE_THRESHOLD = "abc";
+
+	/**
+	 * The account positive threshold.
+	 */
+	private static final double ACCOUNT_POSITIVE_THRESHOLD = 1000;
+
+	/**
+	 * An invalid account positive threshold.
+	 */
+	private static final String INVALID_ACCOUNT_POSITIVE_THRESHOLD = "abc";
 
 	/**
 	 * A valid account name.
@@ -358,12 +388,12 @@ public class FloAccountServiceTest {
 		final List<Account> accounts = new ArrayList<Account>();
 		accounts.add(new Account());
 		accounts.add(new Account());
-		
+
 		context.checking(new Expectations() {
 			{
 				one(userService).isUserLoggedIn();
 				will(returnValue(true));
-				
+
 				one(acctStore).getAccounts();
 				will(returnValue(accounts));
 
@@ -389,12 +419,12 @@ public class FloAccountServiceTest {
 	public void testDeleteLastAccount() {
 		final List<Account> accounts = new ArrayList<Account>();
 		accounts.add(new Account());
-		
+
 		context.checking(new Expectations() {
 			{
 				one(userService).isUserLoggedIn();
 				will(returnValue(true));
-				
+
 				one(acctStore).getAccounts();
 				will(returnValue(accounts));
 			}
@@ -442,12 +472,12 @@ public class FloAccountServiceTest {
 		final List<Account> accounts = new ArrayList<Account>();
 		accounts.add(new Account());
 		accounts.add(new Account());
-		
+
 		context.checking(new Expectations() {
 			{
 				one(userService).isUserLoggedIn();
 				will(returnValue(true));
-				
+
 				one(acctStore).getAccounts();
 				will(returnValue(accounts));
 			}
@@ -472,12 +502,12 @@ public class FloAccountServiceTest {
 		final List<Account> accounts = new ArrayList<Account>();
 		accounts.add(new Account());
 		accounts.add(new Account());
-		
+
 		context.checking(new Expectations() {
 			{
 				one(userService).isUserLoggedIn();
 				will(returnValue(true));
-				
+
 				one(acctStore).getAccounts();
 				will(returnValue(accounts));
 			}
@@ -502,12 +532,12 @@ public class FloAccountServiceTest {
 		final List<Account> accounts = new ArrayList<Account>();
 		accounts.add(new Account());
 		accounts.add(new Account());
-		
+
 		context.checking(new Expectations() {
 			{
 				one(userService).isUserLoggedIn();
 				will(returnValue(true));
-				
+
 				one(acctStore).getAccounts();
 				will(returnValue(accounts));
 			}
@@ -523,7 +553,8 @@ public class FloAccountServiceTest {
 	}
 
 	/**
-	 * Tests the {@link FloAccountService#editAccount(String, String, String)}
+	 * Tests the
+	 * {@link FloAccountService#editAccount(String, String, String, String, String)}
 	 * method. Ensures that the account store is called with the correct
 	 * parameters.
 	 */
@@ -537,13 +568,16 @@ public class FloAccountServiceTest {
 				will(returnValue(true));
 
 				one(acctStore).editAccount(Long.parseLong(ACCOUNT_KEY),
-						ACCOUNT_NAME, ACCOUNT_BALANCE);
+						ACCOUNT_NAME, ACCOUNT_BALANCE,
+						ACCOUNT_NEGATIVE_THRESHOLD, ACCOUNT_POSITIVE_THRESHOLD);
 				will(returnValue(account));
 			}
 		});
 
 		Response<Account> response = service.editAccount(ACCOUNT_KEY,
-				ACCOUNT_NAME, String.valueOf(ACCOUNT_BALANCE));
+				ACCOUNT_NAME, String.valueOf(ACCOUNT_BALANCE),
+				String.valueOf(ACCOUNT_NEGATIVE_THRESHOLD),
+				String.valueOf(ACCOUNT_POSITIVE_THRESHOLD));
 
 		assertThat(response.getResult(), is(equalTo(Response.RESULT_SUCCESS)));
 
@@ -555,7 +589,8 @@ public class FloAccountServiceTest {
 	}
 
 	/**
-	 * Tests the {@link FloAccountService#editAccount(String, String, String)}
+	 * Tests the
+	 * {@link FloAccountService#editAccount(String, String, String, String, String)}
 	 * method with no logged in user. Ensures that a failure response is
 	 * returned with the correct message.
 	 */
@@ -569,7 +604,9 @@ public class FloAccountServiceTest {
 		});
 
 		Response<Account> response = service.editAccount(ACCOUNT_KEY,
-				ACCOUNT_NAME, String.valueOf(ACCOUNT_BALANCE));
+				ACCOUNT_NAME, String.valueOf(ACCOUNT_BALANCE),
+				String.valueOf(ACCOUNT_NEGATIVE_THRESHOLD),
+				String.valueOf(ACCOUNT_POSITIVE_THRESHOLD));
 
 		assertThat(response.getResult(), is(equalTo(Response.RESULT_FAILURE)));
 
@@ -579,7 +616,8 @@ public class FloAccountServiceTest {
 	}
 
 	/**
-	 * Tests the {@link FloAccountService#editAccount(String, String, String)}
+	 * Tests the
+	 * {@link FloAccountService#editAccount(String, String, String, String, String)}
 	 * method with an invalid balance. Ensures that a failure response is
 	 * returned with the correct message.
 	 */
@@ -593,7 +631,9 @@ public class FloAccountServiceTest {
 		});
 
 		Response<Account> response = service.editAccount(ACCOUNT_KEY,
-				ACCOUNT_NAME, INVALID_ACCOUNT_BALANCE);
+				ACCOUNT_NAME, INVALID_ACCOUNT_BALANCE,
+				String.valueOf(ACCOUNT_NEGATIVE_THRESHOLD),
+				String.valueOf(ACCOUNT_POSITIVE_THRESHOLD));
 
 		assertThat(response.getResult(), is(equalTo(Response.RESULT_FAILURE)));
 
@@ -605,7 +645,136 @@ public class FloAccountServiceTest {
 	}
 
 	/**
-	 * Tests the {@link FloAccountService#editAccount(String, String, String)}
+	 * Tests the
+	 * {@link FloAccountService#editAccount(String, String, String, String, String)}
+	 * method with an invalid negative threshold. Ensures that a failure response is
+	 * returned with the correct message.
+	 */
+	@Test
+	public void testEditAccountWithInvalidNegativeThreshold() {
+		context.checking(new Expectations() {
+			{
+				one(userService).isUserLoggedIn();
+				will(returnValue(true));
+			}
+		});
+
+		Response<Account> response = service.editAccount(ACCOUNT_KEY,
+				ACCOUNT_NAME, String.valueOf(ACCOUNT_BALANCE),
+				INVALID_ACCOUNT_NEGATIVE_THRESHOLD,
+				String.valueOf(ACCOUNT_POSITIVE_THRESHOLD));
+
+		assertThat(response.getResult(), is(equalTo(Response.RESULT_FAILURE)));
+
+		assertNull(response.getContent());
+
+		assertThat(MSG_INVALID_NEGATIVE_THRESHOLD, isIn(response.getMessages()));
+
+		context.assertIsSatisfied();
+	}
+
+	/**
+	 * Tests the
+	 * {@link FloAccountService#editAccount(String, String, String, String, String)}
+	 * method with an invalid positive threshold. Ensures that a failure response is
+	 * returned with the correct message.
+	 */
+	@Test
+	public void testEditAccountWithInvalidPositiveThreshold() {
+		context.checking(new Expectations() {
+			{
+				one(userService).isUserLoggedIn();
+				will(returnValue(true));
+			}
+		});
+
+		Response<Account> response = service.editAccount(ACCOUNT_KEY,
+				ACCOUNT_NAME, String.valueOf(ACCOUNT_BALANCE),
+				String.valueOf(ACCOUNT_NEGATIVE_THRESHOLD),
+				INVALID_ACCOUNT_POSITIVE_THRESHOLD);
+
+		assertThat(response.getResult(), is(equalTo(Response.RESULT_FAILURE)));
+
+		assertNull(response.getContent());
+
+		assertThat(MSG_INVALID_POSITIVE_THRESHOLD, isIn(response.getMessages()));
+
+		context.assertIsSatisfied();
+	}
+
+	/**
+	 * Tests the
+	 * {@link FloAccountService#editAccount(String, String, String, String, String)}
+	 * method with a null balance. Ensures that a successful response is
+	 * returned with a default negative threshold of 0.0.
+	 */
+	@Test
+	public void testEditAccountWithNullNegativeThreshold() {
+		final Account account = new Account(null, ACCOUNT_NAME, ACCOUNT_BALANCE);
+
+		context.checking(new Expectations() {
+			{
+				one(userService).isUserLoggedIn();
+				will(returnValue(true));
+
+				one(acctStore).editAccount(Long.parseLong(ACCOUNT_KEY),
+						ACCOUNT_NAME, ACCOUNT_BALANCE, 0.0,
+						ACCOUNT_POSITIVE_THRESHOLD);
+				will(returnValue(account));
+			}
+		});
+
+		Response<Account> response = service.editAccount(ACCOUNT_KEY,
+				ACCOUNT_NAME, String.valueOf(ACCOUNT_BALANCE), null,
+				String.valueOf(ACCOUNT_POSITIVE_THRESHOLD));
+
+		assertThat(response.getResult(), is(equalTo(Response.RESULT_SUCCESS)));
+
+		assertThat(response.getContent(), is(equalTo(account)));
+
+		assertTrue(response.getMessages().isEmpty());
+
+		context.assertIsSatisfied();
+	}
+
+	/**
+	 * Tests the
+	 * {@link FloAccountService#editAccount(String, String, String, String, String)}
+	 * method with a null balance. Ensures that a successful response is
+	 * returned with a default positive threshold of 0.0.
+	 */
+	@Test
+	public void testEditAccountWithNullPositiveThreshold() {
+		final Account account = new Account(null, ACCOUNT_NAME, ACCOUNT_BALANCE);
+
+		context.checking(new Expectations() {
+			{
+				one(userService).isUserLoggedIn();
+				will(returnValue(true));
+
+				one(acctStore).editAccount(Long.parseLong(ACCOUNT_KEY),
+						ACCOUNT_NAME, ACCOUNT_BALANCE, ACCOUNT_NEGATIVE_THRESHOLD,
+						0.0);
+				will(returnValue(account));
+			}
+		});
+
+		Response<Account> response = service.editAccount(ACCOUNT_KEY,
+				ACCOUNT_NAME, String.valueOf(ACCOUNT_BALANCE), String.valueOf(ACCOUNT_NEGATIVE_THRESHOLD),
+				null);
+
+		assertThat(response.getResult(), is(equalTo(Response.RESULT_SUCCESS)));
+
+		assertThat(response.getContent(), is(equalTo(account)));
+
+		assertTrue(response.getMessages().isEmpty());
+
+		context.assertIsSatisfied();
+	}
+
+	/**
+	 * Tests the
+	 * {@link FloAccountService#editAccount(String, String, String, String, String)}
 	 * method with a null balance. Ensures that a failure response is returned
 	 * with the correct message.
 	 */
@@ -619,7 +788,8 @@ public class FloAccountServiceTest {
 		});
 
 		Response<Account> response = service.editAccount(ACCOUNT_KEY,
-				ACCOUNT_NAME, null);
+				ACCOUNT_NAME, null, String.valueOf(ACCOUNT_NEGATIVE_THRESHOLD),
+				String.valueOf(ACCOUNT_POSITIVE_THRESHOLD));
 
 		assertThat(response.getResult(), is(equalTo(Response.RESULT_FAILURE)));
 
@@ -631,7 +801,8 @@ public class FloAccountServiceTest {
 	}
 
 	/**
-	 * Tests the {@link FloAccountService#editAccount(String, String, String)}
+	 * Tests the
+	 * {@link FloAccountService#editAccount(String, String, String, String, String)}
 	 * method with an empty balance. Ensures that a failure response is returned
 	 * with the correct message.
 	 */
@@ -645,7 +816,8 @@ public class FloAccountServiceTest {
 		});
 
 		Response<Account> response = service.editAccount(ACCOUNT_KEY,
-				ACCOUNT_NAME, "");
+				ACCOUNT_NAME, "", String.valueOf(ACCOUNT_NEGATIVE_THRESHOLD),
+				String.valueOf(ACCOUNT_POSITIVE_THRESHOLD));
 
 		assertThat(response.getResult(), is(equalTo(Response.RESULT_FAILURE)));
 
@@ -657,7 +829,8 @@ public class FloAccountServiceTest {
 	}
 
 	/**
-	 * Tests the {@link FloAccountService#editAccount(String, String, String)}
+	 * Tests the
+	 * {@link FloAccountService#editAccount(String, String, String, String, String)}
 	 * method with a null name. Ensures that a failure response is returned with
 	 * the correct message.
 	 */
@@ -671,7 +844,9 @@ public class FloAccountServiceTest {
 		});
 
 		Response<Account> response = service.editAccount(ACCOUNT_KEY, null,
-				String.valueOf(ACCOUNT_BALANCE));
+				String.valueOf(ACCOUNT_BALANCE),
+				String.valueOf(ACCOUNT_NEGATIVE_THRESHOLD),
+				String.valueOf(ACCOUNT_POSITIVE_THRESHOLD));
 
 		assertThat(response.getResult(), is(equalTo(Response.RESULT_FAILURE)));
 
@@ -683,7 +858,8 @@ public class FloAccountServiceTest {
 	}
 
 	/**
-	 * Tests the {@link FloAccountService#editAccount(String, String, String)}
+	 * Tests the
+	 * {@link FloAccountService#editAccount(String, String, String, String, String)}
 	 * method with an empty name. Ensures that a failure response is returned
 	 * with the correct message.
 	 */
@@ -697,7 +873,9 @@ public class FloAccountServiceTest {
 		});
 
 		Response<Account> response = service.editAccount(ACCOUNT_KEY, "",
-				String.valueOf(ACCOUNT_BALANCE));
+				String.valueOf(ACCOUNT_BALANCE),
+				String.valueOf(ACCOUNT_NEGATIVE_THRESHOLD),
+				String.valueOf(ACCOUNT_POSITIVE_THRESHOLD));
 
 		assertThat(response.getResult(), is(equalTo(Response.RESULT_FAILURE)));
 
@@ -709,7 +887,8 @@ public class FloAccountServiceTest {
 	}
 
 	/**
-	 * Tests the {@link FloAccountService#editAccount(String, String, String)}
+	 * Tests the
+	 * {@link FloAccountService#editAccount(String, String, String, String, String)}
 	 * method with a name that is too long. Ensures that a failure response is
 	 * returned with the correct message.
 	 */
@@ -723,7 +902,9 @@ public class FloAccountServiceTest {
 		});
 
 		Response<Account> response = service.editAccount(ACCOUNT_KEY,
-				INVALID_ACCOUNT_NAME_TOO_LONG, String.valueOf(ACCOUNT_BALANCE));
+				INVALID_ACCOUNT_NAME_TOO_LONG, String.valueOf(ACCOUNT_BALANCE),
+				String.valueOf(ACCOUNT_NEGATIVE_THRESHOLD),
+				String.valueOf(ACCOUNT_POSITIVE_THRESHOLD));
 
 		assertThat(response.getResult(), is(equalTo(Response.RESULT_FAILURE)));
 
@@ -735,7 +916,8 @@ public class FloAccountServiceTest {
 	}
 
 	/**
-	 * Tests the {@link FloAccountService#editAccount(String, String, String)}
+	 * Tests the
+	 * {@link FloAccountService#editAccount(String, String, String, String, String)}
 	 * method with an invalid key. Ensures that a failure response is returned
 	 * with the correct message.
 	 */
@@ -749,7 +931,9 @@ public class FloAccountServiceTest {
 		});
 
 		Response<Account> response = service.editAccount(INVALID_ACCOUNT_KEY,
-				ACCOUNT_NAME, String.valueOf(ACCOUNT_BALANCE));
+				ACCOUNT_NAME, String.valueOf(ACCOUNT_BALANCE),
+				String.valueOf(ACCOUNT_NEGATIVE_THRESHOLD),
+				String.valueOf(ACCOUNT_POSITIVE_THRESHOLD));
 
 		assertThat(response.getResult(), is(equalTo(Response.RESULT_FAILURE)));
 
@@ -759,7 +943,8 @@ public class FloAccountServiceTest {
 	}
 
 	/**
-	 * Tests the {@link FloAccountService#editAccount(String, String, String)}
+	 * Tests the
+	 * {@link FloAccountService#editAccount(String, String, String, String, String)}
 	 * method with a null key. Ensures that a failure response is returned with
 	 * the correct message.
 	 */
@@ -773,7 +958,9 @@ public class FloAccountServiceTest {
 		});
 
 		Response<Account> response = service.editAccount(null, ACCOUNT_NAME,
-				String.valueOf(ACCOUNT_BALANCE));
+				String.valueOf(ACCOUNT_BALANCE),
+				String.valueOf(ACCOUNT_NEGATIVE_THRESHOLD),
+				String.valueOf(ACCOUNT_POSITIVE_THRESHOLD));
 
 		assertThat(response.getResult(), is(equalTo(Response.RESULT_FAILURE)));
 
@@ -783,7 +970,8 @@ public class FloAccountServiceTest {
 	}
 
 	/**
-	 * Tests the {@link FloAccountService#editAccount(String, String, String)}
+	 * Tests the
+	 * {@link FloAccountService#editAccount(String, String, String, String, String)}
 	 * method with an empty key. Ensures that a failure response is returned
 	 * with the correct message.
 	 */
@@ -797,7 +985,9 @@ public class FloAccountServiceTest {
 		});
 
 		Response<Account> response = service.editAccount("", ACCOUNT_NAME,
-				String.valueOf(ACCOUNT_BALANCE));
+				String.valueOf(ACCOUNT_BALANCE),
+				String.valueOf(ACCOUNT_NEGATIVE_THRESHOLD),
+				String.valueOf(ACCOUNT_POSITIVE_THRESHOLD));
 
 		assertThat(response.getResult(), is(equalTo(Response.RESULT_FAILURE)));
 

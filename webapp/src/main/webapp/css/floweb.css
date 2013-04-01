@@ -105,6 +105,12 @@ div.dijitCurrencyTextBox.dijitTextBoxHover.negative {
 div.dijitCurrencyTextBox.dijitTextBoxHover.positive {
 	background-color: #d2fecf !important;
 }
+td.flo-xactionbalance.negative {
+	background-color: #fecfec;
+}
+td.flo-xactionbalance.positive {
+	background-color: #d2fecf;
+}
 
 
 /**
@@ -134,6 +140,12 @@ input.newxactiondate {
     border: 1px solid #999;
     padding: 1px;
     background-color: #fff;
+}
+
+div.flo-advanced-options {
+	background-color: #eee;
+	padding: 4px 8px;
+	display: none;
 }
 
 div.flo-dialog-error {

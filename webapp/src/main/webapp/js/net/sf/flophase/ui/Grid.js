@@ -142,7 +142,7 @@ define(["dojo/dom",
                     balance = accounts[j].balance;
                 }
 
-                xactionRow.appendChild(this.createTransactionBalanceCell(transaction.details.key, accounts[j].key, balance));
+                xactionRow.appendChild(this.createTransactionBalanceCell(transaction.details.key, accounts[j], balance));
             }
 
             return xactionRow;
@@ -279,13 +279,19 @@ define(["dojo/dom",
          * @param accountKey The key of the account
          * @param balance The balance
          */
-        createTransactionBalanceCell: function(xactionKey, accountKey, balance) {
+        createTransactionBalanceCell: function(xactionKey, account, balance) {
             var xactionBalanceCell = document.createElement("td");
-            xactionBalanceCell.id = 'balance_'+accountKey+'_'+xactionKey;
+            xactionBalanceCell.id = 'balance_'+account.key+'_'+xactionKey;
             xactionBalanceCell.className = 'flo-xactionbalance';
 
             var balanceText = dojo.currency.format(balance, {currency:'USD'});
             xactionBalanceCell.appendChild(document.createTextNode(balanceText));
+            
+            if (balance < account.negativeThreshold) {
+            	$(xactionBalanceCell).addClass('negative');
+            } else if (balance > account.positiveThreshold) {
+            	$(xactionBalanceCell).addClass('positive');
+            }
 
             return xactionBalanceCell;
         },
@@ -340,13 +346,12 @@ define(["dojo/dom",
                 accountHeader.className = 'flo-accountheader';
 
                 //when the user clicks the cell, it will become editable
-                accountHeader.onclick = function(key, value) {return function(event) {
+                accountHeader.onclick = function(key) {return function(event) {
                     app.showEditAccount(
                             event,
                             this.id,
-                            key,
-                            value);
-                };}(accounts[i].key, accounts[i].name);
+                            key);
+                };}(accounts[i].key);
 
                 accountText = document.createTextNode(accounts[i].name);
 
@@ -359,13 +364,12 @@ define(["dojo/dom",
                 accountHeader.className = 'flo-accountheader';
 
                 //when the user clicks the cell, it will become editable
-                accountHeader.onclick = function(key, value) {return function(event) {
+                accountHeader.onclick = function(key) {return function(event) {
                     app.showEditAccount(
                             event,
                             this.id,
-                            key,
-                            value);
-                };}(accounts[i].key, accounts[i].name);
+                            key);
+                };}(accounts[i].key);
 
                 accountText = document.createTextNode(accounts[i].name);
 
@@ -467,13 +471,12 @@ define(["dojo/dom",
             currentCell.colSpan += 1;
 
             //create a function to handle clicks on the account cell
-            var clickHandler = function(key, value) {return function(event) {
+            var clickHandler = function(key) {return function(event) {
                 app.showEditAccount(
                         event,
                         this.id,
-                        key,
-                        value);
-            };}(account.key, account.name);
+                        key);
+            };}(account.key);
 
             //create the entries header cell
             var accountHeader = document.createElement("th");
@@ -539,7 +542,7 @@ define(["dojo/dom",
                     );
 
                     //the balance cell is just the account balance
-                    xactionRow.appendChild(this.createTransactionBalanceCell(xactionKey, account.key, account.balance));
+                    xactionRow.appendChild(this.createTransactionBalanceCell(xactionKey, account, account.balance));
                 }
             }
         },
@@ -580,26 +583,24 @@ define(["dojo/dom",
          */
         onAccountUpdate: function(account) {
             var accountHeader = dom.byId('account_'+account.key);
-            accountHeader.onclick = function(key, value) {return function(event) {
+            accountHeader.onclick = function(key) {return function(event) {
                     app.showEditAccount(
                             event,
                             this.id,
-                            key,
-                            value);
-                };}(account.key, account.name);
+                            key);
+                };}(account.key);
             accountHeader.replaceChild(
                 document.createTextNode(account.name),
                 accountHeader.firstChild
             );
 
             accountHeader = dom.byId('accountbal_'+account.key);
-            accountHeader.onclick = function(key, value) {return function(event) {
+            accountHeader.onclick = function(key) {return function(event) {
                     app.showEditAccount(
                             event,
                             this.id,
-                            key,
-                            value);
-                };}(account.key, account.name);
+                            key);
+                };}(account.key);
             accountHeader.replaceChild(
                 document.createTextNode(account.name),
                 accountHeader.firstChild
@@ -668,6 +669,21 @@ define(["dojo/dom",
                             document.createTextNode(balance),
                             xactionBalanceCell.firstChild
                         );
+                        
+                        var $xactionBalanceCell = $(xactionBalanceCell);
+                        if (transactions[i].balances[account.key] < account.negativeThreshold) {
+                        	if (!$xactionBalanceCell.hasClass('negative')) {
+                        		$xactionBalanceCell.removeClass('positive');
+                        		$xactionBalanceCell.addClass('negative');
+                        	}
+                        } else if (transactions[i].balances[account.key] > account.positiveThreshold) {
+                        	if (!$xactionBalanceCell.hasClass('positive')) {
+                        		$xactionBalanceCell.removeClass('negative');
+                        		$xactionBalanceCell.addClass('positive');
+                        	}
+                        } else if ($xactionBalanceCell.hasClass('negative') || $xactionBalanceCell.hasClass('positive')) {
+                        	$xactionBalanceCell.removeClass('negative positive');
+                        }
                     } else {
                         for (var j in transactions[i].balances) {
                             xactionBalanceCell = dom.byId('balance_'+j+'_'+transactions[i].details.key);
@@ -676,6 +692,21 @@ define(["dojo/dom",
                                 document.createTextNode(balance),
                                 xactionBalanceCell.firstChild
                             );
+                            
+                            var $xactionBalanceCell = $(xactionBalanceCell);
+                            if (transactions[i].balances[j] < account.negativeThreshold) {
+                            	if (!$xactionBalanceCell.hasClass('negative')) {
+                            		$xactionBalanceCell.removeClass('positive');
+                            		$xactionBalanceCell.addClass('negative');
+                            	}
+                            } else if (transactions[i].balances[j] > account.positiveThreshold) {
+                            	if (!$xactionBalanceCell.hasClass('positive')) {
+                            		$xactionBalanceCell.removeClass('negative');
+                            		$xactionBalanceCell.addClass('positive');
+                            	}
+                            } else if ($xactionBalanceCell.hasClass('negative') || $xactionBalanceCell.hasClass('positive')) {
+                            	$xactionBalanceCell.removeClass('negative positive');
+                            }
                         }
                     }
                 }

@@ -39,12 +39,14 @@ public class AccountQueryServletTest extends AbstractServletTest {
 	 */
 	@Test
 	public void testDoGet() throws Exception {
-		final AccountService mockAccountService = testServletContextListener.getModule().getAccountService();
+		final AccountService mockAccountService = testServletContextListener
+				.getModule().getAccountService();
 
 		final List<Account> accountList = new ArrayList<Account>();
 		accountList.add(new Account(null, ACCOUNT_NAME, ACCOUNT_BALANCE));
 
-		final Response<List<Account>> response = new Response<List<Account>>(Response.RESULT_SUCCESS, accountList);
+		final Response<List<Account>> response = new Response<List<Account>>(
+				Response.RESULT_SUCCESS, accountList);
 
 		context.checking(new Expectations() {
 			{
@@ -54,8 +56,11 @@ public class AccountQueryServletTest extends AbstractServletTest {
 		});
 
 		// ensure the response is a JSON formatted version of the response
-		assertResponseContent("{\"result\":1,\"messages\":[],\"content\":[{\"name\":\"" + ACCOUNT_NAME
-		        + "\",\"balance\":" + String.valueOf(ACCOUNT_BALANCE) + "}]}");
+		assertResponseContent("{\"result\":1,\"messages\":[],\"content\":[{\"name\":\""
+				+ ACCOUNT_NAME
+				+ "\",\"balance\":"
+				+ ACCOUNT_BALANCE
+				+ ",\"negativeThreshold\":0.0,\"positiveThreshold\":0.0}]}");
 	}
 
 	@Override

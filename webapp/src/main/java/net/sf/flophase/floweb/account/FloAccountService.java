@@ -173,7 +173,7 @@ public class FloAccountService implements AccountService {
 	}
 
 	@Override
-	public Response<Account> editAccount(String key, String name, String balance) {
+	public Response<Account> editAccount(String key, String name, String balance, String negativeThreshold, String positiveThreshold) {
 		// respond with success by default
 		Response<Account> response = new Response<Account>(Response.RESULT_SUCCESS);
 
@@ -226,10 +226,42 @@ public class FloAccountService implements AccountService {
 				}
 			}
 
+			double negThresholdValue = Double.NaN;
+			if (negativeThreshold == null || negativeThreshold.length() == 0) {
+				// default to 0.0
+				negThresholdValue = 0.0;
+			} else {
+				try {
+					// try to parse the balance
+					negThresholdValue = Double.parseDouble(negativeThreshold);
+				}
+				// if the negative threshold could not be parsed
+				catch (NumberFormatException e) {
+					response.setResult(Response.RESULT_FAILURE);
+					response.addMessage("Negative threshold must be a valid number");
+				}
+			}
+
+			double posThresholdValue = Double.NaN;
+			if (positiveThreshold == null || positiveThreshold.length() == 0) {
+				// default to 0.0
+				posThresholdValue = 0.0;
+			} else {
+				try {
+					// try to parse the balance
+					posThresholdValue = Double.parseDouble(positiveThreshold);
+				}
+				// if the balance could not be parsed
+				catch (NumberFormatException e) {
+					response.setResult(Response.RESULT_FAILURE);
+					response.addMessage("Positive threshold must be a valid number");
+				}
+			}
+
 			// if we have not indicated failure yet
 			if (response.getResult() == Response.RESULT_SUCCESS) {
 				// edit the account
-				Account acct = acctStore.editAccount(id, name, balanceValue);
+				Account acct = acctStore.editAccount(id, name, balanceValue, negThresholdValue, posThresholdValue);
 
 				// respond with the updated account
 				response.setContent(acct);

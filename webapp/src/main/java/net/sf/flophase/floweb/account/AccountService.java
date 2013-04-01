@@ -44,7 +44,11 @@ public interface AccountService {
 	 *            The name
 	 * @param balance
 	 *            The balance
+	 * @param negativeThreshold
+	 *            The threshold at which the account is considered negative, default is 0
+	 * @param positiveThreshold
+	 *            The threshold at which the account is considered positive, default is 0
 	 * @return A response containing the updated account
 	 */
-	public Response<Account> editAccount(String key, String name, String balance);
+	public Response<Account> editAccount(String key, String name, String balance, String negativeThreshold, String positiveThreshold);
 }

@@ -50,7 +50,8 @@ public class AddAccountServletTest extends AbstractServletTest {
 		});
 
 		assertResponseContent("{\"result\":1,\"messages\":[],\"content\":{\"name\":\"" + ACCOUNT_NAME
-		        + "\",\"balance\":" + String.valueOf(ACCOUNT_BALANCE) + "}}");
+		        + "\",\"balance\":" + ACCOUNT_BALANCE
+				+ ",\"negativeThreshold\":0.0,\"positiveThreshold\":0.0}}");
 	}
 
 	@Override

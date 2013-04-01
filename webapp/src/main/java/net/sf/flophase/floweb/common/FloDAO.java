@@ -120,10 +120,10 @@ public class FloDAO extends DAOBase implements DAO {
 	}
 
 	@Override
-	public Account editAccount(Key<Account> key, String name, double balance) {
+	public Account editAccount(Key<Account> key, String name, double balance, double negativeThreshold, double positiveThreshold) {
 		Objectify ofy = ofy();
 
-		// lo0ad the existing account
+		// load the existing account
 		Account account = ofy.get(key);
 
 		// set the new name
@@ -131,6 +131,10 @@ public class FloDAO extends DAOBase implements DAO {
 
 		// set the new balance
 		account.setBalance(balance);
+		
+		//set the thresholds
+		account.setNegativeThreshold(negativeThreshold);
+		account.setPositiveThreshold(positiveThreshold);
 
 		// store the updated account
 		ofy.put(account);

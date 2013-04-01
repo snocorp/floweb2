@@ -56,8 +56,15 @@
         </div>
         <div id="accountEditor" class="flo-editor flo-off-screen">
             <input class="accountname" type="text" id="accountName" data-dojo-type="dijit.form.TextBox"/><br/>
+            <div id="accountEditorAdvanced" class="flo-advanced-options">
+            	<label title="Negative Threshold">Negative</label>
+            	<input type="text" id="negativeThreshold" data-dojo-type="dijit.form.CurrencyTextBox"/><br/>
+            	<label title="Positive Threshold">Positive</label>
+            	<input type="text" id="positiveThreshold" data-dojo-type="dijit.form.CurrencyTextBox"/><br/>
+            </div>
+            <button type="button" id="accountMore" class="btn">Options</button>
+            <button type="button" id="accountSave" class="btn">Save</button>
             <button type="button" id="accountDelete" class="btn">Delete</button>
-            
         </div>
         <div id="xactionEditor" class="flo-editor flo-off-screen">
             <input class="xactionname" type="text" id="xactionName" data-dojo-type="dijit.form.TextBox"/><br/>
