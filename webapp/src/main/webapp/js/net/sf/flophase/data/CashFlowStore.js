@@ -212,28 +212,15 @@ define([
                 	
                     //update the account object
                     account.name = options.name;
+                    account.positiveThreshold = options.positiveThreshold;
+                    account.negativeThreshold = options.negativeThreshold;
                     
                     if (options.balance !== account.balance) {
                         account.balance = options.balance;
-                        
-                        updateBalancesFlag = true;
-                    }
-                    
-                    if (options.negativeThreshold !== account.negativeThreshold) {
-                        account.negativeThreshold = options.negativeThreshold;
-                        
-                        updateBalancesFlag = true;
-                    }
-                    
-                    if (options.positiveThreshold !== account.positiveThreshold) {
-                        account.positiveThreshold = options.positiveThreshold;
-                        
-                        updateBalancesFlag = true;
-                    }
 
-                    if (updateBalancesFlag) {
                         _this.updateBalances();
                     }
+                    
                     options.success(account);
                 },
                 "error": options.error

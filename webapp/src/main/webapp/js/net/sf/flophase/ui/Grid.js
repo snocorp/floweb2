@@ -605,6 +605,24 @@ define(["dojo/dom",
                 document.createTextNode(account.name),
                 accountHeader.firstChild
             );
+            
+            var transactions = app.getCashflow().getTransactions();
+            for (var i in transactions) {
+            	var $xactionBalanceCell = $('#balance_'+account.key+'_'+transactions[i].details.key);
+                if (transactions[i].balances[account.key] < account.negativeThreshold) {
+                	if (!$xactionBalanceCell.hasClass('negative')) {
+                		$xactionBalanceCell.removeClass('positive');
+                		$xactionBalanceCell.addClass('negative');
+                	}
+                } else if (transactions[i].balances[account.key] > account.positiveThreshold) {
+                	if (!$xactionBalanceCell.hasClass('positive')) {
+                		$xactionBalanceCell.removeClass('negative');
+                		$xactionBalanceCell.addClass('positive');
+                	}
+                } else if ($xactionBalanceCell.hasClass('negative') || $xactionBalanceCell.hasClass('positive')) {
+                	$xactionBalanceCell.removeClass('negative positive');
+                }
+            }
         },
         /**
          * This method is invoked when an entry is edited.
