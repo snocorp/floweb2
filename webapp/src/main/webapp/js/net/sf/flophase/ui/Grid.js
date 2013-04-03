@@ -711,13 +711,14 @@ define(["dojo/dom",
                                 xactionBalanceCell.firstChild
                             );
                             
+                            var acct = app.getCashflow().getAccount(j);
                             var $xactionBalanceCell = $(xactionBalanceCell);
-                            if (transactions[i].balances[j] < account.negativeThreshold) {
+                            if (transactions[i].balances[j] < acct.negativeThreshold) {
                             	if (!$xactionBalanceCell.hasClass('negative')) {
                             		$xactionBalanceCell.removeClass('positive');
                             		$xactionBalanceCell.addClass('negative');
                             	}
-                            } else if (transactions[i].balances[j] > account.positiveThreshold) {
+                            } else if (transactions[i].balances[j] > acct.positiveThreshold) {
                             	if (!$xactionBalanceCell.hasClass('positive')) {
                             		$xactionBalanceCell.removeClass('negative');
                             		$xactionBalanceCell.addClass('positive');
