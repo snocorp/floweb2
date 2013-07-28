@@ -6,7 +6,7 @@
     UserService userService = UserServiceFactory.getUserService();
     User user = userService.getCurrentUser();
     if (user != null) {
-%><jsp:include page="app.jsp"></jsp:include><%
+		response.sendRedirect("std/app.jsp");
     } else {
 %><jsp:include page="splash.jsp"></jsp:include><%
     }
