@@ -7,15 +7,15 @@
 	<packaging>war</packaging>
 	<properties>
 		<!-- GWT needs at least java 1.6 -->
-		<maven.compiler.source>1.6</maven.compiler.source>
-		<maven.compiler.target>1.6</maven.compiler.target>
+		<maven.compiler.source>1.7</maven.compiler.source>
+		<maven.compiler.target>1.7</maven.compiler.target>
+
+		<gae.version>1.8.0</gae.version>
+		<skip.tests>true</skip.tests>
 
 		<!-- GAE properties -->
 		<gae.home>${user.home}/.m2/repository/com/google/appengine/appengine-java-sdk/${gae.version}/appengine-java-sdk-${gae.version}</gae.home>
 		<gae.application.version>1</gae.application.version>
-
-		<gae.version>1.7.4</gae.version>
-		<skip.tests>true</skip.tests>
 	</properties>
 
 	<repositories>
@@ -72,21 +72,27 @@
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
-			<version>2.2.1</version>
+			<version>2.2.4</version>
 			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+		    <groupId>javax.servlet</groupId>
+		    <artifactId>servlet-api</artifactId>
+		    <version>2.5</version>
 		</dependency>
 
 		<!-- Testing dependencies -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.8.1</version>
+			<version>4.11</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.jmock</groupId>
 			<artifactId>jmock-junit4</artifactId>
-			<version>2.5.1</version>
+			<version>2.6.0</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -98,7 +104,7 @@
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-java</artifactId>
-			<version>2.30.0</version>
+			<version>2.33.0</version>
 		</dependency>
 	</dependencies>
 
@@ -111,16 +117,15 @@
 			<plugin>
 				<groupId>net.kindleit</groupId>
 				<artifactId>maven-gae-plugin</artifactId>
-				<version>0.8.1</version>
-				<executions>
-					<execution>
-						<id />
-						<phase>validate</phase>
-						<goals>
-							<goal>unpack</goal>
-						</goals>
-					</execution>
-				</executions>
+				<version>0.9.5</version>
+                <dependencies>
+                  <dependency>
+                    <groupId>net.kindleit</groupId>
+                    <artifactId>gae-runtime</artifactId>
+                    <version>${gae.version}</version>
+                    <type>pom</type>
+                  </dependency>
+                </dependencies>
 			</plugin>
 
 			<plugin>
