@@ -1,0 +1,51 @@
+/* http://colorschemedesigner.com/#3h21Pw0w0w0w0 */
+body {
+  min-height: 2000px;
+  padding-top: 70px;
+}
+.transaction .title, .current .title {
+  font-weight: bold;
+}
+.transaction .title,
+.transaction .date,
+.transaction .entry .amount,
+.current .account .name,
+.current .account .balance {
+	border-color: #fff;
+}
+.transaction .title:hover,
+.transaction .date:hover,
+.transaction .entry .amount:hover,
+.current .account .name:hover,
+.current .account .balance:hover {
+	border-color: #ccc;
+}
+.transaction .entry .amount, .transaction .entry .balance, .current .account .balance {
+	text-align:right;
+}
+.transaction .entry .balance, .current .title, .entries .account {
+	padding: 6px 27px;
+}
+.current .account, .transactions .transaction {
+	padding: 1px;
+	margin: 1px 0;
+	border-radius: 4px;
+}
+.current .account:hover, .current .account.selected:hover {
+	background-color: #5CCDC9;
+}
+.current .account.selected {
+	background-color: #009B95;
+}
+.transactions .transaction:hover, .transactions .transaction.selected:hover {
+	background-color: #5CCDC9;
+}
+.transactions .transaction.selected {
+	background-color: #009B95;
+}
+.flo-hidden {
+	display: none;
+}
+.ui-front {
+	z-index: 1031;
+}
