@@ -12,7 +12,7 @@
    					<button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
 			            <span class="icon-bar"></span>
 			        </button>
-	   				<a href="index.jsp" class="brand">flophase</a>
+	   				<a href="/index.jsp" class="brand">flophase</a>
 	   				<div class="nav-collapse collapse">
 	   					<ul class="nav">
 	   						<li class="active"><a href="api.html">API</a></li>
@@ -275,8 +275,16 @@
             date: &lt;xationDate&gt;
          },
          entries: {
-            &lt;accountKey0&gt;: &lt;entryAmount0&gt;,
-            &lt;accountKey1&gt;: &lt;entryAmount1&gt;,
+            &lt;accountKey0&gt;: { 
+               key: &lt;entryKey0&gt;,
+               account: &lt;accountKey0&gt;,
+               amount: &lt;entryAmount0&gt;
+            },
+            &lt;accountKey1&gt;: { 
+               key: &lt;entryKey1&gt;,
+               account: &lt;accountKey1&gt;,
+               amount: &lt;entryAmount1&gt;
+            }
             ...
          }
       },
