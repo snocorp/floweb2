@@ -57,7 +57,7 @@ public class TransactionQueryServletTest extends AbstractServletTest {
 
 		context.checking(new Expectations() {
 			{
-				one(mockTransactionService).getTransactions(QUERY_MONTH);
+				oneOf(mockTransactionService).getTransactions(QUERY_MONTH);
 				will(returnValue(response));
 			}
 		});

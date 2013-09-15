@@ -50,7 +50,7 @@ public class FloUserStoreTest {
 
 		context.checking(new Expectations() {
 			{
-				one(userService).getCurrentUser();
+				oneOf(userService).getCurrentUser();
 				will(returnValue(expectedUser));
 			}
 		});

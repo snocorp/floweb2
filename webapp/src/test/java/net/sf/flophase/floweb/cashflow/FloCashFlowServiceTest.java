@@ -63,11 +63,11 @@ public class FloCashFlowServiceTest {
 		context.checking(new Expectations() {
 			{
 				// there is a user that is logged in
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 
 				// return the list of accounts
-				one(cashFlowStore).getCashFlow();
+				oneOf(cashFlowStore).getCashFlow();
 				will(returnValue(cashflow));
 			}
 		});
@@ -87,7 +87,7 @@ public class FloCashFlowServiceTest {
 		context.checking(new Expectations() {
 			{
 				// no user is logged in
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(false));
 			}
 		});

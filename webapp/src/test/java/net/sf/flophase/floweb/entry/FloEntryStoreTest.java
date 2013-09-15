@@ -104,13 +104,13 @@ public class FloEntryStoreTest {
 
 		context.checking(new Expectations() {
 			{
-				one(accountStore).getAccount(4L);
+				oneOf(accountStore).getAccount(4L);
 				will(returnValue(account));
 
-				one(xactionStore).getTransaction(5L);
+				oneOf(xactionStore).getTransaction(5L);
 				will(returnValue(xaction));
 
-				one(dao).editEntry(xaction, account.getKey().getId(), 1.23);
+				oneOf(dao).editEntry(xaction, account.getKey().getId(), 1.23);
 				will(returnValue(expectedEntry));
 			}
 		});
@@ -135,7 +135,7 @@ public class FloEntryStoreTest {
 
 		context.checking(new Expectations() {
 			{
-				one(dao).getEntries(xaction);
+				oneOf(dao).getEntries(xaction);
 				will(returnValue(expectedEntries));
 			}
 		});

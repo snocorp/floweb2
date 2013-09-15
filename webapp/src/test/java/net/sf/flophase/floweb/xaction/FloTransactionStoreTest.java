@@ -136,10 +136,10 @@ public class FloTransactionStoreTest {
 
 		context.checking(new Expectations() {
 			{
-				one(cashflowStore).getCashFlow();
+				oneOf(cashflowStore).getCashFlow();
 				will(returnValue(cashflow));
 
-				one(xactionDAO).createTransaction(cashflow, TRANSACTION_NAME_1, date);
+				oneOf(xactionDAO).createTransaction(cashflow, TRANSACTION_NAME_1, date);
 				will(returnValue(xaction));
 			}
 		});
@@ -162,10 +162,10 @@ public class FloTransactionStoreTest {
 
 		context.checking(new Expectations() {
 			{
-				one(cashflowStore).getCashFlow();
+				oneOf(cashflowStore).getCashFlow();
 				will(returnValue(cashflow));
 
-				one(xactionDAO).deleteTransaction(with(equal(key)));
+				oneOf(xactionDAO).deleteTransaction(with(equal(key)));
 			}
 		});
 
@@ -188,10 +188,10 @@ public class FloTransactionStoreTest {
 
 		context.checking(new Expectations() {
 			{
-				one(cashflowStore).getCashFlow();
+				oneOf(cashflowStore).getCashFlow();
 				will(returnValue(cashflow));
 
-				one(xactionDAO).editTransaction(with(equal(key)), with(equal(TRANSACTION_NAME_1)), with(equal(date)));
+				oneOf(xactionDAO).editTransaction(with(equal(key)), with(equal(TRANSACTION_NAME_1)), with(equal(date)));
 				will(returnValue(xaction));
 			}
 		});
@@ -218,13 +218,13 @@ public class FloTransactionStoreTest {
 
 		context.checking(new Expectations() {
 			{
-				one(cashflowStore).getCashFlow();
+				oneOf(cashflowStore).getCashFlow();
 				will(returnValue(cashflow));
 
-				one(xactionDAO).getTransactions(cashflow, date);
+				oneOf(xactionDAO).getTransactions(cashflow, date);
 				will(returnValue(xactions));
 
-				one(entryStore).getEntries(transaction);
+				oneOf(entryStore).getEntries(transaction);
 				will(returnValue(new HashMap<Long, Entry>()));
 			}
 		});
@@ -252,10 +252,10 @@ public class FloTransactionStoreTest {
 
 		context.checking(new Expectations() {
 			{
-				one(cashflowStore).getCashFlow();
+				oneOf(cashflowStore).getCashFlow();
 				will(returnValue(cashflow));
 
-				one(xactionDAO).getTransaction(key);
+				oneOf(xactionDAO).getTransaction(key);
 				will(returnValue(xaction));
 			}
 		});
@@ -292,21 +292,21 @@ public class FloTransactionStoreTest {
 		
 		context.checking(new Expectations() {
 			{
-				one(cashflowStore).getCashFlow();
+				oneOf(cashflowStore).getCashFlow();
 				will(returnValue(cashflow));
 
-				one(xactionDAO).getTransaction(origKey);
+				oneOf(xactionDAO).getTransaction(origKey);
 				will(returnValue(original));
 				
-				one(entryStore).getEntries(original);
+				oneOf(entryStore).getEntries(original);
 				will(returnValue(origEntries));
 				
-				one(xactionDAO).createTransaction(cashflow, TRANSACTION_NAME_2, date);
+				oneOf(xactionDAO).createTransaction(cashflow, TRANSACTION_NAME_2, date);
 				will(returnValue(copy));
 				
-				one(entryStore).editEntry(ACCOUNT_ID, TRANSACTION_ID_2, ENTRY_AMOUNT);
+				oneOf(entryStore).editEntry(ACCOUNT_ID, TRANSACTION_ID_2, ENTRY_AMOUNT);
 				
-				one(entryStore).getEntries(copy);
+				oneOf(entryStore).getEntries(copy);
 				will(returnValue(copyEntries));
 			}
 		});

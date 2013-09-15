@@ -61,10 +61,10 @@ public class FloCashFlowStoreTest {
 
 		context.checking(new Expectations() {
 			{
-				one(userStore).getUser();
+				oneOf(userStore).getUser();
 				will(returnValue(user));
 
-				one(cashflowDAO).getCashFlow(user);
+				oneOf(cashflowDAO).getCashFlow(user);
 				will(returnValue(cashflow));
 			}
 		});
@@ -88,13 +88,13 @@ public class FloCashFlowStoreTest {
 
 		context.checking(new Expectations() {
 			{
-				one(userStore).getUser();
+				oneOf(userStore).getUser();
 				will(returnValue(user));
 
-				one(cashflowDAO).getCashFlow(user);
+				oneOf(cashflowDAO).getCashFlow(user);
 				will(returnValue(null));
 
-				one(cashflowDAO).createCashFlow(user);
+				oneOf(cashflowDAO).createCashFlow(user);
 				will(returnValue(cashflow));
 			}
 		});

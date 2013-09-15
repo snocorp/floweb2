@@ -44,7 +44,7 @@ public class AddAccountServletTest extends AbstractServletTest {
 
 		context.checking(new Expectations() {
 			{
-				one(mockAccountService).addAccount(ACCOUNT_NAME, String.valueOf(ACCOUNT_BALANCE));
+				oneOf(mockAccountService).addAccount(ACCOUNT_NAME, String.valueOf(ACCOUNT_BALANCE));
 				will(returnValue(response));
 			}
 		});

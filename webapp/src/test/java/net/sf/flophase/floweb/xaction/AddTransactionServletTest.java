@@ -55,7 +55,7 @@ public class AddTransactionServletTest extends AbstractServletTest {
 
 		context.checking(new Expectations() {
 			{
-				one(mockTransactionService).addTransaction(TRANSACTION_NAME, dateFormat.format(calendar.getTime()));
+				oneOf(mockTransactionService).addTransaction(TRANSACTION_NAME, dateFormat.format(calendar.getTime()));
 				will(returnValue(response));
 			}
 		});

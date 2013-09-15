@@ -106,10 +106,10 @@ public class FloEntryServiceTest {
 
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 
-				one(entryStore).editEntry(ACCOUNT_ID, XACTION_ID, AMOUNT1);
+				oneOf(entryStore).editEntry(ACCOUNT_ID, XACTION_ID, AMOUNT1);
 				will(returnValue(entry));
 			}
 		});
@@ -134,7 +134,7 @@ public class FloEntryServiceTest {
 	public void testEditEntryWithNoLoggedInUser() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(false));
 			}
 		});
@@ -159,7 +159,7 @@ public class FloEntryServiceTest {
 	public void testEditEntryWithInvalidAmount() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 			}
 		});
@@ -184,7 +184,7 @@ public class FloEntryServiceTest {
 	public void testEditEntryWithNullAmount() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 			}
 		});
@@ -208,7 +208,7 @@ public class FloEntryServiceTest {
 	public void testEditEntryWithEmptyAmount() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 			}
 		});
@@ -232,7 +232,7 @@ public class FloEntryServiceTest {
 	public void testEditEntryWithInvalidAccount() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 			}
 		});
@@ -257,7 +257,7 @@ public class FloEntryServiceTest {
 	public void testEditEntryWithNullAccount() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 			}
 		});
@@ -281,7 +281,7 @@ public class FloEntryServiceTest {
 	public void testEditEntryWithEmptyAccount() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 			}
 		});
@@ -305,7 +305,7 @@ public class FloEntryServiceTest {
 	public void testEditEntryWithInvalidTransaction() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 			}
 		});
@@ -330,7 +330,7 @@ public class FloEntryServiceTest {
 	public void testEditEntryWithNullTransaction() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 			}
 		});
@@ -354,7 +354,7 @@ public class FloEntryServiceTest {
 	public void testEditEntryWithEmptyTransaction() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 			}
 		});

@@ -60,7 +60,7 @@ public class EditTransactionServletTest extends AbstractServletTest {
 
 		context.checking(new Expectations() {
 			{
-				one(mockTransactionService).editTransaction(TRANSACTION_KEY, TRANSACTION_NAME,
+				oneOf(mockTransactionService).editTransaction(TRANSACTION_KEY, TRANSACTION_NAME,
 				        dateFormat.format(calendar.getTime()));
 				will(returnValue(response));
 			}

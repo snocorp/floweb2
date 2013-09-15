@@ -130,7 +130,7 @@ public class FloAccountStoreTest {
 				allowing(cashflowStore).getCashFlow();
 				will(returnValue(cashflow));
 
-				one(accountDAO).getAccounts(with(equal(cashflow)));
+				oneOf(accountDAO).getAccounts(with(equal(cashflow)));
 				will(returnValue(expectedAccounts));
 			}
 		});
@@ -154,10 +154,10 @@ public class FloAccountStoreTest {
 			{
 				allowing(cashflowStore).getCashFlow();
 
-				one(accountDAO).getAccounts(with(any(CashFlow.class)));
+				oneOf(accountDAO).getAccounts(with(any(CashFlow.class)));
 				will(returnValue(expectedAccounts));
 
-				one(accountDAO).createAccount(with(any(CashFlow.class)),
+				oneOf(accountDAO).createAccount(with(any(CashFlow.class)),
 						with(equal(DEFAULT_ACCOUNT_NAME)), with(equal(0.0)));
 				will(returnValue(new Account(new Key<CashFlow>(CashFlow.class,
 						1), DEFAULT_ACCOUNT_NAME, 0.0)));
@@ -192,7 +192,7 @@ public class FloAccountStoreTest {
 			{
 				allowing(cashflowStore).getCashFlow();
 
-				one(accountDAO)
+				oneOf(accountDAO)
 						.createAccount(with(any(CashFlow.class)),
 								with(equal(ACCOUNT_NAME)),
 								with(equal(ACCOUNT_BALANCE)));
@@ -223,7 +223,7 @@ public class FloAccountStoreTest {
 				allowing(cashflowStore).getCashFlow();
 				will(returnValue(cashflow));
 
-				one(accountDAO).deleteAccount(with(equal(key)));
+				oneOf(accountDAO).deleteAccount(with(equal(key)));
 			}
 		});
 
@@ -248,7 +248,7 @@ public class FloAccountStoreTest {
 				allowing(cashflowStore).getCashFlow();
 				will(returnValue(cashflow));
 
-				one(accountDAO).editAccount(with(equal(key)),
+				oneOf(accountDAO).editAccount(with(equal(key)),
 						with(equal(ACCOUNT_NAME)),
 						with(equal(ACCOUNT_BALANCE)),
 						with(equal(ACCOUNT_NEGATIVE_THRESHOLD)),
@@ -280,7 +280,7 @@ public class FloAccountStoreTest {
 				allowing(cashflowStore).getCashFlow();
 				will(returnValue(cashflow));
 
-				one(accountDAO).getAccount(key);
+				oneOf(accountDAO).getAccount(key);
 				will(returnValue(expectedAccount));
 			}
 		});

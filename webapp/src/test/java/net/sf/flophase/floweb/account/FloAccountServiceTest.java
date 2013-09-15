@@ -157,11 +157,11 @@ public class FloAccountServiceTest {
 		context.checking(new Expectations() {
 			{
 				// there is a user that is logged in
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 
 				// return the list of accounts
-				one(acctStore).getAccounts();
+				oneOf(acctStore).getAccounts();
 				will(returnValue(accounts));
 			}
 		});
@@ -182,7 +182,7 @@ public class FloAccountServiceTest {
 		context.checking(new Expectations() {
 			{
 				// no user is logged in
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(false));
 			}
 		});
@@ -206,10 +206,10 @@ public class FloAccountServiceTest {
 
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 
-				one(acctStore).createAccount(ACCOUNT_NAME, ACCOUNT_BALANCE);
+				oneOf(acctStore).createAccount(ACCOUNT_NAME, ACCOUNT_BALANCE);
 				will(returnValue(account));
 			}
 		});
@@ -235,7 +235,7 @@ public class FloAccountServiceTest {
 	public void testAddAccountWithNoLoggedInUser() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(false));
 			}
 		});
@@ -259,7 +259,7 @@ public class FloAccountServiceTest {
 	public void testAddAccountWithInvalidBalance() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 			}
 		});
@@ -285,7 +285,7 @@ public class FloAccountServiceTest {
 	public void testAddAccountWithNullBalance() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 			}
 		});
@@ -310,7 +310,7 @@ public class FloAccountServiceTest {
 	public void testAddAccountWithNullName() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 			}
 		});
@@ -336,7 +336,7 @@ public class FloAccountServiceTest {
 	public void testAddAccountWithEmptyName() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 			}
 		});
@@ -362,7 +362,7 @@ public class FloAccountServiceTest {
 	public void testAddAccountWithNameTooLong() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 			}
 		});
@@ -391,13 +391,13 @@ public class FloAccountServiceTest {
 
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 
-				one(acctStore).getAccounts();
+				oneOf(acctStore).getAccounts();
 				will(returnValue(accounts));
 
-				one(acctStore).deleteAccount(Long.parseLong(ACCOUNT_KEY));
+				oneOf(acctStore).deleteAccount(Long.parseLong(ACCOUNT_KEY));
 			}
 		});
 
@@ -422,10 +422,10 @@ public class FloAccountServiceTest {
 
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 
-				one(acctStore).getAccounts();
+				oneOf(acctStore).getAccounts();
 				will(returnValue(accounts));
 			}
 		});
@@ -448,7 +448,7 @@ public class FloAccountServiceTest {
 	public void testDeleteAccountWithNoLoggedInUser() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(false));
 			}
 		});
@@ -475,10 +475,10 @@ public class FloAccountServiceTest {
 
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 
-				one(acctStore).getAccounts();
+				oneOf(acctStore).getAccounts();
 				will(returnValue(accounts));
 			}
 		});
@@ -505,10 +505,10 @@ public class FloAccountServiceTest {
 
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 
-				one(acctStore).getAccounts();
+				oneOf(acctStore).getAccounts();
 				will(returnValue(accounts));
 			}
 		});
@@ -535,10 +535,10 @@ public class FloAccountServiceTest {
 
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 
-				one(acctStore).getAccounts();
+				oneOf(acctStore).getAccounts();
 				will(returnValue(accounts));
 			}
 		});
@@ -564,10 +564,10 @@ public class FloAccountServiceTest {
 
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 
-				one(acctStore).editAccount(Long.parseLong(ACCOUNT_KEY),
+				oneOf(acctStore).editAccount(Long.parseLong(ACCOUNT_KEY),
 						ACCOUNT_NAME, ACCOUNT_BALANCE,
 						ACCOUNT_NEGATIVE_THRESHOLD, ACCOUNT_POSITIVE_THRESHOLD);
 				will(returnValue(account));
@@ -598,7 +598,7 @@ public class FloAccountServiceTest {
 	public void testEditAccountWithNoLoggedInUser() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(false));
 			}
 		});
@@ -625,7 +625,7 @@ public class FloAccountServiceTest {
 	public void testEditAccountWithInvalidBalance() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 			}
 		});
@@ -654,7 +654,7 @@ public class FloAccountServiceTest {
 	public void testEditAccountWithInvalidNegativeThreshold() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 			}
 		});
@@ -683,7 +683,7 @@ public class FloAccountServiceTest {
 	public void testEditAccountWithInvalidPositiveThreshold() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 			}
 		});
@@ -714,10 +714,10 @@ public class FloAccountServiceTest {
 
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 
-				one(acctStore).editAccount(Long.parseLong(ACCOUNT_KEY),
+				oneOf(acctStore).editAccount(Long.parseLong(ACCOUNT_KEY),
 						ACCOUNT_NAME, ACCOUNT_BALANCE, 0.0,
 						ACCOUNT_POSITIVE_THRESHOLD);
 				will(returnValue(account));
@@ -749,10 +749,10 @@ public class FloAccountServiceTest {
 
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 
-				one(acctStore).editAccount(Long.parseLong(ACCOUNT_KEY),
+				oneOf(acctStore).editAccount(Long.parseLong(ACCOUNT_KEY),
 						ACCOUNT_NAME, ACCOUNT_BALANCE, ACCOUNT_NEGATIVE_THRESHOLD,
 						0.0);
 				will(returnValue(account));
@@ -782,7 +782,7 @@ public class FloAccountServiceTest {
 	public void testEditAccountWithNullBalance() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 			}
 		});
@@ -810,7 +810,7 @@ public class FloAccountServiceTest {
 	public void testEditAccountWithEmptyBalance() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 			}
 		});
@@ -838,7 +838,7 @@ public class FloAccountServiceTest {
 	public void testEditAccountWithNullName() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 			}
 		});
@@ -867,7 +867,7 @@ public class FloAccountServiceTest {
 	public void testEditAccountWithEmptyName() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 			}
 		});
@@ -896,7 +896,7 @@ public class FloAccountServiceTest {
 	public void testEditAccountWithNameTooLong() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 			}
 		});
@@ -925,7 +925,7 @@ public class FloAccountServiceTest {
 	public void testEditAccountWithInvalidKey() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 			}
 		});
@@ -952,7 +952,7 @@ public class FloAccountServiceTest {
 	public void testEditAccountWithNullKey() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 			}
 		});
@@ -979,7 +979,7 @@ public class FloAccountServiceTest {
 	public void testEditAccountWithEmptyKey() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 			}
 		});

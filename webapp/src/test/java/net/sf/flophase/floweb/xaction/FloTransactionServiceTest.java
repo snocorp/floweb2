@@ -161,10 +161,10 @@ public class FloTransactionServiceTest {
 
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 
-				one(xactionStore).getTransactions(DATE_FEB_1_2012);
+				oneOf(xactionStore).getTransactions(DATE_FEB_1_2012);
 				will(returnValue(transactions));
 			}
 		});
@@ -188,7 +188,7 @@ public class FloTransactionServiceTest {
 	public void testGetTransactionsWithNoUserLoggedIn() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(false));
 			}
 		});
@@ -212,7 +212,7 @@ public class FloTransactionServiceTest {
 	public void testGetTransactionsWithInvalidMonth() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 			}
 		});
@@ -236,7 +236,7 @@ public class FloTransactionServiceTest {
 	public void testGetTransactionsWithNullMonth() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 			}
 		});
@@ -260,7 +260,7 @@ public class FloTransactionServiceTest {
 	public void testGetTransactionsWithEmptyMonth() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 			}
 		});
@@ -293,10 +293,10 @@ public class FloTransactionServiceTest {
 
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 
-				one(xactionStore).createTransaction(TRANSACTION_NAME, date);
+				oneOf(xactionStore).createTransaction(TRANSACTION_NAME, date);
 				will(returnValue(xaction));
 			}
 		});
@@ -320,7 +320,7 @@ public class FloTransactionServiceTest {
 	public void testAddTransactionWithNoLoggedInUser() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(false));
 			}
 		});
@@ -344,7 +344,7 @@ public class FloTransactionServiceTest {
 	public void testAddTransactionWithInvalidDate() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 			}
 		});
@@ -368,7 +368,7 @@ public class FloTransactionServiceTest {
 	public void testAddTransactionWithNullDate() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 			}
 		});
@@ -392,7 +392,7 @@ public class FloTransactionServiceTest {
 	public void testAddTransactionWithEmptyDate() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 			}
 		});
@@ -416,7 +416,7 @@ public class FloTransactionServiceTest {
 	public void testAddTransactionWithNullName() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 			}
 		});
@@ -440,7 +440,7 @@ public class FloTransactionServiceTest {
 	public void testAddTransactionWithEmptyName() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 			}
 		});
@@ -464,7 +464,7 @@ public class FloTransactionServiceTest {
 	public void testAddTransactionWithNameTooLong() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 			}
 		});
@@ -489,10 +489,10 @@ public class FloTransactionServiceTest {
 	public void testDeleteTransaction() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 
-				one(xactionStore).deleteTransaction(TRANSACTION_KEY);
+				oneOf(xactionStore).deleteTransaction(TRANSACTION_KEY);
 			}
 		});
 
@@ -513,7 +513,7 @@ public class FloTransactionServiceTest {
 	public void testDeleteTransactionWithNoLoggedInUser() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(false));
 			}
 		});
@@ -537,7 +537,7 @@ public class FloTransactionServiceTest {
 	public void testDeleteTransactionWithInvalidKey() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 			}
 		});
@@ -561,7 +561,7 @@ public class FloTransactionServiceTest {
 	public void testDeleteTransactionWithNullKey() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 			}
 		});
@@ -585,7 +585,7 @@ public class FloTransactionServiceTest {
 	public void testDeleteTransactionWithEmptyKey() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 			}
 		});
@@ -619,10 +619,10 @@ public class FloTransactionServiceTest {
 
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 
-				one(xactionStore).copyTransaction(TRANSACTION_KEY, TRANSACTION_NAME, date);
+				oneOf(xactionStore).copyTransaction(TRANSACTION_KEY, TRANSACTION_NAME, date);
 				will(returnValue(xaction));
 			}
 		});
@@ -647,7 +647,7 @@ public class FloTransactionServiceTest {
 	public void testCopyTransactionWithNoLoggedInUser() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(false));
 			}
 		});
@@ -672,7 +672,7 @@ public class FloTransactionServiceTest {
 	public void testCopyTransactionWithInvalidKey() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 			}
 		});
@@ -696,7 +696,7 @@ public class FloTransactionServiceTest {
 	public void testCopyTransactionWithNullKey() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 			}
 		});
@@ -720,7 +720,7 @@ public class FloTransactionServiceTest {
 	public void testCopyTransactionWithEmptyKey() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 			}
 		});
@@ -744,7 +744,7 @@ public class FloTransactionServiceTest {
 	public void testCopyTransactionWithInvalidDate() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 			}
 		});
@@ -769,7 +769,7 @@ public class FloTransactionServiceTest {
 	public void testCopyTransactionWithNullDate() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 			}
 		});
@@ -794,7 +794,7 @@ public class FloTransactionServiceTest {
 	public void testCopyTransactionWithEmptyDate() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 			}
 		});
@@ -818,7 +818,7 @@ public class FloTransactionServiceTest {
 	public void testCopyTransactionWithNullName() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 			}
 		});
@@ -843,7 +843,7 @@ public class FloTransactionServiceTest {
 	public void testCopyTransactionWithEmptyName() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 			}
 		});
@@ -867,7 +867,7 @@ public class FloTransactionServiceTest {
 	public void testCopyTransactionWithNameTooLong() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 			}
 		});
@@ -901,10 +901,10 @@ public class FloTransactionServiceTest {
 	
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 	
-				one(xactionStore).editTransaction(TRANSACTION_KEY, TRANSACTION_NAME, date);
+				oneOf(xactionStore).editTransaction(TRANSACTION_KEY, TRANSACTION_NAME, date);
 				will(returnValue(xaction));
 			}
 		});
@@ -929,7 +929,7 @@ public class FloTransactionServiceTest {
 	public void testEditTransactionWithNoLoggedInUser() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(false));
 			}
 		});
@@ -954,7 +954,7 @@ public class FloTransactionServiceTest {
 	public void testEditTransactionWithInvalidKey() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 			}
 		});
@@ -978,7 +978,7 @@ public class FloTransactionServiceTest {
 	public void testEditTransactionWithNullKey() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 			}
 		});
@@ -1002,7 +1002,7 @@ public class FloTransactionServiceTest {
 	public void testEditTransactionWithEmptyKey() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 			}
 		});
@@ -1026,7 +1026,7 @@ public class FloTransactionServiceTest {
 	public void testEditTransactionWithInvalidDate() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 			}
 		});
@@ -1051,7 +1051,7 @@ public class FloTransactionServiceTest {
 	public void testEditTransactionWithNullDate() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 			}
 		});
@@ -1076,7 +1076,7 @@ public class FloTransactionServiceTest {
 	public void testEditTransactionWithEmptyDate() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 			}
 		});
@@ -1100,7 +1100,7 @@ public class FloTransactionServiceTest {
 	public void testEditTransactionWithNullName() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 			}
 		});
@@ -1125,7 +1125,7 @@ public class FloTransactionServiceTest {
 	public void testEditTransactionWithEmptyName() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 			}
 		});
@@ -1149,7 +1149,7 @@ public class FloTransactionServiceTest {
 	public void testEditTransactionWithNameTooLong() {
 		context.checking(new Expectations() {
 			{
-				one(userService).isUserLoggedIn();
+				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 			}
 		});

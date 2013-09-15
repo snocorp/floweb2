@@ -36,7 +36,7 @@ public class CashFlowQueryServletTest extends AbstractServletTest {
 
 		context.checking(new Expectations() {
 			{
-				one(mockCashFlowService).getCashFlow();
+				oneOf(mockCashFlowService).getCashFlow();
 				will(returnValue(response));
 			}
 		});

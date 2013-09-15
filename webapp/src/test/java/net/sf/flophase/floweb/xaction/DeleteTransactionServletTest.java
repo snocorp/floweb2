@@ -38,7 +38,7 @@ public class DeleteTransactionServletTest extends AbstractServletTest {
 
 		context.checking(new Expectations() {
 			{
-				one(mockTransactionService).deleteTransaction(TRANSACTION_KEY);
+				oneOf(mockTransactionService).deleteTransaction(TRANSACTION_KEY);
 				will(returnValue(response));
 			}
 		});

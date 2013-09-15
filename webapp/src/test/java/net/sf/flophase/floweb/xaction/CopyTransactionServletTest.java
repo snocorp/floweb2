@@ -65,7 +65,7 @@ public class CopyTransactionServletTest extends AbstractServletTest {
 
 		context.checking(new Expectations() {
 			{
-				one(mockTransactionService).copyTransaction(TRANSACTION_KEY, TRANSACTION_NAME,
+				oneOf(mockTransactionService).copyTransaction(TRANSACTION_KEY, TRANSACTION_NAME,
 				        dateFormat.format(calendar.getTime()));
 				will(returnValue(response));
 			}

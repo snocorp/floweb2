@@ -49,7 +49,7 @@ public class EditEntryServletTest extends AbstractServletTest {
 
 		context.checking(new Expectations() {
 			{
-				one(mockEntryService).editEntry(ACCOUNT_KEY, XACTION_KEY, ENTRY_AMOUNT);
+				oneOf(mockEntryService).editEntry(ACCOUNT_KEY, XACTION_KEY, ENTRY_AMOUNT);
 				will(returnValue(response));
 			}
 		});

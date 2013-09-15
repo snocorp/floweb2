@@ -52,7 +52,7 @@ public class DeleteAccountServletTest extends AbstractServletTest {
 
 		context.checking(new Expectations() {
 			{
-				one(mockAccountService).deleteAccount(ACCOUNT_KEY);
+				oneOf(mockAccountService).deleteAccount(ACCOUNT_KEY);
 				will(returnValue(response));
 			}
 		});

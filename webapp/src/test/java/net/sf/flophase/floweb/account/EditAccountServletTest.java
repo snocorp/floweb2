@@ -62,7 +62,7 @@ public class EditAccountServletTest extends AbstractServletTest {
 
 		context.checking(new Expectations() {
 			{
-				one(mockAccountService).editAccount(ACCOUNT_KEY, ACCOUNT_NAME,
+				oneOf(mockAccountService).editAccount(ACCOUNT_KEY, ACCOUNT_NAME,
 						String.valueOf(ACCOUNT_BALANCE),
 						String.valueOf(ACCOUNT_NEGATIVE_THRESHOLD),
 						String.valueOf(ACCOUNT_POSITIVE_THRESHOLD));

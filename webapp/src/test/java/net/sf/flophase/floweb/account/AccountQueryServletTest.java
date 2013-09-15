@@ -50,7 +50,7 @@ public class AccountQueryServletTest extends AbstractServletTest {
 
 		context.checking(new Expectations() {
 			{
-				one(mockAccountService).getAccounts();
+				oneOf(mockAccountService).getAccounts();
 				will(returnValue(response));
 			}
 		});
