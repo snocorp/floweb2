@@ -153,6 +153,7 @@ public class FloAccountStoreTest {
 		context.checking(new Expectations() {
 			{
 				allowing(cashflowStore).getCashFlow();
+				will(returnValue(new CashFlow()));
 
 				oneOf(accountDAO).getAccounts(with(any(CashFlow.class)));
 				will(returnValue(expectedAccounts));
@@ -191,6 +192,7 @@ public class FloAccountStoreTest {
 		context.checking(new Expectations() {
 			{
 				allowing(cashflowStore).getCashFlow();
+				will(returnValue(new CashFlow()));
 
 				oneOf(accountDAO)
 						.createAccount(with(any(CashFlow.class)),

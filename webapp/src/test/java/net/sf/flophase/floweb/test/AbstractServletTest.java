@@ -1,12 +1,14 @@
 package net.sf.flophase.floweb.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import javax.servlet.http.HttpServlet;
 
 import net.sf.flophase.floweb.TestServletContextListener;
 
 import org.jmock.Mockery;
+import org.jmock.integration.junit4.JUnit4Mockery;
+import org.jmock.lib.concurrent.Synchroniser;
 import org.junit.After;
 import org.junit.Before;
 import org.mortbay.jetty.servlet.DefaultServlet;
@@ -16,7 +18,8 @@ import org.mortbay.jetty.testing.ServletTester;
 import com.google.inject.servlet.GuiceFilter;
 
 /**
- * This abstract class provides functionality to allow simple testing of servlets using a test jetty container.
+ * This abstract class provides functionality to allow simple testing of
+ * servlets using a test jetty container.
  */
 public abstract class AbstractServletTest {
 
@@ -41,8 +44,8 @@ public abstract class AbstractServletTest {
 	private static String baseUrl;
 
 	/**
-	 * Initializes the servlet container. Adds a context listener and the Guice filter to initialize injection and
-	 * create the mapping to the servlet.
+	 * Initializes the servlet container. Adds a context listener and the Guice
+	 * filter to initialize injection and create the mapping to the servlet.
 	 * 
 	 * @throws Exception
 	 *             If an error occurs.
@@ -50,9 +53,14 @@ public abstract class AbstractServletTest {
 	@Before
 	public void initServletContainer() throws Exception {
 		// init the mock context
-		context = new Mockery();
+		context = new JUnit4Mockery() {
+			{
+				setThreadingPolicy(new Synchroniser());
+			}
+		};
 
-		testServletContextListener = new TestServletContextListener(context, getServletPath(), getServletClass());
+		testServletContextListener = new TestServletContextListener(context,
+				getServletPath(), getServletClass());
 
 		tester = new ServletTester();
 		tester.addEventListener(testServletContextListener);
@@ -98,7 +106,8 @@ public abstract class AbstractServletTest {
 	}
 
 	/**
-	 * Asserts that the response of the servlet is equal to the given expected content.
+	 * Asserts that the response of the servlet is equal to the given expected
+	 * content.
 	 * 
 	 * @param expectedContent
 	 *            The expected content to be returned by the servlet response.
