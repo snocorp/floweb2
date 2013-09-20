@@ -1,7 +1,7 @@
 package net.sf.flophase.floweb.cashflow;
 
 import static org.junit.Assert.*;
-import net.sf.flophase.floweb.common.UserStore;
+import net.sf.flophase.floweb.user.UserStore;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;

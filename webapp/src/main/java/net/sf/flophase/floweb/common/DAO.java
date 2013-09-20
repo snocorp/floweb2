@@ -6,7 +6,8 @@ import net.sf.flophase.floweb.entry.EntryDAO;
 import net.sf.flophase.floweb.xaction.TransactionDAO;
 
 /**
- * The DAO interface provides a commin interface for manipulating all types of entities.
+ * The DAO interface provides a common interface for manipulating all types of
+ * entities.
  */
 public interface DAO extends AccountDAO, CashFlowDAO, TransactionDAO, EntryDAO {
 

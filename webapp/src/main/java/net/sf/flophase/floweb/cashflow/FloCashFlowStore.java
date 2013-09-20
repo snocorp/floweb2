@@ -2,7 +2,7 @@ package net.sf.flophase.floweb.cashflow;
 
 import javax.inject.Inject;
 
-import net.sf.flophase.floweb.common.UserStore;
+import net.sf.flophase.floweb.user.UserStore;
 
 import com.google.appengine.api.users.User;
 
