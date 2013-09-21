@@ -5,7 +5,10 @@ import static org.junit.Assert.*;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.sf.flophase.floweb.common.Response;
+
 import org.hamcrest.Matchers;
+import org.hamcrest.collection.IsCollectionContaining;
 import org.hamcrest.collection.IsMapContaining;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -33,6 +36,9 @@ public class FloUserServiceTest {
 
 		context.checking(new Expectations() {
 			{
+				oneOf(mockUserStore).isUserLoggedIn();
+				will(returnValue(true));
+
 				oneOf(mockUserStore).getSetting("a");
 				will(returnValue("valueA"));
 
@@ -44,7 +50,10 @@ public class FloUserServiceTest {
 			}
 		});
 
-		Map<String, String> settings = service.getSettings("a", "b", "c");
+		Response<Map<String, String>> response = service.getSettings("a", "b",
+				"c");
+
+		Map<String, String> settings = response.getContent();
 
 		assertThat(settings, new IsMapContaining<>(Matchers.equalTo("a"),
 				Matchers.equalTo("valueA")));
@@ -52,6 +61,34 @@ public class FloUserServiceTest {
 				Matchers.equalTo("valueB")));
 		assertThat(settings, new IsMapContaining<>(Matchers.equalTo("c"),
 				Matchers.equalTo("valueC")));
+
+		context.assertIsSatisfied();
+	}
+
+	/**
+	 * Tests the getSettngs method.
+	 */
+	@Test
+	public void testGetSettingsPermissionDenied() {
+
+		context.checking(new Expectations() {
+			{
+				oneOf(mockUserStore).isUserLoggedIn();
+				will(returnValue(false));
+			}
+		});
+
+		Response<Map<String, String>> response = service.getSettings("a", "b",
+				"c");
+
+		Map<String, String> settings = response.getContent();
+
+		assertNull(settings);
+
+		assertEquals(Response.RESULT_FAILURE, response.getResult());
+
+		assertThat(response.getMessages(), new IsCollectionContaining<>(
+				Matchers.equalTo("Permission denied")));
 
 		context.assertIsSatisfied();
 	}
@@ -68,9 +105,9 @@ public class FloUserServiceTest {
 			}
 		});
 
-		boolean result = service.isUserLoggedIn();
+		Response<Boolean> result = service.isUserLoggedIn();
 
-		assertTrue(result);
+		assertTrue(result.getContent());
 
 		context.assertIsSatisfied();
 	}
@@ -87,7 +124,9 @@ public class FloUserServiceTest {
 			}
 		});
 
-		User user = service.getCurrentUser();
+		Response<User> response = service.getCurrentUser();
+
+		User user = response.getContent();
 
 		assertEquals("test@example.com", user.getEmail());
 		assertEquals("localhost", user.getAuthDomain());
@@ -95,11 +134,17 @@ public class FloUserServiceTest {
 		context.assertIsSatisfied();
 	}
 
+	/**
+	 * Tests the putSettings method.
+	 */
 	@Test
 	public void testPutSettings() {
 
 		context.checking(new Expectations() {
 			{
+				oneOf(mockUserStore).isUserLoggedIn();
+				will(returnValue(true));
+
 				oneOf(mockUserStore).putSetting("x", "valueX");
 
 				oneOf(mockUserStore).putSetting("y", "valueY");
@@ -107,12 +152,43 @@ public class FloUserServiceTest {
 				oneOf(mockUserStore).putSetting("z", "valueZ");
 			}
 		});
+
 		Map<String, String> settings = new HashMap<String, String>();
 		settings.put("x", "valueX");
 		settings.put("y", "valueY");
 		settings.put("z", "valueZ");
 
-		service.putSettings(settings);
+		Response<Void> response = service.putSettings(settings);
+
+		assertEquals(Response.RESULT_SUCCESS, response.getResult());
+
+		context.assertIsSatisfied();
+	}
+
+	/**
+	 * Tests the putSettings method.
+	 */
+	@Test
+	public void testPutSettingsPermissionDenied() {
+
+		context.checking(new Expectations() {
+			{
+				oneOf(mockUserStore).isUserLoggedIn();
+				will(returnValue(false));
+			}
+		});
+
+		Map<String, String> settings = new HashMap<String, String>();
+		settings.put("x", "valueX");
+		settings.put("y", "valueY");
+		settings.put("z", "valueZ");
+
+		Response<Void> response = service.putSettings(settings);
+
+		assertEquals(Response.RESULT_FAILURE, response.getResult());
+
+		assertThat(response.getMessages(), new IsCollectionContaining<>(
+				Matchers.equalTo("Permission denied")));
 
 		context.assertIsSatisfied();
 	}
