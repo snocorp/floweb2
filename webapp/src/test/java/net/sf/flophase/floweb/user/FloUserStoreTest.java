@@ -1,7 +1,6 @@
-package net.sf.flophase.floweb.common;
+package net.sf.flophase.floweb.user;
 
 import static org.junit.Assert.*;
-import net.sf.flophase.floweb.user.FloUserStore;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -11,6 +10,8 @@ import org.junit.Test;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
@@ -128,7 +129,7 @@ public class FloUserStoreTest {
 	 * from the data store.
 	 */
 	@Test
-	public void testGetSetting() {
+	public void testGetSettingCached() {
 		final User user = new User("email@example.com", "localhost", "uniqueId");
 
 		context.checking(new Expectations() {
@@ -154,16 +155,67 @@ public class FloUserStoreTest {
 	}
 
 	/**
+	 * Tests that get setting attempts to load from the cache and then loads
+	 * from the data store.
+	 */
+	@Test
+	public void testGetSettingNotCached() {
+		final User user = new User("email@example.com", "localhost", "uniqueId");
+
+		final PreparedQuery preparedQuery = context.mock(PreparedQuery.class);
+
+		final Entity entity = new Entity("UserSettings");
+		entity.setProperty("key", "testResult");
+
+		context.checking(new Expectations() {
+			{
+				oneOf(userService).isUserLoggedIn();
+				will(returnValue(true));
+
+				oneOf(datastore).prepare(with(aNonNull(Query.class)));
+				will(returnValue(preparedQuery));
+
+				oneOf(preparedQuery).asSingleEntity();
+				will(returnValue(entity));
+
+				oneOf(userService).getCurrentUser();
+				will(returnValue(user));
+
+				oneOf(memcacheService).put("uniqueId:key", "testResult");
+
+				oneOf(memcacheService).get("uniqueId:key");
+				will(returnValue(null));
+			}
+		});
+
+		store = new FloUserStore(userService, memcacheService, datastore);
+
+		String result = store.getSetting("key");
+
+		assertEquals("testResult", result);
+
+		context.assertIsSatisfied();
+	}
+
+	/**
 	 * Tests that putting a setting persists and caches the value.
 	 */
 	@Test
 	public void testPutSetting() {
 		final User user = new User("email@example.com", "localhost", "uniqueId");
 
+		final PreparedQuery preparedQuery = context.mock(PreparedQuery.class);
+
 		context.checking(new Expectations() {
 			{
 				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
+
+				oneOf(datastore).prepare(with(aNonNull(Query.class)));
+				will(returnValue(preparedQuery));
+
+				oneOf(preparedQuery).asSingleEntity();
+				will(returnValue(new Entity("UserSettings")));
 
 				oneOf(datastore).put(with(aNonNull(Entity.class)));
 

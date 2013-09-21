@@ -16,6 +16,12 @@ import com.google.appengine.api.users.UserService;
  */
 public class FloUserStore implements UserStore {
 
+	private static final String TYPE_USER_SETTING = "UserSetting";
+
+	private static final String KEY_USER_ID = "user_id";
+
+	private static final String KEY_SEPARATOR = ":";
+
 	/**
 	 * The user service.
 	 */
@@ -66,38 +72,49 @@ public class FloUserStore implements UserStore {
 		}
 
 		User user = getUser();
-		String cacheKey = user.getUserId() + ":" + key;
+		String cacheKey = user.getUserId() + KEY_SEPARATOR + key;
 
 		Object value = memcacheService.get(cacheKey);
 		if (value == null) {
-			Filter filter = new Query.FilterPredicate("user_id",
-					FilterOperator.EQUAL, user.getUserId());
-			Query q = new Query("UserSetting").setFilter(filter);
+			Entity userSettings = getSettingsEntity(user);
+			if (userSettings != null) {
+				value = userSettings.getProperty(key);
 
-			Entity userSettings = datastore.prepare(q).asSingleEntity();
-
-			value = userSettings.getProperty(key);
-
-			memcacheService.put(cacheKey, value); // populate cache
+				memcacheService.put(cacheKey, value); // populate cache
+			}
 		}
 
 		return value == null ? null : value.toString();
 	}
 
+	private Entity getSettingsEntity(User user) {
+		Filter filter = new Query.FilterPredicate(KEY_USER_ID,
+				FilterOperator.EQUAL, user.getUserId());
+		Query q = new Query(TYPE_USER_SETTING).setFilter(filter);
+
+		Entity userSettings = datastore.prepare(q).asSingleEntity();
+		return userSettings;
+	}
+
 	@Override
 	public void putSetting(String key, String value) {
-		if (!isUserLoggedIn()) {
+		if (!isUserLoggedIn() || KEY_USER_ID.equals(key)) {
 			return;
 		}
 
 		// persist the setting
-		Entity userSettings = new Entity("UserSettings");
+		final User user = getUser();
+		Entity userSettings = getSettingsEntity(user);
+		if (userSettings == null) {
+			userSettings = new Entity("UserSettings");
+			userSettings.setProperty(KEY_USER_ID, user.getUserId());
+		}
+
 		userSettings.setProperty(key, value);
 
 		datastore.put(userSettings);
 
-		User user = getUser();
-		String cacheKey = user.getUserId() + ":" + key;
+		String cacheKey = user.getUserId() + KEY_SEPARATOR + key;
 
 		// cache it for later
 		memcacheService.put(cacheKey, value);

@@ -19,6 +19,14 @@ public interface UserService {
 	public Map<String, String> getSettings(String... keys);
 
 	/**
+	 * Sets the given settings for the current user.
+	 * 
+	 * @param settings
+	 *            The settings.
+	 */
+	public void putSettings(Map<String, String> settings);
+
+	/**
 	 * Returns true if the current user is logged in.
 	 * 
 	 * @return Whether or not the current user is logged in.
