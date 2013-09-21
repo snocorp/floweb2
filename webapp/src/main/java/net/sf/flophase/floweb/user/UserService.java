@@ -2,6 +2,8 @@ package net.sf.flophase.floweb.user;
 
 import java.util.Map;
 
+import net.sf.flophase.floweb.common.Response;
+
 import com.google.appengine.api.users.User;
 
 /**
@@ -16,27 +18,28 @@ public interface UserService {
 	 *            The array of keys
 	 * @return The settings map, maybe be empty.
 	 */
-	public Map<String, String> getSettings(String... keys);
+	public Response<Map<String, String>> getSettings(String... keys);
 
 	/**
 	 * Sets the given settings for the current user.
 	 * 
 	 * @param settings
 	 *            The settings.
+	 * @return the response
 	 */
-	public void putSettings(Map<String, String> settings);
+	public Response<Void> putSettings(Map<String, String> settings);
 
 	/**
 	 * Returns true if the current user is logged in.
 	 * 
 	 * @return Whether or not the current user is logged in.
 	 */
-	public boolean isUserLoggedIn();
+	public Response<Boolean> isUserLoggedIn();
 
 	/**
 	 * Returns the current user, if there is one.
 	 * 
 	 * @return The current user
 	 */
-	public User getCurrentUser();
+	public Response<User> getCurrentUser();
 }

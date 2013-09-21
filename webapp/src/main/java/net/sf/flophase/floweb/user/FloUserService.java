@@ -3,6 +3,10 @@ package net.sf.flophase.floweb.user;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.inject.Inject;
+
+import net.sf.flophase.floweb.common.Response;
+
 import com.google.appengine.api.users.User;
 
 /**
@@ -18,39 +22,73 @@ public class FloUserService implements UserService {
 	 * @param userStore
 	 *            The user store
 	 */
+	@Inject
 	public FloUserService(UserStore userStore) {
 		this.userStore = userStore;
 	}
 
 	@Override
-	public Map<String, String> getSettings(String... keys) {
-		Map<String, String> settings = new HashMap<String, String>();
-		String value;
-		for (String key : keys) {
-			value = userStore.getSetting(key);
-			if (value != null) {
-				settings.put(key, value);
+	public Response<Map<String, String>> getSettings(String... keys) {
+		Response<Map<String, String>> response;
+
+		if (userStore.isUserLoggedIn()) {
+			Map<String, String> settings = new HashMap<String, String>();
+			String value;
+			for (String key : keys) {
+				value = userStore.getSetting(key);
+				if (value != null) {
+					settings.put(key, value);
+				}
 			}
+
+			response = new Response<Map<String, String>>(
+					Response.RESULT_SUCCESS, settings);
+		}
+		// the user was not logged in
+		else {
+			// respond with failure
+			response = new Response<Map<String, String>>(
+					Response.RESULT_FAILURE);
+
+			// indicate permission was denied
+			response.addMessage("Permission denied");
 		}
 
-		return settings;
+		return response;
 	}
 
 	@Override
-	public boolean isUserLoggedIn() {
-		return userStore.isUserLoggedIn();
+	public Response<Boolean> isUserLoggedIn() {
+		return new Response<Boolean>(Response.RESULT_SUCCESS,
+				userStore.isUserLoggedIn());
 	}
 
 	@Override
-	public User getCurrentUser() {
-		return userStore.getUser();
+	public Response<User> getCurrentUser() {
+		return new Response<User>(Response.RESULT_SUCCESS, userStore.getUser());
 	}
 
 	@Override
-	public void putSettings(Map<String, String> settings) {
-		for (Map.Entry<String, String> entry : settings.entrySet()) {
-			userStore.putSetting(entry.getKey(), entry.getValue());
+	public Response<Void> putSettings(Map<String, String> settings) {
+		Response<Void> response;
+
+		if (userStore.isUserLoggedIn()) {
+			for (Map.Entry<String, String> entry : settings.entrySet()) {
+				userStore.putSetting(entry.getKey(), entry.getValue());
+			}
+
+			response = new Response<Void>(Response.RESULT_SUCCESS);
 		}
+		// the user was not logged in
+		else {
+			// respond with failure
+			response = new Response<Void>(Response.RESULT_FAILURE);
+
+			// indicate permission was denied
+			response.addMessage("Permission denied");
+		}
+
+		return response;
 	}
 
 }

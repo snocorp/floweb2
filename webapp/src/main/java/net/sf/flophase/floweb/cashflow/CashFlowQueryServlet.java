@@ -15,7 +15,7 @@ import com.google.gson.Gson;
 import com.google.inject.Singleton;
 
 /**
- * This servlet returns a Response containing a list of accounts formatted as JSON.
+ * This servlet returns a Response containing a cash flow formatted as JSON.
  */
 @Singleton
 public class CashFlowQueryServlet extends HttpServlet {
@@ -38,7 +38,8 @@ public class CashFlowQueryServlet extends HttpServlet {
 	private Gson gson;
 
 	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
 		Response<CashFlow> response = cashflowService.getCashFlow();
 
 		String output = gson.toJson(response);

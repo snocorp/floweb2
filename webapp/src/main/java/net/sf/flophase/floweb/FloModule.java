@@ -18,7 +18,9 @@ import net.sf.flophase.floweb.entry.EntryService;
 import net.sf.flophase.floweb.entry.EntryStore;
 import net.sf.flophase.floweb.entry.FloEntryService;
 import net.sf.flophase.floweb.entry.FloEntryStore;
+import net.sf.flophase.floweb.user.FloUserService;
 import net.sf.flophase.floweb.user.FloUserStore;
+import net.sf.flophase.floweb.user.UserService;
 import net.sf.flophase.floweb.user.UserStore;
 import net.sf.flophase.floweb.xaction.FloTransactionService;
 import net.sf.flophase.floweb.xaction.FloTransactionStore;
@@ -26,9 +28,10 @@ import net.sf.flophase.floweb.xaction.TransactionDAO;
 import net.sf.flophase.floweb.xaction.TransactionService;
 import net.sf.flophase.floweb.xaction.TransactionStore;
 
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
-import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
@@ -74,14 +77,21 @@ public class FloModule extends AbstractModule {
 		bind(CashFlowDAO.class).toInstance(floDAO);
 		bind(CashFlowStore.class).to(FloCashFlowStore.class);
 		bind(CashFlowService.class).to(FloCashFlowService.class);
+
+		bind(UserStore.class).to(FloUserStore.class);
+		bind(UserService.class).to(FloUserService.class);
 	}
 
 	/**
 	 * Bind all the App Engine specific services to their instances.
 	 */
 	protected void bindAppEngineServices() {
-		bind(UserService.class).toInstance(UserServiceFactory.getUserService());
-		bind(MemcacheService.class).toInstance(MemcacheServiceFactory.getMemcacheService());
+		bind(com.google.appengine.api.users.UserService.class).toInstance(
+				UserServiceFactory.getUserService());
+		bind(MemcacheService.class).toInstance(
+				MemcacheServiceFactory.getMemcacheService());
+		bind(DatastoreService.class).toInstance(
+				DatastoreServiceFactory.getDatastoreService());
 	}
 
 	/**
