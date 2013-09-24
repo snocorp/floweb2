@@ -1,17 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" 
-%><%@ page import="com.google.appengine.api.users.User" 
-%><%@ page import="com.google.appengine.api.users.UserService" 
-%><%@ page import="com.google.appengine.api.users.UserServiceFactory" 
-%><%
-    String logoutUrl = "";
-
-	UserService userService = UserServiceFactory.getUserService();
-    User user = userService.getCurrentUser();
-    if (user == null) {
-    	response.sendRedirect("index.jsp");
-    } else {
-    	logoutUrl = userService.createLogoutURL(request.getRequestURI());
-%><!DOCTYPE html>
+<!DOCTYPE html>
 <html ng-controller="AppController">
 <head>
   <meta charset="utf-8" />
@@ -24,7 +11,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/redmond/jquery-ui.css">
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.0/css/bootstrap.min.css">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="ng/css/style.css">
 </head>
 <body>
 	<div class="navbar navbar-inverse navbar-fixed-top">
@@ -63,7 +50,9 @@
 		                <li id="deleteTransactionMenu" class="disabled"><a href="#" ng-click="deleteTransactions();">Delete</a></li>
 		            </ul>
 				</li>
+				<li><a id="logoutLink" href="${logoutUrl}">Logout</a></li>
           	</ul>
+          	<p id="userIdentifier" class="navbar-text navbar-right">${userEmail}</p>
         </div>
 	</div>
 	<div class="container">
@@ -74,13 +63,13 @@
 				ng-class="transaction.selected ? 'selected' : ''" 
 				ng-click="transaction.selected = !transaction.selected; updateMenus({transactions:true});">
 				<div class="row">
-					<div class="col-sm-3">
+					<div class="col-sm-4">
 						<input 
 							class="title form-control" 
 							ng-model="transaction.details.name" 
 							ng-change="handleTransactionChange(transaction);"/>
 					</div>
-					<div class="col-sm-3">
+					<div class="col-sm-4">
 						<input 
 							class="date form-control" 
 							ui-date="{ dateFormat: 'yy-mm-dd' }" 
@@ -91,10 +80,10 @@
 				</div>
 				<div class="entries">
 					<div class="entry row" ng-repeat="account in accounts">
-						<div class="col-sm-2 col-sm-offset-1">
+						<div class="col-sm-3 col-sm-offset-1">
 						   <div class="account">{{account.name}}</div>
 						</div>
-						<div class="col-sm-2">
+						<div class="col-sm-3">
 							<input 
 								type="text" 
 								class="amount form-control" 
@@ -118,14 +107,14 @@
 				ng-repeat="account in accounts" 
 				ng-class="account.selected ? 'selected' : ''" 
 				ng-click="account.selected = !account.selected; updateMenus({accounts:true});">
-				<div class="col-sm-2 col-sm-offset-1">
+				<div class="col-sm-3 col-sm-offset-1">
 					<input 
 						class="name form-control" 
 						required
 						ng-model="account.name" 
 						ng-change="handleAccountChange(account);"/>
 				</div>
-				<div class="col-sm-2">
+				<div class="col-sm-3">
 					<input 
 						type="text" 
 						class="balance form-control" 
@@ -144,13 +133,13 @@
 				ng-class="transaction.selected ? 'selected' : ''" 
 				ng-click="transaction.selected = !transaction.selected; updateMenus({transactions:true});">
 				<div class="row">
-					<div class="col-sm-3">
+					<div class="col-sm-4">
 						<input 
 							class="title form-control" 
 							ng-model="transaction.details.name" 
 							ng-change="handleTransactionChange(transaction);"/>
 					</div>
-					<div class="col-sm-3">
+					<div class="col-sm-4">
 						<input 
 							class="date form-control" 
 							ui-date="{ dateFormat: 'yy-mm-dd' }" 
@@ -161,10 +150,10 @@
 				</div>
 				<div class="entries">
 					<div class="entry row" ng-repeat="account in accounts">
-						<div class="col-sm-2 col-sm-offset-1">
+						<div class="col-sm-3 col-sm-offset-1">
 						   <div class="account">{{account.name}}</div>
 						</div>
-						<div class="col-sm-2">
+						<div class="col-sm-3">
 							<input 
 								type="text" 
 								class="amount form-control" 
@@ -261,9 +250,6 @@
       		</ul>
       	</div>
   	</div>
-    <script data-main="js/bootstrap" src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.8/require.min.js"></script> 
+    <script data-main="ng/js/bootstrap" src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.8/require.min.js"></script> 
 </body>
 </html>
-<%
-   }
-%>

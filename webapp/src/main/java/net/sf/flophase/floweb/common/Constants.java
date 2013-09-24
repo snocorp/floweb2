@@ -15,7 +15,12 @@ public interface Constants {
 	public static final String ISO_DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ssz";
 
 	/**
-	 * This is the content type for JSON,
+	 * This is the content type for JSON.
 	 */
 	public static final String JSON_CONTENT_TYPE = "application/json";
+
+	/**
+	 * This is the content type for HTML.
+	 */
+	public static final String HTML_CONTENT_TYPE = "text/html";
 }

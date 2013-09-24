@@ -27,6 +27,7 @@
        			<li><a href="#cashflow">Cash Flow</a></li>
        			<li><a href="#entries">Entries</a></li>
        			<li><a href="#transactions">Transactions</a></li>
+       			<li><a href="#user">User</a></li>
        		</ul>
         	<h1 id="accounts">Accounts</h1>
 			<h2>Add Account</h2>
@@ -290,6 +291,41 @@
       },
       ...
    ]      
+}</pre>
+				</li>
+			</ul>
+			<h1 id="user">User</h1>
+			<h2>Settings</h2>
+			<ul>
+				<li>Description: Creates a new transaction.</li>
+				<li>Command: user/setting</li>
+				<li>GET Parameters:
+					<ul>
+						<li>keys: A comma-separated list of settings keys</li>
+					</ul>
+				</li>
+				<li>Response:<br/>
+					<pre class="prettyprint lang-js">{
+   result: &lt;0|1&gt;,
+   messages: [&lt;message0&gt;, &lt;message1&gt;, ...],
+   content: {
+      key1: value1,
+      key2: value2,
+      ...
+   }
+}</pre>
+				</li>
+				<li>PUT Parameters:
+					<ul>
+						<li>key1: value1</li>
+						<li>key2: value2</li>
+						<li>...</li>
+					</ul>
+				</li>
+				<li>Response:<br/>
+					<pre class="prettyprint lang-js">{
+   result: &lt;0|1&gt;,
+   messages: [&lt;message0&gt;, &lt;message1&gt;, ...]
 }</pre>
 				</li>
 			</ul>

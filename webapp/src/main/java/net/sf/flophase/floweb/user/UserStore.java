@@ -39,4 +39,22 @@ public interface UserStore {
 	 *            The value
 	 */
 	public abstract void putSetting(String key, String value);
+
+	/**
+	 * Create a URL where a user can login.
+	 * 
+	 * @param destinationURL
+	 *            The URI of the destination page.
+	 * @return The URL
+	 */
+	public String createLoginURL(String destinationURL);
+
+	/**
+	 * Create a URL where a user can logout.
+	 * 
+	 * @param destinationURL
+	 *            The URI of the destination page.
+	 * @return The URL
+	 */
+	public String createLogoutURL(String destinationURL);
 }

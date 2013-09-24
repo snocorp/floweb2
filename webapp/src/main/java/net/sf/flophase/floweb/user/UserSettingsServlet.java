@@ -61,14 +61,18 @@ public class UserSettingsServlet extends HttpServlet {
 
 	private String[] getKeys(HttpServletRequest req) {
 		String keys = req.getParameter(PARM_KEYS);
-		StringTokenizer tokenizer = new StringTokenizer(keys, KEYS_DELIM);
-		String[] keyArray = new String[tokenizer.countTokens()];
-		int i = 0;
-		while (tokenizer.hasMoreElements()) {
-			keyArray[i] = tokenizer.nextToken();
-		}
+		if (keys != null) {
+			StringTokenizer tokenizer = new StringTokenizer(keys, KEYS_DELIM);
+			String[] keyArray = new String[tokenizer.countTokens()];
+			int i = 0;
+			while (tokenizer.hasMoreElements()) {
+				keyArray[i] = tokenizer.nextToken();
+			}
 
-		return keyArray;
+			return keyArray;
+		} else {
+			return new String[0];
+		}
 	}
 
 	@Override
@@ -87,9 +91,14 @@ public class UserSettingsServlet extends HttpServlet {
 
 	private Map<String, String> getSettings(HttpServletRequest req) {
 		Map<String, String> settings = new HashMap<String, String>();
-		Map<?, ?> parmMap = req.getParameterMap();
-		for (Map.Entry<?, ?> entry : parmMap.entrySet()) {
-			settings.put(entry.getKey().toString(), entry.getValue().toString());
+
+		@SuppressWarnings("unchecked")
+		Map<String, String[]> parmMap = req.getParameterMap();
+
+		for (Map.Entry<String, String[]> entry : parmMap.entrySet()) {
+			if (entry.getValue() != null && entry.getValue().length >= 1) {
+				settings.put(entry.getKey().toString(), entry.getValue()[0]);
+			}
 		}
 		return settings;
 	}

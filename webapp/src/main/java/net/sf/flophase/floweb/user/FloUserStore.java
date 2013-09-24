@@ -16,7 +16,7 @@ import com.google.appengine.api.users.UserService;
  */
 public class FloUserStore implements UserStore {
 
-	private static final String TYPE_USER_SETTING = "UserSetting";
+	private static final String TYPE_USER_SETTING = "UserSettings";
 
 	private static final String KEY_USER_ID = "user_id";
 
@@ -106,7 +106,7 @@ public class FloUserStore implements UserStore {
 		final User user = getUser();
 		Entity userSettings = getSettingsEntity(user);
 		if (userSettings == null) {
-			userSettings = new Entity("UserSettings");
+			userSettings = new Entity(TYPE_USER_SETTING);
 			userSettings.setProperty(KEY_USER_ID, user.getUserId());
 		}
 
@@ -118,6 +118,16 @@ public class FloUserStore implements UserStore {
 
 		// cache it for later
 		memcacheService.put(cacheKey, value);
+	}
+
+	@Override
+	public String createLoginURL(String destinationURL) {
+		return userService.createLoginURL(destinationURL);
+	}
+
+	@Override
+	public String createLogoutURL(String destinationURL) {
+		return userService.createLogoutURL(destinationURL);
 	}
 
 }

@@ -1,5 +1,7 @@
 package net.sf.flophase.floweb;
 
+import java.util.Properties;
+
 import net.sf.flophase.floweb.account.AccountDAO;
 import net.sf.flophase.floweb.account.AccountService;
 import net.sf.flophase.floweb.account.AccountStore;
@@ -18,6 +20,8 @@ import net.sf.flophase.floweb.entry.EntryService;
 import net.sf.flophase.floweb.entry.EntryStore;
 import net.sf.flophase.floweb.entry.FloEntryService;
 import net.sf.flophase.floweb.entry.FloEntryStore;
+import net.sf.flophase.floweb.ui.FloUserInterfaceService;
+import net.sf.flophase.floweb.ui.UserInterfaceService;
 import net.sf.flophase.floweb.user.FloUserService;
 import net.sf.flophase.floweb.user.FloUserStore;
 import net.sf.flophase.floweb.user.UserService;
@@ -27,6 +31,8 @@ import net.sf.flophase.floweb.xaction.FloTransactionStore;
 import net.sf.flophase.floweb.xaction.TransactionDAO;
 import net.sf.flophase.floweb.xaction.TransactionService;
 import net.sf.flophase.floweb.xaction.TransactionStore;
+
+import org.apache.velocity.app.VelocityEngine;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -49,9 +55,23 @@ public class FloModule extends AbstractModule {
 	protected void configure() {
 		bindGson();
 
+		bindVelocity();
+
 		bindAppEngineServices();
 
 		bindFloWebServices();
+	}
+
+	private void bindVelocity() {
+		Properties props = new Properties();
+		props.setProperty("resource.loader", "class");
+		props.setProperty("class.resource.loader.class",
+				"org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
+
+		VelocityEngine velocity = new VelocityEngine();
+		velocity.init(props);
+
+		bind(VelocityEngine.class).toInstance(velocity);
 	}
 
 	/**
@@ -80,6 +100,8 @@ public class FloModule extends AbstractModule {
 
 		bind(UserStore.class).to(FloUserStore.class);
 		bind(UserService.class).to(FloUserService.class);
+
+		bind(UserInterfaceService.class).to(FloUserInterfaceService.class);
 	}
 
 	/**
