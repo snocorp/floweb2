@@ -39,28 +39,42 @@ public class FloUserServiceTest {
 				oneOf(mockUserStore).isUserLoggedIn();
 				will(returnValue(true));
 
-				oneOf(mockUserStore).getSetting("a");
+				oneOf(mockUserStore).getSetting(UserSettings.TEST_SETTING_A);
 				will(returnValue("valueA"));
 
-				oneOf(mockUserStore).getSetting("b");
+				oneOf(mockUserStore).getSetting(UserSettings.TEST_SETTING_B);
 				will(returnValue("valueB"));
 
-				oneOf(mockUserStore).getSetting("c");
+				oneOf(mockUserStore).getSetting(UserSettings.TEST_SETTING_C);
 				will(returnValue("valueC"));
 			}
 		});
 
-		Response<Map<String, String>> response = service.getSettings("a", "b",
-				"c");
+		Response<Map<String, String>> response = service.getSettings(
+				UserSettings.TEST_SETTING_A.getKey(),
+				UserSettings.TEST_SETTING_B.getKey(),
+				UserSettings.TEST_SETTING_C.getKey());
+
+		assertEquals("Result success", Response.RESULT_SUCCESS,
+				response.getResult());
 
 		Map<String, String> settings = response.getContent();
 
-		assertThat(settings, new IsMapContaining<>(Matchers.equalTo("a"),
-				Matchers.equalTo("valueA")));
-		assertThat(settings, new IsMapContaining<>(Matchers.equalTo("b"),
-				Matchers.equalTo("valueB")));
-		assertThat(settings, new IsMapContaining<>(Matchers.equalTo("c"),
-				Matchers.equalTo("valueC")));
+		assertThat(
+				settings,
+				new IsMapContaining<>(Matchers
+						.equalTo(UserSettings.TEST_SETTING_A.getKey()),
+						Matchers.equalTo("valueA")));
+		assertThat(
+				settings,
+				new IsMapContaining<>(Matchers
+						.equalTo(UserSettings.TEST_SETTING_B.getKey()),
+						Matchers.equalTo("valueB")));
+		assertThat(
+				settings,
+				new IsMapContaining<>(Matchers
+						.equalTo(UserSettings.TEST_SETTING_C.getKey()),
+						Matchers.equalTo("valueC")));
 
 		context.assertIsSatisfied();
 	}
@@ -78,8 +92,10 @@ public class FloUserServiceTest {
 			}
 		});
 
-		Response<Map<String, String>> response = service.getSettings("a", "b",
-				"c");
+		Response<Map<String, String>> response = service.getSettings(
+				"net.sf.flophase.floweb.test.setting.a",
+				"net.sf.flophase.floweb.test.setting.b",
+				"net.sf.flophase.floweb.test.setting.c");
 
 		Map<String, String> settings = response.getContent();
 
@@ -145,18 +161,21 @@ public class FloUserServiceTest {
 				oneOf(mockUserStore).isUserLoggedIn();
 				will(returnValue(true));
 
-				oneOf(mockUserStore).putSetting("x", "valueX");
+				oneOf(mockUserStore).putSetting(UserSettings.TEST_SETTING_A,
+						"valueX");
 
-				oneOf(mockUserStore).putSetting("y", "valueY");
+				oneOf(mockUserStore).putSetting(UserSettings.TEST_SETTING_B,
+						"valueY");
 
-				oneOf(mockUserStore).putSetting("z", "valueZ");
+				oneOf(mockUserStore).putSetting(UserSettings.TEST_SETTING_C,
+						"valueZ");
 			}
 		});
 
 		Map<String, String> settings = new HashMap<String, String>();
-		settings.put("x", "valueX");
-		settings.put("y", "valueY");
-		settings.put("z", "valueZ");
+		settings.put("net.sf.flophase.floweb.test.setting.a", "valueX");
+		settings.put("net.sf.flophase.floweb.test.setting.b", "valueY");
+		settings.put("net.sf.flophase.floweb.test.setting.c", "valueZ");
 
 		Response<Void> response = service.putSettings(settings);
 

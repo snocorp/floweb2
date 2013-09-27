@@ -4,6 +4,7 @@ import java.io.Writer;
 
 import javax.inject.Inject;
 
+import net.sf.flophase.floweb.user.UserSettings;
 import net.sf.flophase.floweb.user.UserStore;
 
 import org.apache.velocity.Template;
@@ -16,8 +17,6 @@ import com.google.appengine.api.users.User;
  * This service provides functionality for the user interface.
  */
 public class FloUserInterfaceService implements UserInterfaceService {
-
-	private static final String APP_MODE = "net.sf.flophase.floweb.ui.app.mode";
 
 	private static final String DEFAULT_APP_MODE = "std";
 
@@ -42,7 +41,7 @@ public class FloUserInterfaceService implements UserInterfaceService {
 	public void writeApp(final String destinationURL, final Writer writer) {
 		final User user = userStore.getUser();
 		if (user != null) {
-			String appMode = userStore.getSetting(APP_MODE);
+			String appMode = userStore.getSetting(UserSettings.UI_APP_MODE);
 
 			String appTemplate = "net/sf/flophase/floweb/ui/" + appMode
 					+ "/app.html";

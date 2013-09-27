@@ -16,6 +16,14 @@ public class FloUserService implements UserService {
 
 	private final UserStore userStore;
 
+	private final static Map<String, UserSettings> settingsMap = new HashMap<String, UserSettings>();
+
+	static {
+		for (UserSettings setting : UserSettings.values()) {
+			settingsMap.put(setting.getKey(), setting);
+		}
+	}
+
 	/**
 	 * Creates a new {@link FloUserService}.
 	 * 
@@ -29,20 +37,25 @@ public class FloUserService implements UserService {
 
 	@Override
 	public Response<Map<String, String>> getSettings(String... keys) {
-		Response<Map<String, String>> response;
+		Response<Map<String, String>> response = null;
 
 		if (userStore.isUserLoggedIn()) {
 			Map<String, String> settings = new HashMap<String, String>();
 			String value;
 			for (String key : keys) {
-				value = userStore.getSetting(key);
-				if (value != null) {
-					settings.put(key, value);
+				UserSettings setting = settingsMap.get(key);
+				if (setting != null) {
+					value = userStore.getSetting(setting);
+					if (value != null) {
+						settings.put(key, value);
+					}
 				}
 			}
 
-			response = new Response<Map<String, String>>(
-					Response.RESULT_SUCCESS, settings);
+			if (response == null) {
+				response = new Response<Map<String, String>>(
+						Response.RESULT_SUCCESS, settings);
+			}
 		}
 		// the user was not logged in
 		else {
@@ -70,11 +83,14 @@ public class FloUserService implements UserService {
 
 	@Override
 	public Response<Void> putSettings(Map<String, String> settings) {
-		Response<Void> response;
+		Response<Void> response = null;
 
 		if (userStore.isUserLoggedIn()) {
 			for (Map.Entry<String, String> entry : settings.entrySet()) {
-				userStore.putSetting(entry.getKey(), entry.getValue());
+				UserSettings setting = settingsMap.get(entry.getKey());
+				if (settings != null) {
+					userStore.putSetting(setting, entry.getValue());
+				}
 			}
 
 			response = new Response<Void>(Response.RESULT_SUCCESS);

@@ -24,21 +24,21 @@ public interface UserStore {
 	 * Returns the value for the requested setting. Returns null if the setting
 	 * does not exist.
 	 * 
-	 * @param key
+	 * @param setting
 	 *            The setting key.
 	 * @return The value.
 	 */
-	public abstract String getSetting(String key);
+	public abstract String getSetting(UserSettings setting);
 
 	/**
 	 * Sets the value for a user setting.
 	 * 
-	 * @param key
+	 * @param setting
 	 *            The key
 	 * @param value
 	 *            The value
 	 */
-	public abstract void putSetting(String key, String value);
+	public abstract void putSetting(UserSettings setting, String value);
 
 	/**
 	 * Create a URL where a user can login.

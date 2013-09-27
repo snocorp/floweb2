@@ -140,14 +140,15 @@ public class FloUserStoreTest {
 				oneOf(userService).getCurrentUser();
 				will(returnValue(user));
 
-				oneOf(memcacheService).get("uniqueId:key");
+				oneOf(memcacheService).get(
+						"uniqueId:" + UserSettings.UI_APP_MODE);
 				will(returnValue("result"));
 			}
 		});
 
 		store = new FloUserStore(userService, memcacheService, datastore);
 
-		String result = store.getSetting("key");
+		String result = store.getSetting(UserSettings.UI_APP_MODE);
 
 		assertEquals("result", result);
 
@@ -165,7 +166,7 @@ public class FloUserStoreTest {
 		final PreparedQuery preparedQuery = context.mock(PreparedQuery.class);
 
 		final Entity entity = new Entity("UserSettings");
-		entity.setProperty("key", "testResult");
+		entity.setProperty(UserSettings.UI_APP_MODE.getKey(), "testResult");
 
 		context.checking(new Expectations() {
 			{
@@ -181,16 +182,18 @@ public class FloUserStoreTest {
 				oneOf(userService).getCurrentUser();
 				will(returnValue(user));
 
-				oneOf(memcacheService).put("uniqueId:key", "testResult");
+				oneOf(memcacheService).put(
+						"uniqueId:" + UserSettings.UI_APP_MODE, "testResult");
 
-				oneOf(memcacheService).get("uniqueId:key");
+				oneOf(memcacheService).get(
+						"uniqueId:" + UserSettings.UI_APP_MODE);
 				will(returnValue(null));
 			}
 		});
 
 		store = new FloUserStore(userService, memcacheService, datastore);
 
-		String result = store.getSetting("key");
+		String result = store.getSetting(UserSettings.UI_APP_MODE);
 
 		assertEquals("testResult", result);
 
@@ -222,15 +225,24 @@ public class FloUserStoreTest {
 				oneOf(userService).getCurrentUser();
 				will(returnValue(user));
 
-				oneOf(memcacheService).put("uniqueId:testKey", "testValue");
+				oneOf(memcacheService).put(
+						"uniqueId:" + UserSettings.UI_APP_MODE, "testValue");
 			}
 		});
 
 		store = new FloUserStore(userService, memcacheService, datastore);
 
-		store.putSetting("testKey", "testValue");
+		store.putSetting(UserSettings.UI_APP_MODE, "testValue");
 
 		context.assertIsSatisfied();
+	}
+
+	public void testCreateLoginURL() throws Exception {
+		fail("Not yet implemented");
+	}
+
+	public void testCreateLogoutURL() throws Exception {
+		fail("Not yet implemented");
 	}
 
 }

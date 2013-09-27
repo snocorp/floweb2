@@ -66,19 +66,19 @@ public class FloUserStore implements UserStore {
 	}
 
 	@Override
-	public String getSetting(String key) {
+	public String getSetting(UserSettings setting) {
 		if (!isUserLoggedIn()) {
 			return null;
 		}
 
 		User user = getUser();
-		String cacheKey = user.getUserId() + KEY_SEPARATOR + key;
+		String cacheKey = user.getUserId() + KEY_SEPARATOR + setting;
 
 		Object value = memcacheService.get(cacheKey);
 		if (value == null) {
 			Entity userSettings = getSettingsEntity(user);
 			if (userSettings != null) {
-				value = userSettings.getProperty(key);
+				value = userSettings.getProperty(setting.getKey());
 
 				memcacheService.put(cacheKey, value); // populate cache
 			}
@@ -97,8 +97,8 @@ public class FloUserStore implements UserStore {
 	}
 
 	@Override
-	public void putSetting(String key, String value) {
-		if (!isUserLoggedIn() || KEY_USER_ID.equals(key)) {
+	public void putSetting(UserSettings setting, String value) {
+		if (!isUserLoggedIn()) {
 			return;
 		}
 
@@ -110,11 +110,11 @@ public class FloUserStore implements UserStore {
 			userSettings.setProperty(KEY_USER_ID, user.getUserId());
 		}
 
-		userSettings.setProperty(key, value);
+		userSettings.setProperty(setting.getKey(), value);
 
 		datastore.put(userSettings);
 
-		String cacheKey = user.getUserId() + KEY_SEPARATOR + key;
+		String cacheKey = user.getUserId() + KEY_SEPARATOR + setting;
 
 		// cache it for later
 		memcacheService.put(cacheKey, value);
