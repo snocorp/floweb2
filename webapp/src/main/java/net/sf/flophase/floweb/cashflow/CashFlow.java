@@ -1,13 +1,16 @@
 package net.sf.flophase.floweb.cashflow;
 
-import javax.persistence.Id;
-
 import com.google.appengine.api.users.User;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
 
 /**
- * This class represents a cash flow. This is a container object for all of the other objects in the system.
+ * This class represents a cash flow. This is a container object for all of the
+ * other objects in the system.
  */
+@Entity
 public class CashFlow {
 
 	/**
@@ -19,6 +22,7 @@ public class CashFlow {
 	/**
 	 * The user that owns the cash flow
 	 */
+	@Index
 	private User user;
 
 	/**
@@ -44,7 +48,7 @@ public class CashFlow {
 	 * @return The key
 	 */
 	public Key<CashFlow> getKey() {
-		return new Key<CashFlow>(CashFlow.class, key);
+		return Key.create(CashFlow.class, key);
 	}
 
 	/**

@@ -2,6 +2,8 @@ package net.sf.flophase.floweb;
 
 import java.util.Properties;
 
+import javax.inject.Singleton;
+
 import net.sf.flophase.floweb.account.AccountDAO;
 import net.sf.flophase.floweb.account.AccountService;
 import net.sf.flophase.floweb.account.AccountStore;
@@ -44,6 +46,7 @@ import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.inject.AbstractModule;
+import com.googlecode.objectify.ObjectifyFilter;
 import com.googlecode.objectify.annotation.Parent;
 
 /**
@@ -114,6 +117,9 @@ public class FloModule extends AbstractModule {
 				MemcacheServiceFactory.getMemcacheService());
 		bind(DatastoreService.class).toInstance(
 				DatastoreServiceFactory.getDatastoreService());
+
+		// objectify filter
+		bind(ObjectifyFilter.class).in(Singleton.class);
 	}
 
 	/**

@@ -15,7 +15,8 @@ import net.sf.flophase.floweb.entry.EntryStore;
 import com.googlecode.objectify.Key;
 
 /**
- * The transaction store contains the non-data specific business logic. Data access is delegated to the Transaction DAO.
+ * The transaction store contains the non-data specific business logic. Data
+ * access is delegated to the Transaction DAO.
  */
 public class FloTransactionStore implements TransactionStore {
 
@@ -45,7 +46,8 @@ public class FloTransactionStore implements TransactionStore {
 	 *            The cash flow store
 	 */
 	@Inject
-	public FloTransactionStore(TransactionDAO xactionDAO, EntryStore entryStore, CashFlowStore cashflowStore) {
+	public FloTransactionStore(TransactionDAO xactionDAO,
+			EntryStore entryStore, CashFlowStore cashflowStore) {
 		super();
 
 		this.dao = xactionDAO;
@@ -69,27 +71,30 @@ public class FloTransactionStore implements TransactionStore {
 		CashFlow cashflow = cashflowStore.getCashFlow();
 
 		// delete the account with the given key
-		dao.deleteTransaction(new Key<Transaction>(cashflow.getKey(), Transaction.class, id));
+		dao.deleteTransaction(Key.create(cashflow.getKey(), Transaction.class,
+				id));
 	}
 
 	@Override
 	public FinancialTransaction copyTransaction(long id, String name, Date date) {
 		// get the user's cash flow
 		CashFlow cashflow = cashflowStore.getCashFlow();
-				
-		Key<Transaction> key = new Key<Transaction>(cashflow.getKey(), Transaction.class, id);
+
+		Key<Transaction> key = Key.create(cashflow.getKey(), Transaction.class,
+				id);
 		Transaction original = dao.getTransaction(key);
 		Map<Long, Entry> origEntries = entryStore.getEntries(original);
-		
+
 		Transaction copy = dao.createTransaction(cashflow, name, date);
 		final long copyId = copy.getKey().getId();
-		
-		//copy all the entries
-		for (Map.Entry<Long,Entry> entry : origEntries.entrySet()) {
-			entryStore.editEntry(entry.getKey(), copyId, entry.getValue().getAmount());
+
+		// copy all the entries
+		for (Map.Entry<Long, Entry> entry : origEntries.entrySet()) {
+			entryStore.editEntry(entry.getKey(), copyId, entry.getValue()
+					.getAmount());
 		}
 
-		return new FinancialTransaction( copy, entryStore.getEntries(copy));
+		return new FinancialTransaction(copy, entryStore.getEntries(copy));
 	}
 
 	@Override
@@ -97,7 +102,8 @@ public class FloTransactionStore implements TransactionStore {
 		// get the user's cash flow
 		CashFlow cashflow = cashflowStore.getCashFlow();
 
-		Key<Transaction> key = new Key<Transaction>(cashflow.getKey(), Transaction.class, id);
+		Key<Transaction> key = Key.create(cashflow.getKey(), Transaction.class,
+				id);
 
 		Transaction xaction = dao.editTransaction(key, name, date);
 
@@ -109,14 +115,17 @@ public class FloTransactionStore implements TransactionStore {
 		// get the user's cash flow
 		CashFlow cashflow = cashflowStore.getCashFlow();
 
-		List<Transaction> transactions = dao.getTransactions(cashflow, startDate);
-		List<FinancialTransaction> financialTransactions = new ArrayList<FinancialTransaction>(transactions.size());
+		List<Transaction> transactions = dao.getTransactions(cashflow,
+				startDate);
+		List<FinancialTransaction> financialTransactions = new ArrayList<FinancialTransaction>(
+				transactions.size());
 
 		Map<Long, Entry> entries;
 		for (Transaction xaction : transactions) {
 			entries = entryStore.getEntries(xaction);
 
-			financialTransactions.add(new FinancialTransaction(xaction, entries));
+			financialTransactions
+					.add(new FinancialTransaction(xaction, entries));
 		}
 
 		return financialTransactions;
@@ -127,7 +136,8 @@ public class FloTransactionStore implements TransactionStore {
 		// get the user's cash flow
 		CashFlow cashflow = cashflowStore.getCashFlow();
 
-		Key<Transaction> key = new Key<Transaction>(cashflow.getKey(), Transaction.class, id);
+		Key<Transaction> key = Key.create(cashflow.getKey(), Transaction.class,
+				id);
 
 		return dao.getTransaction(key);
 	}

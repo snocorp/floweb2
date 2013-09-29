@@ -1,5 +1,6 @@
 package net.sf.flophase.floweb.common;
 
+import static com.googlecode.objectify.ObjectifyService.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
@@ -19,7 +20,8 @@ import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserServiceFactory;
 
 /**
- * This class tests the method of the {@link FloDAO} class that come from {@link EntryDAO}.
+ * This class tests the method of the {@link FloDAO} class that come from
+ * {@link EntryDAO}.
  */
 public class FloEntryDAOTest extends AbstractDAOTestCase {
 
@@ -64,8 +66,8 @@ public class FloEntryDAOTest extends AbstractDAOTestCase {
 	}
 
 	/**
-	 * Tests the {@link FloDAO#editEntry(Transaction, long, double)} method. Adds an entry and ensures its details are
-	 * correct.
+	 * Tests the {@link FloDAO#editEntry(Transaction, long, double)} method.
+	 * Adds an entry and ensures its details are correct.
 	 */
 	@Test
 	public void testEditEntryCreatesNew() {
@@ -76,12 +78,13 @@ public class FloEntryDAOTest extends AbstractDAOTestCase {
 
 		Map<Long, Entry> entries = dao.getEntries(xaction);
 
-		assertThat(entries.get(account.getKey().getId()).getKey(), is(equalTo(entry.getKey())));
+		assertThat(entries.get(account.getKey().getId()).getKey(),
+				is(equalTo(entry.getKey())));
 	}
 
 	/**
-	 * Tests the {@link FloDAO#editEntry(Transaction, long, double)} method. Adds an entry with zero amount and ensures
-	 * it is not created.
+	 * Tests the {@link FloDAO#editEntry(Transaction, long, double)} method.
+	 * Adds an entry with zero amount and ensures it is not created.
 	 */
 	@Test
 	public void testEditEntryWithZeroAmount() {
@@ -96,31 +99,37 @@ public class FloEntryDAOTest extends AbstractDAOTestCase {
 	}
 
 	/**
-	 * Tests the {@link FloDAO#editEntry(Transaction, long, double)} method. Adds an entry to the data store then
-	 * updates it and ensures the details are updated correctly.
+	 * Tests the {@link FloDAO#editEntry(Transaction, long, double)} method.
+	 * Adds an entry to the data store then updates it and ensures the details
+	 * are updated correctly.
 	 */
 	@Test
 	public void testEditEntryWithExisting() {
-		Entry entry = new Entry(xaction.getKey(), account.getKey().getId(), 2.34);
+		Entry entry = new Entry(xaction.getKey(), account.getKey().getId(),
+				2.34);
 
-		dao.ofy().put(entry);
+		ofy().save().entity(entry).now();
 
-		Entry updatedEntry = dao.editEntry(xaction, account.getKey().getId(), 3.45);
+		Entry updatedEntry = dao.editEntry(xaction, account.getKey().getId(),
+				3.45);
 
 		assertThat(updatedEntry.getAmount(), is(equalTo(3.45)));
 	}
 
 	/**
-	 * Tests the {@link FloDAO#editEntry(Transaction, long, double)} method. Adds an entry to the data store then
-	 * updates it to have zero amount and ensures the entry is removed.
+	 * Tests the {@link FloDAO#editEntry(Transaction, long, double)} method.
+	 * Adds an entry to the data store then updates it to have zero amount and
+	 * ensures the entry is removed.
 	 */
 	@Test
 	public void testEditEntryWithExistingToZeroAmount() {
-		Entry entry = new Entry(xaction.getKey(), account.getKey().getId(), 2.34);
+		Entry entry = new Entry(xaction.getKey(), account.getKey().getId(),
+				2.34);
 
-		dao.ofy().put(entry);
+		ofy().save().entity(entry).now();
 
-		Entry updatedEntry = dao.editEntry(xaction, account.getKey().getId(), 0.0);
+		Entry updatedEntry = dao.editEntry(xaction, account.getKey().getId(),
+				0.0);
 
 		assertThat(updatedEntry, is(nullValue()));
 

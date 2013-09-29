@@ -1,5 +1,6 @@
 package net.sf.flophase.floweb.common;
 
+import static com.googlecode.objectify.ObjectifyService.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
@@ -14,10 +15,10 @@ import org.junit.Test;
 
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserServiceFactory;
-import com.googlecode.objectify.NotFoundException;
 
 /**
- * This class tests the method of the {@link FloDAO} class that come from {@link AccountDAO}.
+ * This class tests the method of the {@link FloDAO} class that come from
+ * {@link AccountDAO}.
  */
 public class FloAccountDAOTest extends AbstractDAOTestCase {
 
@@ -50,16 +51,16 @@ public class FloAccountDAOTest extends AbstractDAOTestCase {
 	}
 
 	/**
-	 * Tests the {@link FloDAO#getAccounts(CashFlow)} method. Adds two accounts to the data store. Ensures that both
-	 * accounts are returned.
+	 * Tests the {@link FloDAO#getAccounts(CashFlow)} method. Adds two accounts
+	 * to the data store. Ensures that both accounts are returned.
 	 */
 	@Test
 	public void testGetAccounts() {
 		Account account1 = new Account(cashflow.getKey(), "Account1", 1.23);
 		Account account2 = new Account(cashflow.getKey(), "Account2", 2.34);
 
-		dao.ofy().put(account1);
-		dao.ofy().put(account2);
+		ofy().save().entity(account1).now();
+		ofy().save().entity(account2).now();
 
 		List<Account> accounts = dao.getAccounts(cashflow);
 
@@ -85,8 +86,8 @@ public class FloAccountDAOTest extends AbstractDAOTestCase {
 	}
 
 	/**
-	 * Tests the {@link FloDAO#createAccount(CashFlow, String, double)} method. Creates an account and validates it was
-	 * created correctly.
+	 * Tests the {@link FloDAO#createAccount(CashFlow, String, double)} method.
+	 * Creates an account and validates it was created correctly.
 	 */
 	@Test
 	public void testCreateAccount() {
@@ -102,36 +103,35 @@ public class FloAccountDAOTest extends AbstractDAOTestCase {
 	}
 
 	/**
-	 * Tests the {@link FloDAO#deleteAccount(com.googlecode.objectify.Key)} method. Adds an account to the data store
-	 * then deletes it and ensures the account cannot be retrieved.
+	 * Tests the {@link FloDAO#deleteAccount(com.googlecode.objectify.Key)}
+	 * method. Adds an account to the data store then deletes it and ensures the
+	 * account cannot be retrieved.
 	 */
 	@Test
 	public void testDeleteAccount() {
 		Account account = new Account(cashflow.getKey(), "Account1", 1.23);
 
-		dao.ofy().put(account);
+		ofy().save().entity(account).now();
 
-		dao.deleteAccount(account.getKey());
+		dao.deleteAccount(account.getKey()).now();
 
-		try {
-			dao.getAccount(account.getKey());
-			fail("Expected NotFoundException");
-		} catch (NotFoundException e) {
-			// pass
-		}
+		assertNull(dao.getAccount(account.getKey()));
 	}
 
 	/**
-	 * Tests the {@link FloDAO#editAccount(com.googlecode.objectify.Key, String, double)} method. Adds an account to the
-	 * data store then updates it and ensures the details are updated.
+	 * Tests the
+	 * {@link FloDAO#editAccount(com.googlecode.objectify.Key, String, double, double, double)}
+	 * method. Adds an account to the data store then updates it and ensures the
+	 * details are updated.
 	 */
 	@Test
 	public void testEditAccount() {
 		Account account = new Account(cashflow.getKey(), "Account1", 1.23);
 
-		dao.ofy().put(account);
+		ofy().save().entity(account).now();
 
-		Account updatedAccount = dao.editAccount(account.getKey(), "Account2", 2.34, 99.0, 1000.0);
+		Account updatedAccount = dao.editAccount(account.getKey(), "Account2",
+				2.34, 99.0, 1000.0);
 
 		assertThat(updatedAccount.getName(), is(equalTo("Account2")));
 		assertThat(updatedAccount.getBalance(), is(equalTo(2.34)));
@@ -145,14 +145,15 @@ public class FloAccountDAOTest extends AbstractDAOTestCase {
 	}
 
 	/**
-	 * Tests the {@link FloDAO#getAccount(com.googlecode.objectify.Key)} method. Adds an account to the data store then
-	 * retrieves it and ensures the details are correct.
+	 * Tests the {@link FloDAO#getAccount(com.googlecode.objectify.Key)} method.
+	 * Adds an account to the data store then retrieves it and ensures the
+	 * details are correct.
 	 */
 	@Test
 	public void testGetAccount() {
 		Account account = new Account(cashflow.getKey(), "Account1", 1.23);
 
-		dao.ofy().put(account);
+		ofy().save().entity(account).now();
 
 		Account acct = dao.getAccount(account.getKey());
 

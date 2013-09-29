@@ -122,7 +122,7 @@ public class FloAccountStoreTest {
 	public void testGetAccounts() {
 		final CashFlow cashflow = new CashFlow();
 		final List<Account> expectedAccounts = new ArrayList<Account>();
-		expectedAccounts.add(new Account(new Key<CashFlow>(CashFlow.class, 1),
+		expectedAccounts.add(new Account(Key.create(CashFlow.class, 1),
 				ACCOUNT_NAME, ACCOUNT_BALANCE));
 
 		context.checking(new Expectations() {
@@ -160,8 +160,8 @@ public class FloAccountStoreTest {
 
 				oneOf(accountDAO).createAccount(with(any(CashFlow.class)),
 						with(equal(DEFAULT_ACCOUNT_NAME)), with(equal(0.0)));
-				will(returnValue(new Account(new Key<CashFlow>(CashFlow.class,
-						1), DEFAULT_ACCOUNT_NAME, 0.0)));
+				will(returnValue(new Account(Key.create(CashFlow.class, 1),
+						DEFAULT_ACCOUNT_NAME, 0.0)));
 			}
 		});
 
@@ -217,8 +217,8 @@ public class FloAccountStoreTest {
 	@Test
 	public void testDeleteAccount() {
 		final CashFlow cashflow = getMockCashFlow();
-		final Key<Account> key = new Key<Account>(cashflow.getKey(),
-				Account.class, ACCOUNT_KEY);
+		final Key<Account> key = Key.create(cashflow.getKey(), Account.class,
+				ACCOUNT_KEY);
 
 		context.checking(new Expectations() {
 			{
@@ -235,15 +235,16 @@ public class FloAccountStoreTest {
 	}
 
 	/**
-	 * Tests the {@link FloAccountStore#editAccount(long, String, double)}
+	 * Tests the
+	 * {@link FloAccountStore#editAccount(long, String, double, double, double)}
 	 * method. Ensures the account data access object is called with the correct
 	 * parameters.
 	 */
 	@Test
 	public void testEditAccount() {
 		final CashFlow cashflow = getMockCashFlow();
-		final Key<Account> key = new Key<Account>(cashflow.getKey(),
-				Account.class, ACCOUNT_KEY);
+		final Key<Account> key = Key.create(cashflow.getKey(), Account.class,
+				ACCOUNT_KEY);
 
 		context.checking(new Expectations() {
 			{
@@ -271,8 +272,8 @@ public class FloAccountStoreTest {
 	@Test
 	public void testGetAccount() {
 		final CashFlow cashflow = getMockCashFlow();
-		final Key<Account> key = new Key<Account>(cashflow.getKey(),
-				Account.class, ACCOUNT_KEY);
+		final Key<Account> key = Key.create(cashflow.getKey(), Account.class,
+				ACCOUNT_KEY);
 
 		final Account expectedAccount = new Account(cashflow.getKey(),
 				ACCOUNT_NAME, ACCOUNT_BALANCE);
@@ -304,7 +305,7 @@ public class FloAccountStoreTest {
 
 			@Override
 			public Key<CashFlow> getKey() {
-				return new Key<CashFlow>(CashFlow.class, CASHFLOW_KEY);
+				return Key.create(CashFlow.class, CASHFLOW_KEY);
 			}
 
 		};

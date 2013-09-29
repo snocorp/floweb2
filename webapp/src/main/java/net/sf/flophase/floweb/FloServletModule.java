@@ -15,6 +15,7 @@ import net.sf.flophase.floweb.xaction.EditTransactionServlet;
 import net.sf.flophase.floweb.xaction.TransactionQueryServlet;
 
 import com.google.inject.servlet.ServletModule;
+import com.googlecode.objectify.ObjectifyFilter;
 
 /**
  * Binds all the servlets to the appropriate URLs.
@@ -22,6 +23,8 @@ import com.google.inject.servlet.ServletModule;
 public class FloServletModule extends ServletModule {
 	@Override
 	protected void configureServlets() {
+		filter("/*").through(ObjectifyFilter.class);
+
 		serve("/cashflow/q").with(CashFlowQueryServlet.class);
 
 		serve("/account/add").with(AddAccountServlet.class);

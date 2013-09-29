@@ -1,16 +1,16 @@
 package net.sf.flophase.floweb.account;
 
-import javax.persistence.Id;
-
 import net.sf.flophase.floweb.cashflow.CashFlow;
 
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Parent;
-import com.googlecode.objectify.annotation.Unindexed;
 
 /**
  * This class represents an account.
  */
+@Entity
 public class Account {
 	/**
 	 * The account identifier.
@@ -27,25 +27,21 @@ public class Account {
 	/**
 	 * The account name.
 	 */
-	@Unindexed
 	private String name;
 
 	/**
 	 * The account balance.
 	 */
-	@Unindexed
 	private double balance;
 
 	/**
 	 * The threshold at which the account is considered negative, default is 0.
 	 */
-	@Unindexed
 	private double negativeThreshold;
 
 	/**
 	 * The threshold at which the account is considered positive, default is 0.
 	 */
-	@Unindexed
 	private double positiveThreshold;
 
 	/**
@@ -80,7 +76,7 @@ public class Account {
 	 * @return The key
 	 */
 	public Key<Account> getKey() {
-		return new Key<Account>(cashflow, Account.class, key);
+		return Key.create(cashflow, Account.class, key);
 	}
 
 	/**

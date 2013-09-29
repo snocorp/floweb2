@@ -1,17 +1,19 @@
 package net.sf.flophase.floweb.entry;
 
-import javax.persistence.Id;
-
 import net.sf.flophase.floweb.xaction.Transaction;
 
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
 import com.googlecode.objectify.annotation.Parent;
-import com.googlecode.objectify.annotation.Unindexed;
 
 /**
- * This class represents an entry in a transaction. There may be one entry per account in each transaction representing
- * the money debited or credited to the account during that transaction.
+ * This class represents an entry in a transaction. There may be one entry per
+ * account in each transaction representing the money debited or credited to the
+ * account during that transaction.
  */
+@Entity
 public class Entry {
 	/**
 	 * The entry identifier.
@@ -28,12 +30,12 @@ public class Entry {
 	/**
 	 * The account for the entry.
 	 */
+	@Index
 	private long account;
 
 	/**
 	 * The entry amount.
 	 */
-	@Unindexed
 	private double amount;
 
 	/**
@@ -93,6 +95,6 @@ public class Entry {
 	 * @return The key
 	 */
 	public Key<Entry> getKey() {
-		return new Key<Entry>(xaction, Entry.class, key);
+		return Key.create(xaction, Entry.class, key);
 	}
 }

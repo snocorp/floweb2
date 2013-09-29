@@ -1,5 +1,6 @@
 package net.sf.flophase.floweb.common;
 
+import static com.googlecode.objectify.ObjectifyService.*;
 import static org.junit.Assert.*;
 import net.sf.flophase.floweb.cashflow.CashFlow;
 import net.sf.flophase.floweb.cashflow.CashFlowDAO;
@@ -12,7 +13,8 @@ import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserServiceFactory;
 
 /**
- * This class tests the method of the {@link FloDAO} class that come from {@link CashFlowDAO}.
+ * This class tests the method of the {@link FloDAO} class that come from
+ * {@link CashFlowDAO}.
  */
 public class FloCashFlowDAOTest extends AbstractDAOTestCase {
 
@@ -36,8 +38,9 @@ public class FloCashFlowDAOTest extends AbstractDAOTestCase {
 	}
 
 	/**
-	 * Tests the {@link FloDAO#getCashFlow(User)} method. Adds a new cash flow using the Objectify engine and loads it
-	 * back using the data access object.
+	 * Tests the {@link FloDAO#getCashFlow(User)} method. Adds a new cash flow
+	 * using the Objectify engine and loads it back using the data access
+	 * object.
 	 */
 	@Test
 	public void testGetCashFlow() {
@@ -50,7 +53,7 @@ public class FloCashFlowDAOTest extends AbstractDAOTestCase {
 
 		// add a cash flow
 		CashFlow expectedCashFlow = new CashFlow(user);
-		dao.ofy().put(expectedCashFlow);
+		ofy().save().entity(expectedCashFlow).now();
 
 		// get the cash flow again
 		actualCashFlow = dao.getCashFlow(user);
@@ -61,7 +64,8 @@ public class FloCashFlowDAOTest extends AbstractDAOTestCase {
 	}
 
 	/**
-	 * Tests the {@link FloDAO#createCashFlow(User)} method. Adds a new cash flow using the data access object.
+	 * Tests the {@link FloDAO#createCashFlow(User)} method. Adds a new cash
+	 * flow using the data access object.
 	 */
 	@Test
 	public void testCreateCashFlow() {
@@ -74,7 +78,8 @@ public class FloCashFlowDAOTest extends AbstractDAOTestCase {
 	}
 
 	/**
-	 * Tests the {@link FloDAO#createCashFlow(User)} method. Adds two new cash flows using the data access object.
+	 * Tests the {@link FloDAO#createCashFlow(User)} method. Adds two new cash
+	 * flows using the data access object.
 	 */
 	@Test
 	public void testCreateTwoCashFlows() {
@@ -95,7 +100,8 @@ public class FloCashFlowDAOTest extends AbstractDAOTestCase {
 		assertEquals(dao.getCashFlow(user2).getKey(), cashflow2.getKey());
 
 		// ensure the two cashflows are different
-		assertThat(cashflow2.getKey(), Matchers.is(Matchers.not(Matchers.equalTo(cashflow1.getKey()))));
+		assertThat(cashflow2.getKey(),
+				Matchers.is(Matchers.not(Matchers.equalTo(cashflow1.getKey()))));
 
 	}
 

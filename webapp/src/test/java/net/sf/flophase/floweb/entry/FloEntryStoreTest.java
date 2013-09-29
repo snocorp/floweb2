@@ -39,7 +39,8 @@ public class FloEntryStoreTest {
 	/**
 	 * A helper class to allow app engine calls.
 	 */
-	private final LocalServiceTestHelper helper = new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
+	private final LocalServiceTestHelper helper = new LocalServiceTestHelper(
+			new LocalDatastoreServiceTestConfig());
 
 	/**
 	 * The class to be tested.
@@ -62,8 +63,9 @@ public class FloEntryStoreTest {
 	private TransactionStore xactionStore;
 
 	/**
-	 * Sets up the test case. Sets up the app engine helper. Creates mock entry data access object and account,
-	 * transaction and cash flow stores. Creates the store to be tested.
+	 * Sets up the test case. Sets up the app engine helper. Creates mock entry
+	 * data access object and account, transaction and cash flow stores. Creates
+	 * the store to be tested.
 	 * 
 	 * @throws Exception
 	 *             If an error occurs
@@ -91,8 +93,8 @@ public class FloEntryStoreTest {
 	}
 
 	/**
-	 * Tests the {@link FloEntryStore#editEntry(long, long, double)} method. Ensures the data access object is called
-	 * with the correct parameters.
+	 * Tests the {@link FloEntryStore#editEntry(long, long, double)} method.
+	 * Ensures the data access object is called with the correct parameters.
 	 */
 	@Test
 	public void testEditEntry() {
@@ -123,8 +125,8 @@ public class FloEntryStoreTest {
 	}
 
 	/**
-	 * Tests the {@link EntryStore#getEntries(Transaction)} method. Ensures the data access object is called and the
-	 * proper result is returned.
+	 * Tests the {@link EntryStore#getEntries(Transaction)} method. Ensures the
+	 * data access object is called and the proper result is returned.
 	 */
 	@Test
 	public void testGetEntries() {
@@ -157,7 +159,7 @@ public class FloEntryStoreTest {
 
 			@Override
 			public Key<CashFlow> getKey() {
-				return new Key<CashFlow>(CashFlow.class, CASHFLOW_ID);
+				return Key.create(CashFlow.class, CASHFLOW_ID);
 			}
 
 		};
@@ -175,7 +177,7 @@ public class FloEntryStoreTest {
 
 			@Override
 			public Key<Account> getKey() {
-				return new Key<Account>(cashflow, Account.class, 2L);
+				return Key.create(cashflow, Account.class, 2L);
 			}
 
 		};
@@ -193,7 +195,7 @@ public class FloEntryStoreTest {
 
 			@Override
 			public Key<Transaction> getKey() {
-				return new Key<Transaction>(cashflow, Transaction.class, 3L);
+				return Key.create(cashflow, Transaction.class, 3L);
 			}
 
 		};

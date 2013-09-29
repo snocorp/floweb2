@@ -2,17 +2,18 @@ package net.sf.flophase.floweb.xaction;
 
 import java.util.Date;
 
-import javax.persistence.Id;
-
 import net.sf.flophase.floweb.cashflow.CashFlow;
 
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
 import com.googlecode.objectify.annotation.Parent;
-import com.googlecode.objectify.annotation.Unindexed;
 
 /**
  * This class represents a transaction.
  */
+@Entity
 public class Transaction {
 	/**
 	 * The transaction identifier.
@@ -29,12 +30,12 @@ public class Transaction {
 	/**
 	 * The transaction name.
 	 */
-	@Unindexed
 	private String name;
 
 	/**
 	 * The transaction date.
 	 */
+	@Index
 	private Date date;
 
 	/**
@@ -75,7 +76,7 @@ public class Transaction {
 	 * @return The key
 	 */
 	public Key<Transaction> getKey() {
-		return new Key<Transaction>(cashflow, Transaction.class, key);
+		return Key.create(cashflow, Transaction.class, key);
 	}
 
 	/**

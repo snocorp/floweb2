@@ -18,12 +18,12 @@
 		<gae.application.version>1</gae.application.version>
 	</properties>
 
-	<repositories>
+	<!-- <repositories>
 		<repository>
 			<id>objectify-appengine</id>
 			<url>http://objectify-appengine.googlecode.com/svn/maven</url>
 		</repository>
-	</repositories>
+	</repositories> -->
 
 	<dependencies>
 		<!-- Google App Engine (GAE) -->
@@ -50,7 +50,7 @@
 		<dependency>
 			<groupId>com.googlecode.objectify</groupId>
 			<artifactId>objectify</artifactId>
-			<version>3.1</version>
+			<version>4.0rc1</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.persistence</groupId>

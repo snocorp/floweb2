@@ -10,7 +10,8 @@ import net.sf.flophase.floweb.cashflow.CashFlowStore;
 import com.googlecode.objectify.Key;
 
 /**
- * The account store contains the non-data specific business logic. Data access is delegated to the Account DAO.
+ * The account store contains the non-data specific business logic. Data access
+ * is delegated to the Account DAO.
  */
 public class FloAccountStore implements AccountStore {
 
@@ -84,7 +85,8 @@ public class FloAccountStore implements AccountStore {
 	 * @return The new account
 	 */
 	private Account createDefaultAccount(CashFlow cashflow) {
-		return dao.createAccount(cashflow, DEFAULT_ACCOUNT_NAME, DEFAULT_ACCOUNT_BALANCE);
+		return dao.createAccount(cashflow, DEFAULT_ACCOUNT_NAME,
+				DEFAULT_ACCOUNT_BALANCE);
 	}
 
 	@Override
@@ -93,18 +95,20 @@ public class FloAccountStore implements AccountStore {
 		CashFlow cashflow = cashflowStore.getCashFlow();
 
 		// delete the account with the given key
-		dao.deleteAccount(new Key<Account>(cashflow.getKey(), Account.class, id));
+		dao.deleteAccount(Key.create(cashflow.getKey(), Account.class, id));
 	}
 
 	@Override
-	public Account editAccount(long id, String name, double balance, double negativeThreshold, double positiveThreshold) {
+	public Account editAccount(long id, String name, double balance,
+			double negativeThreshold, double positiveThreshold) {
 		// get the user's cash flow
 		CashFlow cashflow = cashflowStore.getCashFlow();
 
-		Key<Account> key = new Key<Account>(cashflow.getKey(), Account.class, id);
+		Key<Account> key = Key.create(cashflow.getKey(), Account.class, id);
 
 		// update the account with the given key
-		return dao.editAccount(key, name, balance, negativeThreshold, positiveThreshold);
+		return dao.editAccount(key, name, balance, negativeThreshold,
+				positiveThreshold);
 	}
 
 	@Override
@@ -112,7 +116,7 @@ public class FloAccountStore implements AccountStore {
 		// get the user's cash flow
 		CashFlow cashflow = cashflowStore.getCashFlow();
 
-		Key<Account> key = new Key<Account>(cashflow.getKey(), Account.class, id);
+		Key<Account> key = Key.create(cashflow.getKey(), Account.class, id);
 
 		return dao.getAccount(key);
 	}

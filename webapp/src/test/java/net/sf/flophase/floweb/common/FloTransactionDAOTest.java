@@ -1,5 +1,6 @@
 package net.sf.flophase.floweb.common;
 
+import static com.googlecode.objectify.ObjectifyService.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
@@ -17,10 +18,10 @@ import org.junit.Test;
 
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserServiceFactory;
-import com.googlecode.objectify.NotFoundException;
 
 /**
- * This class tests the method of the {@link FloDAO} class that come from {@link TransactionDAO}.
+ * This class tests the method of the {@link FloDAO} class that come from
+ * {@link TransactionDAO}.
  */
 public class FloTransactionDAOTest extends AbstractDAOTestCase {
 
@@ -53,13 +54,14 @@ public class FloTransactionDAOTest extends AbstractDAOTestCase {
 	}
 
 	/**
-	 * Tests the {@link FloDAO#createTransaction(CashFlow, String, Date)} method. Creates an account and validates it
-	 * was created correctly.
+	 * Tests the {@link FloDAO#createTransaction(CashFlow, String, Date)}
+	 * method. Creates an account and validates it was created correctly.
 	 */
 	@Test
 	public void testCreateTransaction() {
 		Date date = new Date();
-		Transaction xaction = dao.createTransaction(cashflow, "Transaction1", date);
+		Transaction xaction = dao.createTransaction(cashflow, "Transaction1",
+				date);
 
 		assertThat(xaction.getName(), is(equalTo("Transaction1")));
 		assertThat(xaction.getDate(), is(equalTo(date)));
@@ -71,37 +73,38 @@ public class FloTransactionDAOTest extends AbstractDAOTestCase {
 	}
 
 	/**
-	 * Tests the {@link FloDAO#deleteTransaction(com.googlecode.objectify.Key)} method. Adds a transaction to the data
-	 * store then deletes it and ensures the account cannot be retrieved.
+	 * Tests the {@link FloDAO#deleteTransaction(com.googlecode.objectify.Key)}
+	 * method. Adds a transaction to the data store then deletes it and ensures
+	 * the account cannot be retrieved.
 	 */
 	@Test
 	public void testDeleteTransaction() {
-		Transaction xaction = new Transaction(cashflow.getKey(), "Transaction1", new Date());
+		Transaction xaction = new Transaction(cashflow.getKey(),
+				"Transaction1", new Date());
 
-		dao.ofy().put(xaction);
+		ofy().save().entity(xaction).now();
 
-		dao.deleteTransaction(xaction.getKey());
+		dao.deleteTransaction(xaction.getKey()).now();
 
-		try {
-			dao.getTransaction(xaction.getKey());
-			fail("Expected NotFoundException");
-		} catch (NotFoundException e) {
-			// pass
-		}
+		assertNull(dao.getTransaction(xaction.getKey()));
 	}
 
 	/**
-	 * Tests the {@link FloDAO#editTransaction(com.googlecode.objectify.Key, String, Date)} method. Adds a transaction
-	 * to the data store then updates it and ensures the details are updated.
+	 * Tests the
+	 * {@link FloDAO#editTransaction(com.googlecode.objectify.Key, String, Date)}
+	 * method. Adds a transaction to the data store then updates it and ensures
+	 * the details are updated.
 	 */
 	@Test
 	public void testEditTransaction() {
-		Transaction xaction = new Transaction(cashflow.getKey(), "Transaction1", new Date(0));
+		Transaction xaction = new Transaction(cashflow.getKey(),
+				"Transaction1", new Date(0));
 
-		dao.ofy().put(xaction);
+		ofy().save().entity(xaction).now();
 
 		Date date = new Date();
-		Transaction updatedTransaction = dao.editTransaction(xaction.getKey(), "Transaction2", date);
+		Transaction updatedTransaction = dao.editTransaction(xaction.getKey(),
+				"Transaction2", date);
 
 		assertThat(updatedTransaction.getName(), is(equalTo("Transaction2")));
 		assertThat(updatedTransaction.getDate(), is(equalTo(date)));
@@ -113,8 +116,9 @@ public class FloTransactionDAOTest extends AbstractDAOTestCase {
 	}
 
 	/**
-	 * Tests the {@link FloDAO#getTransactions(CashFlow, Date)} method. Adds three transactions into different months
-	 * and queries each month to ensure only the proper transaction is returned.
+	 * Tests the {@link FloDAO#getTransactions(CashFlow, Date)} method. Adds
+	 * three transactions into different months and queries each month to ensure
+	 * only the proper transaction is returned.
 	 * 
 	 * @throws Exception
 	 *             If an error occurs.
@@ -127,20 +131,23 @@ public class FloTransactionDAOTest extends AbstractDAOTestCase {
 		calendar.add(Calendar.MONTH, -1);
 		Date oneMonthAgo = calendar.getTime();
 
-		Transaction xaction1 = new Transaction(cashflow.getKey(), "Transaction1", oneMonthAgo);
+		Transaction xaction1 = new Transaction(cashflow.getKey(),
+				"Transaction1", oneMonthAgo);
 
 		calendar.add(Calendar.MONTH, 1);
 		Date currentDate = calendar.getTime();
 
-		Transaction xaction2 = new Transaction(cashflow.getKey(), "Transaction2", currentDate);
+		Transaction xaction2 = new Transaction(cashflow.getKey(),
+				"Transaction2", currentDate);
 
 		calendar.add(Calendar.MONTH, 1);
 		Date oneMonthFromNow = calendar.getTime();
 
-		Transaction xaction3 = new Transaction(cashflow.getKey(), "Transaction3", oneMonthFromNow);
+		Transaction xaction3 = new Transaction(cashflow.getKey(),
+				"Transaction3", oneMonthFromNow);
 
 		// store the transactions
-		dao.ofy().put(xaction1, xaction2, xaction3);
+		ofy().save().entities(xaction1, xaction2, xaction3).now();
 
 		// one month ago
 		Date startDate = format.parse(format.format(oneMonthAgo));
@@ -165,14 +172,16 @@ public class FloTransactionDAOTest extends AbstractDAOTestCase {
 	}
 
 	/**
-	 * Tests the {@link FloDAO#getTransaction(com.googlecode.objectify.Key)} method. Adds a transaction to the data
-	 * store then retrieves it and ensures the details are correct.
+	 * Tests the {@link FloDAO#getTransaction(com.googlecode.objectify.Key)}
+	 * method. Adds a transaction to the data store then retrieves it and
+	 * ensures the details are correct.
 	 */
 	@Test
 	public void testGetTransaction() {
-		Transaction xaction = new Transaction(cashflow.getKey(), "Transaction1", new Date());
+		Transaction xaction = new Transaction(cashflow.getKey(),
+				"Transaction1", new Date());
 
-		dao.ofy().put(xaction);
+		ofy().save().entity(xaction).now();
 
 		Transaction transaction = dao.getTransaction(xaction.getKey());
 

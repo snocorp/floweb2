@@ -58,7 +58,7 @@ public class FloTransactionStoreTest {
 	 * The account id.
 	 */
 	private static final long ACCOUNT_ID = 3L;
-	
+
 	/**
 	 * The entry amount.
 	 */
@@ -72,7 +72,8 @@ public class FloTransactionStoreTest {
 	/**
 	 * A helper class to allow app engine calls.
 	 */
-	private final LocalServiceTestHelper helper = new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
+	private final LocalServiceTestHelper helper = new LocalServiceTestHelper(
+			new LocalDatastoreServiceTestConfig());
 
 	/**
 	 * The object under test.
@@ -95,8 +96,9 @@ public class FloTransactionStoreTest {
 	private EntryStore entryStore;
 
 	/**
-	 * Sets up the test case. Sets up the app engine helper. Creates mock transaction data access object and cash flow
-	 * store. Creates the store to be tested.
+	 * Sets up the test case. Sets up the app engine helper. Creates mock
+	 * transaction data access object and cash flow store. Creates the store to
+	 * be tested.
 	 * 
 	 * @throws Exception
 	 *             If an error occurs
@@ -124,8 +126,9 @@ public class FloTransactionStoreTest {
 	}
 
 	/**
-	 * Tests the {@link FloTransactionStore#createTransaction(String, Date)} method. Ensures that the transaction data
-	 * access object is called with the expected parameters.
+	 * Tests the {@link FloTransactionStore#createTransaction(String, Date)}
+	 * method. Ensures that the transaction data access object is called with
+	 * the expected parameters.
 	 */
 	@Test
 	public void testCreateTransaction() {
@@ -139,12 +142,14 @@ public class FloTransactionStoreTest {
 				oneOf(cashflowStore).getCashFlow();
 				will(returnValue(cashflow));
 
-				oneOf(xactionDAO).createTransaction(cashflow, TRANSACTION_NAME_1, date);
+				oneOf(xactionDAO).createTransaction(cashflow,
+						TRANSACTION_NAME_1, date);
 				will(returnValue(xaction));
 			}
 		});
 
-		Transaction transaction = store.createTransaction(TRANSACTION_NAME_1, date);
+		Transaction transaction = store.createTransaction(TRANSACTION_NAME_1,
+				date);
 
 		assertThat(transaction, is(equalTo(xaction)));
 
@@ -152,13 +157,15 @@ public class FloTransactionStoreTest {
 	}
 
 	/**
-	 * Tests the {@link FloTransactionStore#deleteTransaction(long)} method. Ensures the transaction data access object
-	 * is called with the correct parameters.
+	 * Tests the {@link FloTransactionStore#deleteTransaction(long)} method.
+	 * Ensures the transaction data access object is called with the correct
+	 * parameters.
 	 */
 	@Test
 	public void testDeleteTransaction() {
 		final CashFlow cashflow = getMockCashFlow();
-		final Key<Transaction> key = new Key<Transaction>(cashflow.getKey(), Transaction.class, TRANSACTION_ID_1);
+		final Key<Transaction> key = Key.create(cashflow.getKey(),
+				Transaction.class, TRANSACTION_ID_1);
 
 		context.checking(new Expectations() {
 			{
@@ -175,13 +182,15 @@ public class FloTransactionStoreTest {
 	}
 
 	/**
-	 * Tests the {@link FloTransactionStore#editTransaction(long, String, Date)} method. Ensures the transaction data
-	 * access object is called with the correct parameters.
+	 * Tests the {@link FloTransactionStore#editTransaction(long, String, Date)}
+	 * method. Ensures the transaction data access object is called with the
+	 * correct parameters.
 	 */
 	@Test
 	public void testEditTransaction() {
 		final CashFlow cashflow = getMockCashFlow();
-		final Key<Transaction> key = new Key<Transaction>(cashflow.getKey(), Transaction.class, TRANSACTION_ID_1);
+		final Key<Transaction> key = Key.create(cashflow.getKey(),
+				Transaction.class, TRANSACTION_ID_1);
 		final Date date = new Date();
 
 		final Transaction xaction = new Transaction();
@@ -191,12 +200,14 @@ public class FloTransactionStoreTest {
 				oneOf(cashflowStore).getCashFlow();
 				will(returnValue(cashflow));
 
-				oneOf(xactionDAO).editTransaction(with(equal(key)), with(equal(TRANSACTION_NAME_1)), with(equal(date)));
+				oneOf(xactionDAO).editTransaction(with(equal(key)),
+						with(equal(TRANSACTION_NAME_1)), with(equal(date)));
 				will(returnValue(xaction));
 			}
 		});
 
-		Transaction transaction = store.editTransaction(TRANSACTION_ID_1, TRANSACTION_NAME_1, date);
+		Transaction transaction = store.editTransaction(TRANSACTION_ID_1,
+				TRANSACTION_NAME_1, date);
 
 		assertThat(transaction, is(equalTo(xaction)));
 
@@ -204,14 +215,16 @@ public class FloTransactionStoreTest {
 	}
 
 	/**
-	 * Tests the {@link FloTransactionStore#getTransactions(Date)} method. Ensures the transaction data access object is
-	 * called with the correct parameters.
+	 * Tests the {@link FloTransactionStore#getTransactions(Date)} method.
+	 * Ensures the transaction data access object is called with the correct
+	 * parameters.
 	 */
 	@Test
 	public void testGetTransactions() {
 		final CashFlow cashflow = new CashFlow();
 		final Date date = new Date();
-		final Transaction transaction = new Transaction(null, TRANSACTION_NAME_1, date);
+		final Transaction transaction = new Transaction(null,
+				TRANSACTION_NAME_1, date);
 
 		final List<Transaction> xactions = new ArrayList<Transaction>();
 		xactions.add(transaction);
@@ -232,21 +245,23 @@ public class FloTransactionStoreTest {
 		List<FinancialTransaction> transactions = store.getTransactions(date);
 
 		for (int i = 0; i < transactions.size(); i++) {
-			assertThat(transactions.get(i).getDetails(), is(equalTo(xactions.get(i))));
+			assertThat(transactions.get(i).getDetails(),
+					is(equalTo(xactions.get(i))));
 		}
 
 		context.assertIsSatisfied();
 	}
 
 	/**
-	 * Tests the {@link FloTransactionStore#getTransaction(long)} method. Ensure the transaction data access object is
-	 * called with the correct parameters.
+	 * Tests the {@link FloTransactionStore#getTransaction(long)} method. Ensure
+	 * the transaction data access object is called with the correct parameters.
 	 */
 	@Test
 	public void testGetTransaction() {
 		final CashFlow cashflow = getMockCashFlow();
 
-		final Key<Transaction> key = new Key<Transaction>(cashflow.getKey(), Transaction.class, TRANSACTION_ID_1);
+		final Key<Transaction> key = Key.create(cashflow.getKey(),
+				Transaction.class, TRANSACTION_ID_1);
 
 		final Transaction xaction = new Transaction();
 
@@ -266,30 +281,40 @@ public class FloTransactionStoreTest {
 
 		context.assertIsSatisfied();
 	}
-	
-	
+
+	/**
+	 * Tests that copying a transaction creates a new version of the transaction
+	 * at the given date with the given name that has the same entries.
+	 * 
+	 * @throws Exception
+	 *             If an error occurs
+	 */
 	@Test
 	public void testCopyTransaction() throws Exception {
 		final CashFlow cashflow = getMockCashFlow();
-		final Key<Transaction> origKey = new Key<Transaction>(cashflow.getKey(), Transaction.class, TRANSACTION_ID_1);
-		final Key<Transaction> copyKey = new Key<Transaction>(cashflow.getKey(), Transaction.class, TRANSACTION_ID_2);
+		final Key<Transaction> origKey = Key.create(cashflow.getKey(),
+				Transaction.class, TRANSACTION_ID_1);
+		final Key<Transaction> copyKey = Key.create(cashflow.getKey(),
+				Transaction.class, TRANSACTION_ID_2);
 		final Date date = new Date();
-		
+
 		final Transaction original = new Transaction();
 		final Map<Long, Entry> origEntries = new HashMap<Long, Entry>();
-		origEntries.put(ACCOUNT_ID, new Entry(origKey, ACCOUNT_ID, ENTRY_AMOUNT));
-		
+		origEntries.put(ACCOUNT_ID,
+				new Entry(origKey, ACCOUNT_ID, ENTRY_AMOUNT));
+
 		final Transaction copy = new Transaction() {
 
 			@Override
 			public Key<Transaction> getKey() {
 				return copyKey;
 			}
-			
+
 		};
 		final Map<Long, Entry> copyEntries = new HashMap<Long, Entry>();
-		copyEntries.put(ACCOUNT_ID, new Entry(copyKey, ACCOUNT_ID, ENTRY_AMOUNT));
-		
+		copyEntries.put(ACCOUNT_ID,
+				new Entry(copyKey, ACCOUNT_ID, ENTRY_AMOUNT));
+
 		context.checking(new Expectations() {
 			{
 				oneOf(cashflowStore).getCashFlow();
@@ -297,25 +322,28 @@ public class FloTransactionStoreTest {
 
 				oneOf(xactionDAO).getTransaction(origKey);
 				will(returnValue(original));
-				
+
 				oneOf(entryStore).getEntries(original);
 				will(returnValue(origEntries));
-				
-				oneOf(xactionDAO).createTransaction(cashflow, TRANSACTION_NAME_2, date);
+
+				oneOf(xactionDAO).createTransaction(cashflow,
+						TRANSACTION_NAME_2, date);
 				will(returnValue(copy));
-				
-				oneOf(entryStore).editEntry(ACCOUNT_ID, TRANSACTION_ID_2, ENTRY_AMOUNT);
-				
+
+				oneOf(entryStore).editEntry(ACCOUNT_ID, TRANSACTION_ID_2,
+						ENTRY_AMOUNT);
+
 				oneOf(entryStore).getEntries(copy);
 				will(returnValue(copyEntries));
 			}
 		});
-		
-		FinancialTransaction actualCopy = store.copyTransaction(TRANSACTION_ID_1, TRANSACTION_NAME_2, date);
-		
-		assertThat( actualCopy.getDetails().getKey(), is(equalTo(copyKey)));
+
+		FinancialTransaction actualCopy = store.copyTransaction(
+				TRANSACTION_ID_1, TRANSACTION_NAME_2, date);
+
+		assertThat(actualCopy.getDetails().getKey(), is(equalTo(copyKey)));
 		assertThat(actualCopy.getEntries(), is(equalTo(copyEntries)));
-		
+
 		context.assertIsSatisfied();
 	}
 
@@ -329,7 +357,7 @@ public class FloTransactionStoreTest {
 
 			@Override
 			public Key<CashFlow> getKey() {
-				return new Key<CashFlow>(CashFlow.class, CASHFLOW_ID);
+				return Key.create(CashFlow.class, CASHFLOW_ID);
 			}
 
 		};

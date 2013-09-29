@@ -23,7 +23,8 @@ public class AccountTest {
 	/**
 	 * A helper class to allow app engine calls.
 	 */
-	private final LocalServiceTestHelper helper = new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
+	private final LocalServiceTestHelper helper = new LocalServiceTestHelper(
+			new LocalDatastoreServiceTestConfig());
 
 	/**
 	 * Sets up the test case. Sets up the app engine helper.
@@ -55,7 +56,7 @@ public class AccountTest {
 	 */
 	@Test
 	public void testGetKey() throws Exception {
-		Key<CashFlow> cashflow = new Key<CashFlow>(CashFlow.class, 1);
+		Key<CashFlow> cashflow = Key.create(CashFlow.class, 1);
 		Account account = new Account(cashflow, "Account1", 1.23);
 
 		// set the key using reflection

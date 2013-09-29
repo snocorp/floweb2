@@ -24,7 +24,8 @@ public class TransactionTest {
 	/**
 	 * A helper class to allow app engine calls.
 	 */
-	private final LocalServiceTestHelper helper = new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
+	private final LocalServiceTestHelper helper = new LocalServiceTestHelper(
+			new LocalDatastoreServiceTestConfig());
 
 	/**
 	 * Sets up the test case. Sets up the app engine helper.
@@ -81,8 +82,9 @@ public class TransactionTest {
 	 */
 	@Test
 	public void testGetKey() throws Exception {
-		Key<CashFlow> cashflow = new Key<CashFlow>(CashFlow.class, 1);
-		Transaction xaction = new Transaction(cashflow, "Transaction1", new Date());
+		Key<CashFlow> cashflow = Key.create(CashFlow.class, 1);
+		Transaction xaction = new Transaction(cashflow, "Transaction1",
+				new Date());
 
 		// set the key using reflection
 		Field keyField = Transaction.class.getDeclaredField("key");
@@ -91,7 +93,8 @@ public class TransactionTest {
 
 		// validate the elements of the key
 		assertEquals(cashflow, xaction.getKey().getParent());
-		assertEquals(Transaction.class.getSimpleName(), xaction.getKey().getKind());
+		assertEquals(Transaction.class.getSimpleName(), xaction.getKey()
+				.getKind());
 		assertEquals(2L, xaction.getKey().getId());
 	}
 

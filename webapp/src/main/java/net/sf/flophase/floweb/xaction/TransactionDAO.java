@@ -6,6 +6,7 @@ import java.util.List;
 import net.sf.flophase.floweb.cashflow.CashFlow;
 
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.Result;
 
 /**
  * This interface defines methods for accessing data related to transactions.
@@ -22,15 +23,17 @@ public interface TransactionDAO {
 	 *            The transaction date
 	 * @return The new transaction
 	 */
-	public abstract Transaction createTransaction(CashFlow cashflow, String name, Date date);
+	public abstract Transaction createTransaction(CashFlow cashflow,
+			String name, Date date);
 
 	/**
 	 * Deletes the transaction with the given key.
 	 * 
 	 * @param key
 	 *            The transaction key
+	 * @return the result
 	 */
-	public abstract void deleteTransaction(Key<Transaction> key);
+	public abstract Result<Void> deleteTransaction(Key<Transaction> key);
 
 	/**
 	 * Updates the transaction with the given key.
@@ -43,7 +46,8 @@ public interface TransactionDAO {
 	 *            The new date
 	 * @return The updated transaction
 	 */
-	public abstract Transaction editTransaction(Key<Transaction> key, String name, Date date);
+	public abstract Transaction editTransaction(Key<Transaction> key,
+			String name, Date date);
 
 	/**
 	 * Returns all the transaction in a given month.
@@ -54,7 +58,8 @@ public interface TransactionDAO {
 	 *            The start date for the month
 	 * @return The list of transactions
 	 */
-	public abstract List<Transaction> getTransactions(CashFlow cashflow, Date startDate);
+	public abstract List<Transaction> getTransactions(CashFlow cashflow,
+			Date startDate);
 
 	/**
 	 * Returns the transaction with the given key.
