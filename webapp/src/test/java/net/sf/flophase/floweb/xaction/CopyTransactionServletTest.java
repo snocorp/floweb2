@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServlet;
 import net.sf.flophase.floweb.common.Constants;
 import net.sf.flophase.floweb.common.Response;
 import net.sf.flophase.floweb.entry.Entry;
-import net.sf.flophase.floweb.test.AbstractServletTest;
+import net.sf.flophase.floweb.test.AbstractServletTestCase;
 
 import org.jmock.Expectations;
 import org.junit.Test;
@@ -19,7 +19,7 @@ import org.junit.Test;
 /**
  * This class tests the {@link EditTransactionServlet} class.
  */
-public class CopyTransactionServletTest extends AbstractServletTest {
+public class CopyTransactionServletTest extends AbstractServletTestCase {
 
 	/**
 	 * The transaction name.

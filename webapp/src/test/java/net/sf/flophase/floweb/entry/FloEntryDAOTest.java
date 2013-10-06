@@ -1,16 +1,20 @@
-package net.sf.flophase.floweb.common;
+package net.sf.flophase.floweb.entry;
 
-import static com.googlecode.objectify.ObjectifyService.*;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static com.googlecode.objectify.ObjectifyService.ofy;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertThat;
 
 import java.util.Date;
 import java.util.Map;
 
 import net.sf.flophase.floweb.account.Account;
+import net.sf.flophase.floweb.account.FloAccountDAO;
 import net.sf.flophase.floweb.cashflow.CashFlow;
-import net.sf.flophase.floweb.entry.Entry;
-import net.sf.flophase.floweb.entry.EntryDAO;
+import net.sf.flophase.floweb.cashflow.FloCashFlowDAO;
+import net.sf.flophase.floweb.test.AbstractDAOTestCase;
+import net.sf.flophase.floweb.xaction.FloTransactionDAO;
 import net.sf.flophase.floweb.xaction.Transaction;
 
 import org.junit.Before;
@@ -20,7 +24,7 @@ import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserServiceFactory;
 
 /**
- * This class tests the method of the {@link FloDAO} class that come from
+ * This class tests the method of the {@link FloEntryDAO} class that come from
  * {@link EntryDAO}.
  */
 public class FloEntryDAOTest extends AbstractDAOTestCase {
@@ -28,7 +32,7 @@ public class FloEntryDAOTest extends AbstractDAOTestCase {
 	/**
 	 * The data access object to be tested.
 	 */
-	private FloDAO dao;
+	private FloEntryDAO dao;
 
 	/**
 	 * The cash flow.
@@ -56,18 +60,19 @@ public class FloEntryDAOTest extends AbstractDAOTestCase {
 	public void setUp() throws Exception {
 		super.setUp();
 
-		dao = new FloDAO();
+		dao = new FloEntryDAO();
 
 		User user = UserServiceFactory.getUserService().getCurrentUser();
 
-		cashflow = dao.createCashFlow(user);
-		account = dao.createAccount(cashflow, "Account1", 1.23);
-		xaction = dao.createTransaction(cashflow, "Transaction1", new Date());
+		cashflow = new FloCashFlowDAO().createCashFlow(user);
+		account = new FloAccountDAO().createAccount(cashflow, "Account1", 1.23);
+		xaction = new FloTransactionDAO().createTransaction(cashflow,
+				"Transaction1", new Date());
 	}
 
 	/**
-	 * Tests the {@link FloDAO#editEntry(Transaction, long, double)} method.
-	 * Adds an entry and ensures its details are correct.
+	 * Tests the {@link FloEntryDAO#editEntry(Transaction, long, double)}
+	 * method. Adds an entry and ensures its details are correct.
 	 */
 	@Test
 	public void testEditEntryCreatesNew() {
@@ -83,8 +88,8 @@ public class FloEntryDAOTest extends AbstractDAOTestCase {
 	}
 
 	/**
-	 * Tests the {@link FloDAO#editEntry(Transaction, long, double)} method.
-	 * Adds an entry with zero amount and ensures it is not created.
+	 * Tests the {@link FloEntryDAO#editEntry(Transaction, long, double)}
+	 * method. Adds an entry with zero amount and ensures it is not created.
 	 */
 	@Test
 	public void testEditEntryWithZeroAmount() {
@@ -99,9 +104,9 @@ public class FloEntryDAOTest extends AbstractDAOTestCase {
 	}
 
 	/**
-	 * Tests the {@link FloDAO#editEntry(Transaction, long, double)} method.
-	 * Adds an entry to the data store then updates it and ensures the details
-	 * are updated correctly.
+	 * Tests the {@link FloEntryDAO#editEntry(Transaction, long, double)}
+	 * method. Adds an entry to the data store then updates it and ensures the
+	 * details are updated correctly.
 	 */
 	@Test
 	public void testEditEntryWithExisting() {
@@ -117,9 +122,9 @@ public class FloEntryDAOTest extends AbstractDAOTestCase {
 	}
 
 	/**
-	 * Tests the {@link FloDAO#editEntry(Transaction, long, double)} method.
-	 * Adds an entry to the data store then updates it to have zero amount and
-	 * ensures the entry is removed.
+	 * Tests the {@link FloEntryDAO#editEntry(Transaction, long, double)}
+	 * method. Adds an entry to the data store then updates it to have zero
+	 * amount and ensures the entry is removed.
 	 */
 	@Test
 	public void testEditEntryWithExistingToZeroAmount() {

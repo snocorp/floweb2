@@ -1,6 +1,6 @@
 package net.sf.flophase.floweb.cashflow;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import net.sf.flophase.floweb.user.UserStore;
 
 import org.jmock.Expectations;
@@ -36,8 +36,8 @@ public class FloCashFlowStoreTest {
 	private CashFlowDAO cashflowDAO;
 
 	/**
-	 * Sets up the test case. Creates the mock user store and the cash flow data access object. Creates the store to be
-	 * tested.
+	 * Sets up the test case. Creates the mock user store and the cash flow data
+	 * access object. Creates the store to be tested.
 	 * 
 	 * @throws Exception
 	 *             If an error occurs.
@@ -51,8 +51,8 @@ public class FloCashFlowStoreTest {
 	}
 
 	/**
-	 * Tests the {@link FloCashFlowStore#getCashFlow()} method. Ensures the cash flow data access object is called with
-	 * the correct parameters.
+	 * Tests the {@link FloCashFlowStore#getCashFlow()} method. Ensures the cash
+	 * flow data access object is called with the correct parameters.
 	 */
 	@Test
 	public void testGetCashFlow() {
@@ -77,9 +77,10 @@ public class FloCashFlowStoreTest {
 	}
 
 	/**
-	 * Tests the {@link FloCashFlowStore#getCashFlow()} method when no cash flow already exists. Ensures the cash flow
-	 * data access object is called with the correct parameters. Ensures a new cash flow is automatically created and
-	 * returned.
+	 * Tests the {@link FloCashFlowStore#getCashFlow()} method when no cash flow
+	 * already exists. Ensures the cash flow data access object is called with
+	 * the correct parameters. Ensures a new cash flow is automatically created
+	 * and returned.
 	 */
 	@Test
 	public void testGetCashFlowWithNoCashFlow() {

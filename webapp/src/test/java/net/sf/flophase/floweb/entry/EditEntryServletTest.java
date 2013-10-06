@@ -3,7 +3,7 @@ package net.sf.flophase.floweb.entry;
 import javax.servlet.http.HttpServlet;
 
 import net.sf.flophase.floweb.common.Response;
-import net.sf.flophase.floweb.test.AbstractServletTest;
+import net.sf.flophase.floweb.test.AbstractServletTestCase;
 
 import org.jmock.Expectations;
 import org.junit.Test;
@@ -11,7 +11,7 @@ import org.junit.Test;
 /**
  * This class tests the {@link EditEntryServlet} class.
  */
-public class EditEntryServletTest extends AbstractServletTest {
+public class EditEntryServletTest extends AbstractServletTestCase {
 
 	/**
 	 * The entry amount.

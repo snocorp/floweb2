@@ -1,4 +1,4 @@
-package net.sf.flophase.floweb.common;
+package net.sf.flophase.floweb.test;
 
 import org.junit.After;
 import org.junit.Before;

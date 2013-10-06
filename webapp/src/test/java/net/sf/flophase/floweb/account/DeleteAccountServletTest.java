@@ -6,7 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpServlet;
 
 import net.sf.flophase.floweb.common.Response;
-import net.sf.flophase.floweb.test.AbstractServletTest;
+import net.sf.flophase.floweb.test.AbstractServletTestCase;
 
 import org.jmock.Expectations;
 import org.junit.Test;
@@ -14,7 +14,7 @@ import org.junit.Test;
 /**
  * This class tests the {@link DeleteAccountServlet} class.
  */
-public class DeleteAccountServletTest extends AbstractServletTest {
+public class DeleteAccountServletTest extends AbstractServletTestCase {
 
 	/**
 	 * The account key.

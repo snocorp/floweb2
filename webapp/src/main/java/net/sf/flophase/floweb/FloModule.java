@@ -7,19 +7,22 @@ import javax.inject.Singleton;
 import net.sf.flophase.floweb.account.AccountDAO;
 import net.sf.flophase.floweb.account.AccountService;
 import net.sf.flophase.floweb.account.AccountStore;
+import net.sf.flophase.floweb.account.FloAccountDAO;
 import net.sf.flophase.floweb.account.FloAccountService;
 import net.sf.flophase.floweb.account.FloAccountStore;
 import net.sf.flophase.floweb.cashflow.CashFlowDAO;
+import net.sf.flophase.floweb.cashflow.CashFlowExportStore;
 import net.sf.flophase.floweb.cashflow.CashFlowService;
 import net.sf.flophase.floweb.cashflow.CashFlowStore;
+import net.sf.flophase.floweb.cashflow.FloCashFlowDAO;
+import net.sf.flophase.floweb.cashflow.FloCashFlowExportStore;
 import net.sf.flophase.floweb.cashflow.FloCashFlowService;
 import net.sf.flophase.floweb.cashflow.FloCashFlowStore;
 import net.sf.flophase.floweb.common.Constants;
-import net.sf.flophase.floweb.common.DAO;
-import net.sf.flophase.floweb.common.FloDAO;
 import net.sf.flophase.floweb.entry.EntryDAO;
 import net.sf.flophase.floweb.entry.EntryService;
 import net.sf.flophase.floweb.entry.EntryStore;
+import net.sf.flophase.floweb.entry.FloEntryDAO;
 import net.sf.flophase.floweb.entry.FloEntryService;
 import net.sf.flophase.floweb.entry.FloEntryStore;
 import net.sf.flophase.floweb.ui.FloUserInterfaceService;
@@ -28,6 +31,7 @@ import net.sf.flophase.floweb.user.FloUserService;
 import net.sf.flophase.floweb.user.FloUserStore;
 import net.sf.flophase.floweb.user.UserService;
 import net.sf.flophase.floweb.user.UserStore;
+import net.sf.flophase.floweb.xaction.FloTransactionDAO;
 import net.sf.flophase.floweb.xaction.FloTransactionService;
 import net.sf.flophase.floweb.xaction.FloTransactionStore;
 import net.sf.flophase.floweb.xaction.TransactionDAO;
@@ -65,6 +69,9 @@ public class FloModule extends AbstractModule {
 		bindFloWebServices();
 	}
 
+	/**
+	 * Binds the velocity instance.
+	 */
 	private void bindVelocity() {
 		Properties props = new Properties();
 		props.setProperty("resource.loader", "class");
@@ -81,24 +88,23 @@ public class FloModule extends AbstractModule {
 	 * This binds all the logic interfaces to their implementations.
 	 */
 	protected void bindFloWebServices() {
-		DAO floDAO = new FloDAO();
-
 		bind(UserStore.class).to(FloUserStore.class);
 
-		bind(AccountDAO.class).toInstance(floDAO);
+		bind(AccountDAO.class).to(FloAccountDAO.class);
 		bind(AccountService.class).to(FloAccountService.class);
 		bind(AccountStore.class).to(FloAccountStore.class);
 
-		bind(TransactionDAO.class).toInstance(floDAO);
+		bind(TransactionDAO.class).to(FloTransactionDAO.class);
 		bind(TransactionService.class).to(FloTransactionService.class);
 		bind(TransactionStore.class).to(FloTransactionStore.class);
 
-		bind(EntryDAO.class).toInstance(floDAO);
+		bind(EntryDAO.class).to(FloEntryDAO.class);
 		bind(EntryService.class).to(FloEntryService.class);
 		bind(EntryStore.class).to(FloEntryStore.class);
 
-		bind(CashFlowDAO.class).toInstance(floDAO);
+		bind(CashFlowDAO.class).to(FloCashFlowDAO.class);
 		bind(CashFlowStore.class).to(FloCashFlowStore.class);
+		bind(CashFlowExportStore.class).to(FloCashFlowExportStore.class);
 		bind(CashFlowService.class).to(FloCashFlowService.class);
 
 		bind(UserStore.class).to(FloUserStore.class);

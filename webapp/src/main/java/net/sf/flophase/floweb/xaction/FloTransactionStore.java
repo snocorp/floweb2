@@ -142,4 +142,24 @@ public class FloTransactionStore implements TransactionStore {
 		return dao.getTransaction(key);
 	}
 
+	@Override
+	public List<FinancialTransaction> getTransactions() {
+		// get the user's cash flow
+		CashFlow cashflow = cashflowStore.getCashFlow();
+
+		List<Transaction> transactions = dao.getTransactions(cashflow);
+		List<FinancialTransaction> financialTransactions = new ArrayList<FinancialTransaction>(
+				transactions.size());
+
+		Map<Long, Entry> entries;
+		for (Transaction xaction : transactions) {
+			entries = entryStore.getEntries(xaction);
+
+			financialTransactions
+					.add(new FinancialTransaction(xaction, entries));
+		}
+
+		return financialTransactions;
+	}
+
 }

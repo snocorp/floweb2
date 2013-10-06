@@ -12,4 +12,11 @@ public interface CashFlowService {
 	 * @return A response containing the accounts.
 	 */
 	public Response<CashFlow> getCashFlow();
+
+	/**
+	 * Returns an export of the full cashflow.
+	 * 
+	 * @return The export
+	 */
+	public Response<CashFlowExport> getCashFlowExport();
 }

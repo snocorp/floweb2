@@ -69,4 +69,13 @@ public interface TransactionDAO {
 	 * @return The transaction
 	 */
 	public abstract Transaction getTransaction(Key<Transaction> key);
+
+	/**
+	 * Returns all transactions for the given cash flow.
+	 * 
+	 * @param cashflow
+	 *            The cash flow
+	 * @return All transactions
+	 */
+	public abstract List<Transaction> getTransactions(CashFlow cashflow);
 }

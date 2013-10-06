@@ -7,7 +7,8 @@ import net.sf.flophase.floweb.user.UserStore;
 import com.google.appengine.api.users.User;
 
 /**
- * The cash flow store contains the non-data specific business logic. Data access is delegated to the Cash Flow DAO.
+ * The cash flow store contains the non-data specific business logic. Data
+ * access is delegated to the Cash Flow DAO.
  */
 public class FloCashFlowStore implements CashFlowStore {
 

@@ -69,4 +69,11 @@ public interface TransactionStore {
 	 * @return The new transaction
 	 */
 	public FinancialTransaction copyTransaction(long id, String name, Date date);
+
+	/**
+	 * Returns all the transactions.
+	 * 
+	 * @return All transactions
+	 */
+	public List<FinancialTransaction> getTransactions();
 }

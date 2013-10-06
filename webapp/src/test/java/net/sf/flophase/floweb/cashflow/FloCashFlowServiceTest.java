@@ -1,7 +1,9 @@
 package net.sf.flophase.floweb.cashflow;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.isIn;
+import static org.junit.Assert.assertThat;
 import net.sf.flophase.floweb.account.FloAccountService;
 import net.sf.flophase.floweb.common.Response;
 
@@ -38,19 +40,27 @@ public class FloCashFlowServiceTest {
 	private UserService userService;
 
 	/**
-	 * The account store that the service depends upon.
+	 * The cash flow store that the service depends upon.
 	 */
 	private CashFlowStore cashFlowStore;
 
 	/**
-	 * Sets up the test case. Creates mock user service and account store. Creates the service to be tested.
+	 * The cash flow export store that the service depends upon.
+	 */
+	private CashFlowExportStore cashFlowExportStore;
+
+	/**
+	 * Sets up the test case. Creates mock user service and account store.
+	 * Creates the service to be tested.
 	 */
 	@Before
 	public void setUp() {
 		userService = context.mock(UserService.class);
 		cashFlowStore = context.mock(CashFlowStore.class);
+		cashFlowExportStore = context.mock(CashFlowExportStore.class);
 
-		service = new FloCashFlowService(userService, cashFlowStore);
+		service = new FloCashFlowService(userService, cashFlowStore,
+				cashFlowExportStore);
 	}
 
 	/**
@@ -80,7 +90,35 @@ public class FloCashFlowServiceTest {
 	}
 
 	/**
-	 * Tests the {@link FloCashFlowService#getCashFlow()} method when there is no logged in user.
+	 * Tests the {@link FloCashFlowService#getCashFlowExport()} method.
+	 */
+	@Test
+	public void testGetCashFlowExport() {
+		final CashFlowExport cashflow = new CashFlowExport();
+
+		context.checking(new Expectations() {
+			{
+
+				// there is a user that is logged in
+				oneOf(userService).isUserLoggedIn();
+				will(returnValue(true));
+
+				// return the list of accounts
+				oneOf(cashFlowExportStore).getCashFlowExport();
+				will(returnValue(cashflow));
+			}
+		});
+
+		Response<CashFlowExport> response = service.getCashFlowExport();
+
+		assertThat(response.getContent(), is(equalTo(cashflow)));
+
+		context.assertIsSatisfied();
+	}
+
+	/**
+	 * Tests the {@link FloCashFlowService#getCashFlow()} method when there is
+	 * no logged in user.
 	 */
 	@Test
 	public void testGetCashFlowWithNoLoggedInUser() {
@@ -93,6 +131,29 @@ public class FloCashFlowServiceTest {
 		});
 
 		Response<CashFlow> response = service.getCashFlow();
+
+		assertThat(response.getResult(), is(equalTo(Response.RESULT_FAILURE)));
+
+		assertThat(MSG_PERMISSION_DENIED, isIn(response.getMessages()));
+
+		context.assertIsSatisfied();
+	}
+
+	/**
+	 * Tests the {@link FloCashFlowService#getCashFlowExport()} method when
+	 * there is no logged in user.
+	 */
+	@Test
+	public void testGetCashFlowExportWithNoLoggedInUser() {
+		context.checking(new Expectations() {
+			{
+				// no user is logged in
+				oneOf(userService).isUserLoggedIn();
+				will(returnValue(false));
+			}
+		});
+
+		Response<CashFlowExport> response = service.getCashFlowExport();
 
 		assertThat(response.getResult(), is(equalTo(Response.RESULT_FAILURE)));
 

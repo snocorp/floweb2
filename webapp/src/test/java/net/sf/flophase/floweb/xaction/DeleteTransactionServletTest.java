@@ -3,7 +3,7 @@ package net.sf.flophase.floweb.xaction;
 import javax.servlet.http.HttpServlet;
 
 import net.sf.flophase.floweb.common.Response;
-import net.sf.flophase.floweb.test.AbstractServletTest;
+import net.sf.flophase.floweb.test.AbstractServletTestCase;
 
 import org.jmock.Expectations;
 import org.junit.Test;
@@ -11,7 +11,7 @@ import org.junit.Test;
 /**
  * This class tests the {@link DeleteTransactionServlet} class.
  */
-public class DeleteTransactionServletTest extends AbstractServletTest {
+public class DeleteTransactionServletTest extends AbstractServletTestCase {
 
 	/**
 	 * The transaction key.

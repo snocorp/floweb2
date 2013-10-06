@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.sf.flophase.floweb.common.Constants;
-import net.sf.flophase.floweb.user.UserStore;
 
 /**
  * This servlet is the starting point for the user interface.
@@ -22,9 +21,6 @@ public class UserInterfaceServlet extends HttpServlet {
 	 * Serialization identifier
 	 */
 	private static final long serialVersionUID = 4667900059644886931L;
-
-	@Inject
-	private UserStore userStore;
 
 	@Inject
 	private UserInterfaceService uiService;

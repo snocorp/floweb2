@@ -3,7 +3,7 @@ package net.sf.flophase.floweb.cashflow;
 import javax.servlet.http.HttpServlet;
 
 import net.sf.flophase.floweb.common.Response;
-import net.sf.flophase.floweb.test.AbstractServletTest;
+import net.sf.flophase.floweb.test.AbstractServletTestCase;
 
 import org.jmock.Expectations;
 import org.junit.Test;
@@ -13,7 +13,7 @@ import com.google.appengine.api.users.User;
 /**
  * This class tests the {@link CashFlowQueryServlet} class.
  */
-public class CashFlowQueryServletTest extends AbstractServletTest {
+public class CashFlowQueryServletTest extends AbstractServletTestCase {
 
 	/**
 	 * The servlet path.

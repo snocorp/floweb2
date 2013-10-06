@@ -21,7 +21,7 @@ import com.google.inject.servlet.GuiceFilter;
  * This abstract class provides functionality to allow simple testing of
  * servlets using a test jetty container.
  */
-public abstract class AbstractServletTest {
+public abstract class AbstractServletTestCase {
 
 	/**
 	 * The mock context
