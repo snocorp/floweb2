@@ -4,5 +4,6 @@ webapp/.project
 webapp/.settings
 webapp/target
 webapp/war
+.metadata
 *~
 
