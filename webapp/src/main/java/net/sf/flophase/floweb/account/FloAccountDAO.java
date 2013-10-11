@@ -24,17 +24,6 @@ public class FloAccountDAO implements AccountDAO {
 	}
 
 	@Override
-	public Account createAccount(CashFlow cashflow, String name, double balance) {
-		// create a new account
-		Account account = new Account(cashflow.getKey(), name, balance);
-
-		// store the account
-		ofy().save().entity(account).now();
-
-		return account;
-	}
-
-	@Override
 	public Result<Void> deleteAccount(Key<Account> key) {
 		// delete the account
 		return ofy().delete().entity(key);
@@ -73,5 +62,20 @@ public class FloAccountDAO implements AccountDAO {
 	public List<Account> getAccounts(CashFlow cashflow) {
 		// query for all accounts that are under the given cash flow
 		return ofy().load().type(Account.class).ancestor(cashflow).list();
+	}
+
+	@Override
+	public Account createAccount(CashFlow cashflow, String name,
+			double balance, double negativeThreshold, double positiveThreshold) {
+		// create a new account
+		Account account = new Account(cashflow.getKey(), name, balance);
+
+		account.setNegativeThreshold(negativeThreshold);
+		account.setPositiveThreshold(positiveThreshold);
+
+		// store the account
+		ofy().save().entity(account).now();
+
+		return account;
 	}
 }

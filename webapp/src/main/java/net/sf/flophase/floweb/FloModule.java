@@ -15,7 +15,7 @@ import net.sf.flophase.floweb.cashflow.CashFlowExportStore;
 import net.sf.flophase.floweb.cashflow.CashFlowService;
 import net.sf.flophase.floweb.cashflow.CashFlowStore;
 import net.sf.flophase.floweb.cashflow.FloCashFlowDAO;
-import net.sf.flophase.floweb.cashflow.FloCashFlowExportStore;
+import net.sf.flophase.floweb.cashflow.FloCashFlowTradeStore;
 import net.sf.flophase.floweb.cashflow.FloCashFlowService;
 import net.sf.flophase.floweb.cashflow.FloCashFlowStore;
 import net.sf.flophase.floweb.common.Constants;
@@ -104,7 +104,7 @@ public class FloModule extends AbstractModule {
 
 		bind(CashFlowDAO.class).to(FloCashFlowDAO.class);
 		bind(CashFlowStore.class).to(FloCashFlowStore.class);
-		bind(CashFlowExportStore.class).to(FloCashFlowExportStore.class);
+		bind(CashFlowExportStore.class).to(FloCashFlowTradeStore.class);
 		bind(CashFlowService.class).to(FloCashFlowService.class);
 
 		bind(UserStore.class).to(FloUserStore.class);

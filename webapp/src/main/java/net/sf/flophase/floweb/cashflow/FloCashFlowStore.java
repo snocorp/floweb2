@@ -52,4 +52,23 @@ public class FloCashFlowStore implements CashFlowStore {
 		return cashflow;
 	}
 
+	@Override
+	public CashFlowImportStatus createCashFlowImport(int total) {
+		return dao.createCashFlowImport(getCashFlow(), total);
+	}
+
+	@Override
+	public CashFlowImportStatus getCashFlowImportStatus(long id) {
+		return dao.getCashFlowImportStatus(getCashFlow(), id);
+	}
+
+	@Override
+	public void updateCashFlowImportStatus(CashFlowImportStatus status,
+			int done, int total) {
+		status.setDone(done);
+		status.setTotal(total);
+
+		dao.updateCashFlowImportStatus(status);
+	}
+
 }

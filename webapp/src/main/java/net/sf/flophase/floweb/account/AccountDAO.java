@@ -31,10 +31,14 @@ public interface AccountDAO {
 	 *            The name
 	 * @param balance
 	 *            The balance
+	 * @param negativeThreshold
+	 *            The threshold at which the account is considered negative
+	 * @param positiveThreshold
+	 *            The threshold at which the account is considered positive
 	 * @return The new account
 	 */
 	public abstract Account createAccount(CashFlow cashflow, String name,
-			double balance);
+			double balance, double negativeThreshold, double positiveThreshold);
 
 	/**
 	 * Deletes the account with the given key.

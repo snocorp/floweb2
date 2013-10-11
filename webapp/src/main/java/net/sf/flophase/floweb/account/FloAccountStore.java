@@ -68,13 +68,7 @@ public class FloAccountStore implements AccountStore {
 
 	@Override
 	public Account createAccount(String name, double balance) {
-		// get the user's cash flow
-		CashFlow cashflow = cashflowStore.getCashFlow();
-
-		// create the new account
-		Account acct = dao.createAccount(cashflow, name, balance);
-
-		return acct;
+		return createAccount(name, balance, 0.0, 0.0);
 	}
 
 	/**
@@ -86,7 +80,7 @@ public class FloAccountStore implements AccountStore {
 	 */
 	private Account createDefaultAccount(CashFlow cashflow) {
 		return dao.createAccount(cashflow, DEFAULT_ACCOUNT_NAME,
-				DEFAULT_ACCOUNT_BALANCE);
+				DEFAULT_ACCOUNT_BALANCE, 0.0, 0.0);
 	}
 
 	@Override
@@ -119,6 +113,19 @@ public class FloAccountStore implements AccountStore {
 		Key<Account> key = Key.create(cashflow.getKey(), Account.class, id);
 
 		return dao.getAccount(key);
+	}
+
+	@Override
+	public Account createAccount(String name, double balance,
+			double negativeThreshold, double positiveThreshold) {
+		// get the user's cash flow
+		CashFlow cashflow = cashflowStore.getCashFlow();
+
+		// create the new account
+		Account acct = dao.createAccount(cashflow, name, balance,
+				negativeThreshold, positiveThreshold);
+
+		return acct;
 	}
 
 }

@@ -13,6 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.google.appengine.api.users.UserService;
+import com.google.gson.Gson;
 
 /**
  * This class tests the {@link FloAccountService} class.
@@ -60,7 +61,7 @@ public class FloCashFlowServiceTest {
 		cashFlowExportStore = context.mock(CashFlowExportStore.class);
 
 		service = new FloCashFlowService(userService, cashFlowStore,
-				cashFlowExportStore);
+				cashFlowExportStore, new Gson());
 	}
 
 	/**

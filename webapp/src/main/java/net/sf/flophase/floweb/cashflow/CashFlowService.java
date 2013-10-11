@@ -14,9 +14,40 @@ public interface CashFlowService {
 	public Response<CashFlow> getCashFlow();
 
 	/**
-	 * Returns an export of the full cashflow.
+	 * Returns an export of the full cash flow.
 	 * 
 	 * @return The export
 	 */
 	public Response<CashFlowExport> getCashFlowExport();
+
+	/**
+	 * Imports the given cash flow.
+	 * 
+	 * @param cashflow
+	 *            The cash flow in JSON format.
+	 * @return The initial status.
+	 */
+	public Response<CashFlowImportStatus> importCashFlow(String cashflow);
+
+	/**
+	 * Imports the given cash flow.
+	 * 
+	 * @param key
+	 *            The import status key
+	 * @param cashflow
+	 *            The cash flow in JSON format.
+	 * @return The final status.
+	 */
+	public Response<CashFlowImportStatus> importCashFlow(String key,
+			String cashflow);
+
+	/**
+	 * Returns the status of a cash flow import task.
+	 * 
+	 * @param key
+	 *            The import status key
+	 * 
+	 * @return The status
+	 */
+	public Response<CashFlowImportStatus> getCashFlowImportStatus(String key);
 }

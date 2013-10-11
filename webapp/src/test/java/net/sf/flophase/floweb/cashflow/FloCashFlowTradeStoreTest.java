@@ -16,9 +16,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * This class tests the {@link FloCashFlowStore} class.
+ * This class tests the {@link FloCashFlowTradeStore} class.
  */
-public class FloCashFlowExportStoreTest {
+public class FloCashFlowTradeStoreTest {
 
 	/**
 	 * The mock context.
@@ -28,7 +28,7 @@ public class FloCashFlowExportStoreTest {
 	/**
 	 * The store to be tested.
 	 */
-	private FloCashFlowExportStore store;
+	private FloCashFlowTradeStore store;
 
 	/**
 	 * The mock account store.
@@ -52,11 +52,11 @@ public class FloCashFlowExportStoreTest {
 		accountStore = context.mock(AccountStore.class);
 		xactionStore = context.mock(TransactionStore.class);
 
-		store = new FloCashFlowExportStore(accountStore, xactionStore);
+		store = new FloCashFlowTradeStore(accountStore, xactionStore);
 	}
 
 	/**
-	 * Tests the {@link FloCashFlowExportStore#getCashFlowExport()} method.
+	 * Tests the {@link FloCashFlowTradeStore#getCashFlowExport()} method.
 	 * Ensures the data access objects are called with the correct parameters.
 	 */
 	@Test

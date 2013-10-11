@@ -14,7 +14,8 @@ public interface AccountStore {
 	public List<Account> getAccounts();
 
 	/**
-	 * Creates a new account for the logged in user.
+	 * Creates a new account for the logged in user. Sets positive and negative
+	 * thresholds to 0.
 	 * 
 	 * @param name
 	 *            The name
@@ -23,6 +24,22 @@ public interface AccountStore {
 	 * @return The new account
 	 */
 	public Account createAccount(String name, double balance);
+
+	/**
+	 * Creates a new account for the logged in user.
+	 * 
+	 * @param name
+	 *            The name
+	 * @param balance
+	 *            The balance
+	 * @param negativeThreshold
+	 *            The threshold at which the account is considered negative
+	 * @param positiveThreshold
+	 *            The threshold at which the account is considered positive
+	 * @return The new account
+	 */
+	public Account createAccount(String name, double balance,
+			double negativeThreshold, double positiveThreshold);
 
 	/**
 	 * Deletes the account with the given key.
@@ -42,12 +59,13 @@ public interface AccountStore {
 	 * @param balance
 	 *            The balance
 	 * @param negativeThreshold
-	 *            The threshold at which the account is considered negative, default is 0
+	 *            The threshold at which the account is considered negative
 	 * @param positiveThreshold
-	 *            The threshold at which the account is considered positive, default is 0
+	 *            The threshold at which the account is considered positive
 	 * @return The updated account
 	 */
-	public Account editAccount(long id, String name, double balance, double negativeThreshold, double positiveThreshold);
+	public Account editAccount(long id, String name, double balance,
+			double negativeThreshold, double positiveThreshold);
 
 	/**
 	 * Returns the account with the given id.

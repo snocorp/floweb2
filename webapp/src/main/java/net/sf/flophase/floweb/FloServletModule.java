@@ -5,6 +5,7 @@ import net.sf.flophase.floweb.account.AddAccountServlet;
 import net.sf.flophase.floweb.account.DeleteAccountServlet;
 import net.sf.flophase.floweb.account.EditAccountServlet;
 import net.sf.flophase.floweb.cashflow.CashFlowExportServlet;
+import net.sf.flophase.floweb.cashflow.CashFlowImportServlet;
 import net.sf.flophase.floweb.cashflow.CashFlowQueryServlet;
 import net.sf.flophase.floweb.entry.EditEntryServlet;
 import net.sf.flophase.floweb.ui.UserInterfaceServlet;
@@ -28,6 +29,8 @@ public class FloServletModule extends ServletModule {
 
 		serve("/cashflow/q").with(CashFlowQueryServlet.class);
 		serve("/cashflow/export").with(CashFlowExportServlet.class);
+		serve("/cashflow/import").with(CashFlowImportServlet.class);
+		serve("/cashflow/import-worker").with(CashFlowImportServlet.class);
 
 		serve("/account/add").with(AddAccountServlet.class);
 		serve("/account/delete").with(DeleteAccountServlet.class);

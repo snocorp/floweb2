@@ -4,6 +4,7 @@ import static com.googlecode.objectify.ObjectifyService.ofy;
 import static com.googlecode.objectify.ObjectifyService.register;
 
 import com.google.appengine.api.users.User;
+import com.googlecode.objectify.Key;
 import com.googlecode.objectify.cmd.Query;
 
 /**
@@ -16,6 +17,7 @@ public class FloCashFlowDAO implements CashFlowDAO {
 	 */
 	static {
 		register(CashFlow.class);
+		register(CashFlowImportStatus.class);
 	}
 
 	@Override
@@ -36,6 +38,29 @@ public class FloCashFlowDAO implements CashFlowDAO {
 		ofy().save().entity(cashflow).now();
 
 		return cashflow;
+	}
+
+	@Override
+	public CashFlowImportStatus createCashFlowImport(CashFlow cashflow,
+			int total) {
+		CashFlowImportStatus status = new CashFlowImportStatus(
+				cashflow.getKey(), total);
+
+		ofy().save().entity(status).now();
+
+		return status;
+	}
+
+	@Override
+	public CashFlowImportStatus getCashFlowImportStatus(CashFlow cashflow,
+			long id) {
+		return ofy().load().key(Key.create(CashFlowImportStatus.class, id))
+				.now();
+	}
+
+	@Override
+	public void updateCashFlowImportStatus(CashFlowImportStatus status) {
+		ofy().save().entity(status);
 	}
 
 }
