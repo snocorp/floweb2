@@ -242,7 +242,7 @@ public class FloCashFlowServiceTest {
 				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 
-				oneOf(cashFlowStore).createCashFlowImport(with(equal(0)));
+				oneOf(cashFlowStore).createCashFlowImportStatus();
 				will(returnValue(status));
 
 				oneOf(queue).add(with(aNonNull(TaskOptions.class)));

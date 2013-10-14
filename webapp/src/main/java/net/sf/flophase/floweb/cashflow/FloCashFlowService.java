@@ -127,7 +127,8 @@ public class FloCashFlowService implements CashFlowService {
 		// if the user is logged in
 		if (userService.isUserLoggedIn()) {
 
-			CashFlowImportStatus status = cashFlowStore.createCashFlowImport(0);
+			CashFlowImportStatus status = cashFlowStore
+					.createCashFlowImportStatus();
 
 			Queue queue = queueProvider.get();
 			queue.add(TaskOptions.Builder.withUrl("/cashflow/import")

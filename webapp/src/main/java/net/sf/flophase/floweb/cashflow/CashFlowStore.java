@@ -1,6 +1,5 @@
 package net.sf.flophase.floweb.cashflow;
 
-
 /**
  * This interface defines the internal API to manipulate cash flows.
  */
@@ -15,11 +14,9 @@ public interface CashFlowStore {
 	/**
 	 * Creates a record of a cash flow import.
 	 * 
-	 * @param total
-	 *            The total number of things to be imported
 	 * @return The initial status
 	 */
-	public CashFlowImportStatus createCashFlowImport(int total);
+	public CashFlowImportStatus createCashFlowImportStatus();
 
 	/**
 	 * Retrieves the cash flow import status with the given id.

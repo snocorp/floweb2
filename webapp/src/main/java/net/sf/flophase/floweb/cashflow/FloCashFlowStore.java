@@ -53,8 +53,9 @@ public class FloCashFlowStore implements CashFlowStore {
 	}
 
 	@Override
-	public CashFlowImportStatus createCashFlowImport(int total) {
-		return dao.createCashFlowImport(getCashFlow(), total);
+	public CashFlowImportStatus createCashFlowImportStatus() {
+		// use -1 to indicate an uninitialized status
+		return dao.createCashFlowImport(getCashFlow(), -1);
 	}
 
 	@Override
