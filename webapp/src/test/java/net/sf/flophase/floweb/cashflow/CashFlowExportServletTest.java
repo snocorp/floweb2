@@ -22,7 +22,7 @@ import org.jmock.Expectations;
 import org.junit.Test;
 
 /**
- * This class tests the {@link CashFlowQueryServlet} class.
+ * This class tests the {@link CashFlowExportServlet} class.
  */
 public class CashFlowExportServletTest extends AbstractServletTestCase {
 

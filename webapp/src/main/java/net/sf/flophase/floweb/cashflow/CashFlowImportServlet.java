@@ -10,9 +10,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.sf.flophase.floweb.common.Constants;
+import net.sf.flophase.floweb.common.Executable;
 import net.sf.flophase.floweb.common.Response;
+import net.sf.flophase.floweb.common.ServletRequestWrapper;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.google.inject.Singleton;
 
 /**
@@ -38,8 +41,11 @@ public class CashFlowImportServlet extends HttpServlet {
 	@Inject
 	private Gson gson;
 
+	@Inject
+	private ServletRequestWrapper<CashFlowImportStatus> logicWrapper;
+
 	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+	protected void doPut(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
 		Response<CashFlowImportStatus> response;
@@ -52,21 +58,41 @@ public class CashFlowImportServlet extends HttpServlet {
 		}
 
 		String key = req.getParameter("key");
-		if (key != null) {
-			// execute synchronously
-			response = cashflowService.importCashFlow(key,
-					requestDataString.toString());
-		} else {
-			// execute asynchronously
-			response = cashflowService.importCashFlow(requestDataString
-					.toString());
-		}
+
+		// execute synchronously
+		response = cashflowService.importCashFlow(key,
+				requestDataString.toString());
 
 		String output = gson.toJson(response);
 
 		resp.setContentType(Constants.JSON_CONTENT_TYPE);
 		resp.setContentLength(output.length());
 		resp.getWriter().write(output);
+	}
+
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+
+		BufferedReader reader = req.getReader();
+		String line;
+		final StringBuilder requestDataString = new StringBuilder();
+		while ((line = reader.readLine()) != null) {
+			requestDataString.append(line);
+		}
+
+		Executable<Response<CashFlowImportStatus>> logic = new Executable<Response<CashFlowImportStatus>>() {
+
+			@Override
+			public Response<CashFlowImportStatus> execute() {
+				return cashflowService.importCashFlow(requestDataString
+						.toString());
+			}
+		};
+
+		logicWrapper.execute(logic,
+				new TypeToken<Response<CashFlowImportStatus>>() {
+				}.getType(), resp);
 	}
 
 	@Override

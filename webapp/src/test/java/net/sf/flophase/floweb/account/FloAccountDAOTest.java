@@ -91,12 +91,14 @@ public class FloAccountDAOTest extends AbstractDAOTestCase {
 	}
 
 	/**
-	 * Tests the {@link FloAccountDAO#createAccount(CashFlow, String, double)}
+	 * Tests the
+	 * {@link FloAccountDAO#createAccount(CashFlow, String, double, double, double)}
 	 * method. Creates an account and validates it was created correctly.
 	 */
 	@Test
 	public void testCreateAccount() {
-		Account account = accountDao.createAccount(cashflow, "Account1", 1.23);
+		Account account = accountDao.createAccount(cashflow, "Account1", 1.23,
+				0.0, 0.0);
 
 		assertThat(account.getName(), is(equalTo("Account1")));
 		assertThat(account.getBalance(), is(equalTo(1.23)));

@@ -4,7 +4,7 @@ package net.sf.flophase.floweb.cashflow;
 /**
  * This interface defines the internal API to manipulate cash flows.
  */
-public interface CashFlowExportStore {
+public interface CashFlowTradeStore {
 
 	/**
 	 * Returns the export of the cash flow for the logged in user.

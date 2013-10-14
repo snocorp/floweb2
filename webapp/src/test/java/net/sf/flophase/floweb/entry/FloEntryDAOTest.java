@@ -50,7 +50,8 @@ public class FloEntryDAOTest extends AbstractDAOTestCase {
 	private Transaction xaction;
 
 	/**
-	 * Sets up the test case. Creates the data acces object.
+	 * Sets up the test case. Creates the data access object. Creates a cash
+	 * flow, an account and a transaction.
 	 * 
 	 * @throws Exception
 	 *             If an error occurs.
@@ -65,7 +66,8 @@ public class FloEntryDAOTest extends AbstractDAOTestCase {
 		User user = UserServiceFactory.getUserService().getCurrentUser();
 
 		cashflow = new FloCashFlowDAO().createCashFlow(user);
-		account = new FloAccountDAO().createAccount(cashflow, "Account1", 1.23);
+		account = new FloAccountDAO().createAccount(cashflow, "Account1", 1.23,
+				0.0, 0.0);
 		xaction = new FloTransactionDAO().createTransaction(cashflow,
 				"Transaction1", new Date());
 	}

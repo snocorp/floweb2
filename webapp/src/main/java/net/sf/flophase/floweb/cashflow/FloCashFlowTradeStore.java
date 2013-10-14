@@ -1,5 +1,8 @@
 package net.sf.flophase.floweb.cashflow;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.inject.Inject;
 
 import net.sf.flophase.floweb.account.Account;
@@ -14,7 +17,7 @@ import net.sf.flophase.floweb.xaction.TransactionStore;
  * The cash flow store contains the non-data specific business logic. Data
  * access is delegated to the Cash Flow DAO.
  */
-public class FloCashFlowTradeStore implements CashFlowExportStore {
+public class FloCashFlowTradeStore implements CashFlowTradeStore {
 
 	/**
 	 * The cash flow store.
@@ -78,11 +81,18 @@ public class FloCashFlowTradeStore implements CashFlowExportStore {
 
 		cashflowStore.updateCashFlowImportStatus(status, done, total);
 
+		Map<Long, Long> accountIdMap = new HashMap<Long, Long>();
+
 		// import accounts
+		Account newAccount;
 		for (Account account : cashflowExport.getAccounts()) {
-			accountStore.createAccount(account.getName(), account.getBalance(),
-					account.getNegativeThreshold(),
+			newAccount = accountStore.createAccount(account.getName(),
+					account.getBalance(), account.getNegativeThreshold(),
 					account.getPositiveThreshold());
+
+			accountIdMap.put(account.getKey().getId(), newAccount.getKey()
+					.getId());
+
 			done++;
 
 			cashflowStore.updateCashFlowImportStatus(status, done, total);
@@ -99,9 +109,13 @@ public class FloCashFlowTradeStore implements CashFlowExportStore {
 
 			// import entries
 			for (Entry entry : transaction.getEntries().values()) {
-				entryStore.editEntry(entry.getAccount(), xactionId,
-						entry.getAmount());
+				entryStore.editEntry(accountIdMap.get(entry.getAccount()),
+						xactionId, entry.getAmount());
 			}
+
+			done++;
+
+			cashflowStore.updateCashFlowImportStatus(status, done, total);
 		}
 	}
 

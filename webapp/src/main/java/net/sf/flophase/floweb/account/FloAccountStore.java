@@ -21,6 +21,16 @@ public class FloAccountStore implements AccountStore {
 	private static final double DEFAULT_ACCOUNT_BALANCE = 0.0;
 
 	/**
+	 * The default negative threshold.
+	 */
+	private static final double DEFAULT_NEGATIVE_THRESHOLD = 0.0;
+
+	/**
+	 * The default positive threshold.
+	 */
+	private static final double DEFAULT_POSITIVE_THRESHOLD = 0.0;
+
+	/**
 	 * The default account name.
 	 */
 	private static final String DEFAULT_ACCOUNT_NAME = "My Account";
@@ -80,7 +90,8 @@ public class FloAccountStore implements AccountStore {
 	 */
 	private Account createDefaultAccount(CashFlow cashflow) {
 		return dao.createAccount(cashflow, DEFAULT_ACCOUNT_NAME,
-				DEFAULT_ACCOUNT_BALANCE, 0.0, 0.0);
+				DEFAULT_ACCOUNT_BALANCE, DEFAULT_NEGATIVE_THRESHOLD,
+				DEFAULT_POSITIVE_THRESHOLD);
 	}
 
 	@Override

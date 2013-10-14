@@ -17,7 +17,7 @@ public class CashFlow {
 	 * The cash flow identifier
 	 */
 	@Id
-	private Long key;
+	private Long id;
 
 	/**
 	 * The user that owns the cash flow
@@ -48,7 +48,7 @@ public class CashFlow {
 	 * @return The key
 	 */
 	public Key<CashFlow> getKey() {
-		return Key.create(CashFlow.class, key);
+		return Key.create(CashFlow.class, id);
 	}
 
 	/**

@@ -1,6 +1,6 @@
 package net.sf.flophase.floweb.account;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -159,7 +159,8 @@ public class FloAccountStoreTest {
 				will(returnValue(expectedAccounts));
 
 				oneOf(accountDAO).createAccount(with(any(CashFlow.class)),
-						with(equal(DEFAULT_ACCOUNT_NAME)), with(equal(0.0)));
+						with(equal(DEFAULT_ACCOUNT_NAME)), with(equal(0.0)),
+						with(equal(0.0)), with(equal(0.0)));
 				will(returnValue(new Account(Key.create(CashFlow.class, 1),
 						DEFAULT_ACCOUNT_NAME, 0.0)));
 			}
@@ -194,10 +195,10 @@ public class FloAccountStoreTest {
 				allowing(cashflowStore).getCashFlow();
 				will(returnValue(new CashFlow()));
 
-				oneOf(accountDAO)
-						.createAccount(with(any(CashFlow.class)),
-								with(equal(ACCOUNT_NAME)),
-								with(equal(ACCOUNT_BALANCE)));
+				oneOf(accountDAO).createAccount(with(any(CashFlow.class)),
+						with(equal(ACCOUNT_NAME)),
+						with(equal(ACCOUNT_BALANCE)), with(equal(0.0)),
+						with(equal(0.0)));
 				will(returnValue(new Account(cashflow.getKey(), ACCOUNT_NAME,
 						ACCOUNT_BALANCE)));
 			}

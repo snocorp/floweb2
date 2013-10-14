@@ -15,7 +15,7 @@ public class CashFlowImportStatus {
 	 * The cash flow import status identifier
 	 */
 	@Id
-	private Long key;
+	private Long id;
 
 	/**
 	 * The cash flow for this account.
@@ -59,7 +59,7 @@ public class CashFlowImportStatus {
 	 * @return The key
 	 */
 	public Key<CashFlowImportStatus> getKey() {
-		return Key.create(CashFlowImportStatus.class, key);
+		return Key.create(CashFlowImportStatus.class, id);
 	}
 
 	/**

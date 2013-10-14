@@ -1,6 +1,6 @@
 package net.sf.flophase.floweb.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import javax.servlet.http.HttpServlet;
 
@@ -115,11 +115,32 @@ public abstract class AbstractServletTestCase {
 	 *             If an error occurs.
 	 */
 	public void assertResponseContent(String expectedContent) throws Exception {
+		assertResponseContent("GET", null, expectedContent);
+	}
+
+	/**
+	 * Asserts that the response of the servlet is equal to the given expected
+	 * content.
+	 * 
+	 * @param method
+	 *            The http method
+	 * @param requestContent
+	 *            The request content
+	 * @param expectedContent
+	 *            The expected content to be returned by the servlet response.
+	 * @throws Exception
+	 *             If an error occurs.
+	 */
+	public void assertResponseContent(String method, String requestContent,
+			String expectedContent) throws Exception {
 		HttpTester request = new HttpTester();
-		request.setMethod("GET");
+		request.setMethod(method);
 		request.setHeader("Host", "localhost");
 		request.setURI(baseUrl + getServletPath() + getQuery());
 		request.setVersion("HTTP/1.0");
+		if (requestContent != null) {
+			request.setContent(requestContent);
+		}
 
 		HttpTester response = new HttpTester();
 		response.parse(tester.getResponses(request.generate()));

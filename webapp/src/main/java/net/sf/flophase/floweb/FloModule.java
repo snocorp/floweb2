@@ -11,14 +11,16 @@ import net.sf.flophase.floweb.account.FloAccountDAO;
 import net.sf.flophase.floweb.account.FloAccountService;
 import net.sf.flophase.floweb.account.FloAccountStore;
 import net.sf.flophase.floweb.cashflow.CashFlowDAO;
-import net.sf.flophase.floweb.cashflow.CashFlowExportStore;
+import net.sf.flophase.floweb.cashflow.CashFlowImportStatus;
 import net.sf.flophase.floweb.cashflow.CashFlowService;
 import net.sf.flophase.floweb.cashflow.CashFlowStore;
+import net.sf.flophase.floweb.cashflow.CashFlowTradeStore;
 import net.sf.flophase.floweb.cashflow.FloCashFlowDAO;
-import net.sf.flophase.floweb.cashflow.FloCashFlowTradeStore;
 import net.sf.flophase.floweb.cashflow.FloCashFlowService;
 import net.sf.flophase.floweb.cashflow.FloCashFlowStore;
+import net.sf.flophase.floweb.cashflow.FloCashFlowTradeStore;
 import net.sf.flophase.floweb.common.Constants;
+import net.sf.flophase.floweb.common.ServletRequestWrapper;
 import net.sf.flophase.floweb.entry.EntryDAO;
 import net.sf.flophase.floweb.entry.EntryService;
 import net.sf.flophase.floweb.entry.EntryStore;
@@ -44,12 +46,16 @@ import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.inject.AbstractModule;
+import com.google.inject.Provider;
+import com.google.inject.TypeLiteral;
 import com.googlecode.objectify.ObjectifyFilter;
 import com.googlecode.objectify.annotation.Parent;
 
@@ -104,8 +110,11 @@ public class FloModule extends AbstractModule {
 
 		bind(CashFlowDAO.class).to(FloCashFlowDAO.class);
 		bind(CashFlowStore.class).to(FloCashFlowStore.class);
-		bind(CashFlowExportStore.class).to(FloCashFlowTradeStore.class);
+		bind(CashFlowTradeStore.class).to(FloCashFlowTradeStore.class);
 		bind(CashFlowService.class).to(FloCashFlowService.class);
+
+		bind(new TypeLiteral<ServletRequestWrapper<CashFlowImportStatus>>() {
+		}).toInstance(new ServletRequestWrapper<CashFlowImportStatus>());
 
 		bind(UserStore.class).to(FloUserStore.class);
 		bind(UserService.class).to(FloUserService.class);
@@ -123,6 +132,14 @@ public class FloModule extends AbstractModule {
 				MemcacheServiceFactory.getMemcacheService());
 		bind(DatastoreService.class).toInstance(
 				DatastoreServiceFactory.getDatastoreService());
+		bind(Queue.class).toProvider(new Provider<Queue>() {
+
+			@Override
+			public Queue get() {
+				return QueueFactory.getDefaultQueue();
+			}
+
+		});
 
 		// objectify filter
 		bind(ObjectifyFilter.class).in(Singleton.class);

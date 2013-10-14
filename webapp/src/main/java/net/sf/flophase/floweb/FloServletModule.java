@@ -30,7 +30,6 @@ public class FloServletModule extends ServletModule {
 		serve("/cashflow/q").with(CashFlowQueryServlet.class);
 		serve("/cashflow/export").with(CashFlowExportServlet.class);
 		serve("/cashflow/import").with(CashFlowImportServlet.class);
-		serve("/cashflow/import-worker").with(CashFlowImportServlet.class);
 
 		serve("/account/add").with(AddAccountServlet.class);
 		serve("/account/delete").with(DeleteAccountServlet.class);

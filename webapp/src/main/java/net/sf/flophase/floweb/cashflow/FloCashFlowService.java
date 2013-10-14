@@ -4,16 +4,15 @@ import java.lang.reflect.Type;
 
 import javax.inject.Inject;
 
-import net.sf.flophase.floweb.common.Constants;
 import net.sf.flophase.floweb.common.Response;
 
 import com.google.appengine.api.taskqueue.Queue;
-import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import com.google.appengine.api.taskqueue.TaskOptions.Method;
 import com.google.appengine.api.users.UserService;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
+import com.google.inject.Provider;
 
 /**
  * This class provides functionality to access the cash flow data.
@@ -28,7 +27,7 @@ public class FloCashFlowService implements CashFlowService {
 	/**
 	 * The cash flow export store to execute the business logic.
 	 */
-	private final CashFlowExportStore cashFlowTradeStore;
+	private final CashFlowTradeStore cashFlowTradeStore;
 
 	/**
 	 * The user service.
@@ -41,6 +40,11 @@ public class FloCashFlowService implements CashFlowService {
 	private final Gson gson;
 
 	/**
+	 * A provider for queues.
+	 */
+	private final Provider<Queue> queueProvider;
+
+	/**
 	 * Creates a new FloCashFlowService instance.
 	 * 
 	 * @param userService
@@ -49,16 +53,20 @@ public class FloCashFlowService implements CashFlowService {
 	 *            The cash flow store
 	 * @param cashFlowExportStore
 	 *            The cash flow export store
+	 * @param queueProvider
+	 *            The queue provider
 	 * @param gson
 	 *            The json library
 	 */
 	@Inject
 	public FloCashFlowService(UserService userService,
 			CashFlowStore cashFlowStore,
-			CashFlowExportStore cashFlowExportStore, Gson gson) {
+			CashFlowTradeStore cashFlowExportStore,
+			Provider<Queue> queueProvider, Gson gson) {
 		this.userService = userService;
 		this.cashFlowStore = cashFlowStore;
 		this.cashFlowTradeStore = cashFlowExportStore;
+		this.queueProvider = queueProvider;
 		this.gson = gson;
 	}
 
@@ -121,11 +129,11 @@ public class FloCashFlowService implements CashFlowService {
 
 			CashFlowImportStatus status = cashFlowStore.createCashFlowImport(0);
 
-			Queue queue = QueueFactory.getDefaultQueue();
-			queue.add(TaskOptions.Builder.withUrl("/cashflow/import-worker")
-					.method(Method.POST)
+			Queue queue = queueProvider.get();
+			queue.add(TaskOptions.Builder.withUrl("/cashflow/import")
+					.method(Method.PUT)
 					.param("key", status.getKey().toString())
-					.payload(cashflowToImport, Constants.JSON_CONTENT_TYPE));
+					.payload(cashflowToImport));
 
 			response.setContent(status);
 		}
@@ -178,6 +186,12 @@ public class FloCashFlowService implements CashFlowService {
 
 				// indicate the key is not valid
 				response.addMessage("The key is not valid");
+			} catch (Exception e) {
+				// respond with failure
+				response.setResult(Response.RESULT_FAILURE);
+
+				// indicate the cash flow is not valid
+				response.addMessage("The cash flow is not valid");
 			}
 		}
 		// if the user is not logged in
