@@ -5,10 +5,13 @@ import javax.inject.Inject;
 import net.sf.flophase.floweb.user.UserStore;
 
 import com.google.appengine.api.users.User;
+import com.googlecode.objectify.Key;
 
 /**
  * The cash flow store contains the non-data specific business logic. Data
  * access is delegated to the Cash Flow DAO.
+ * 
+ * This store has state and must be scoped.
  */
 public class FloCashFlowStore implements CashFlowStore {
 
@@ -21,6 +24,16 @@ public class FloCashFlowStore implements CashFlowStore {
 	 * The user store.
 	 */
 	private final UserStore userStore;
+
+	/**
+	 * The key to use to get the cash flow if there is no user.
+	 */
+	private Key<CashFlow> key;
+
+	/**
+	 * The cash flow cached to save look ups.
+	 */
+	private CashFlow cashflow;
 
 	/**
 	 * Creates a new FloCashFlowStore instance
@@ -38,38 +51,29 @@ public class FloCashFlowStore implements CashFlowStore {
 
 	@Override
 	public CashFlow getCashFlow() {
-		User user = userStore.getUser();
-
-		// get the cash flow for the user
-		CashFlow cashflow = dao.getCashFlow(user);
-
-		// if there is no cash flow
 		if (cashflow == null) {
-			// create a new cash flow
-			cashflow = dao.createCashFlow(user);
+			User user = userStore.getUser();
+
+			if (user != null) {
+				// get the cash flow for the user
+				cashflow = dao.getCashFlow(user);
+
+				// if there is no cash flow
+				if (cashflow == null) {
+					// create a new cash flow
+					cashflow = dao.createCashFlow(user);
+				}
+			} else if (key != null) {
+				cashflow = dao.getCashFlow(key);
+			}
 		}
 
 		return cashflow;
 	}
 
 	@Override
-	public CashFlowImportStatus createCashFlowImportStatus() {
-		// use -1 to indicate an uninitialized status
-		return dao.createCashFlowImport(getCashFlow(), -1);
-	}
-
-	@Override
-	public CashFlowImportStatus getCashFlowImportStatus(long id) {
-		return dao.getCashFlowImportStatus(getCashFlow(), id);
-	}
-
-	@Override
-	public void updateCashFlowImportStatus(CashFlowImportStatus status,
-			int done, int total) {
-		status.setDone(done);
-		status.setTotal(total);
-
-		dao.updateCashFlowImportStatus(status);
+	public void setCashFlowId(long cashflowId) {
+		key = Key.create(CashFlow.class, cashflowId);
 	}
 
 }

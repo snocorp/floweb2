@@ -6,19 +6,27 @@ import java.util.Map;
 import net.sf.flophase.floweb.entry.Entry;
 
 /**
- * This is a wrapper object that represents a transaction that has entries against one or more accounts.
+ * This is a wrapper object that represents a transaction that has entries
+ * against one or more accounts.
  */
 public class FinancialTransaction {
 
 	/**
 	 * The transaction details.
 	 */
-	private final Transaction details;
+	private Transaction details;
 
 	/**
 	 * The entries for this transaction.
 	 */
-	private final Map<Long, Entry> entries;
+	private Map<Long, Entry> entries;
+
+	/**
+	 * Creates a new {@link FinancialTransaction} instance.
+	 */
+	public FinancialTransaction() {
+		// no-arg constructor
+	}
 
 	/**
 	 * Creates a new {@link FinancialTransaction} instance.

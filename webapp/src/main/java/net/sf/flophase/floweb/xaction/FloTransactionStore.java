@@ -12,6 +12,7 @@ import net.sf.flophase.floweb.cashflow.CashFlowStore;
 import net.sf.flophase.floweb.entry.Entry;
 import net.sf.flophase.floweb.entry.EntryStore;
 
+import com.google.inject.Provider;
 import com.googlecode.objectify.Key;
 
 /**
@@ -33,7 +34,7 @@ public class FloTransactionStore implements TransactionStore {
 	/**
 	 * The cash flow store.
 	 */
-	private final CashFlowStore cashflowStore;
+	private final Provider<CashFlowStore> cashflowStore;
 
 	/**
 	 * Creates a new {@link FloTransactionStore} instance.
@@ -47,7 +48,7 @@ public class FloTransactionStore implements TransactionStore {
 	 */
 	@Inject
 	public FloTransactionStore(TransactionDAO xactionDAO,
-			EntryStore entryStore, CashFlowStore cashflowStore) {
+			EntryStore entryStore, Provider<CashFlowStore> cashflowStore) {
 		super();
 
 		this.dao = xactionDAO;
@@ -58,7 +59,7 @@ public class FloTransactionStore implements TransactionStore {
 	@Override
 	public Transaction createTransaction(String name, Date date) {
 		// get the user's cash flow
-		CashFlow cashflow = cashflowStore.getCashFlow();
+		CashFlow cashflow = cashflowStore.get().getCashFlow();
 
 		Transaction xaction = dao.createTransaction(cashflow, name, date);
 
@@ -68,7 +69,7 @@ public class FloTransactionStore implements TransactionStore {
 	@Override
 	public void deleteTransaction(long id) {
 		// get the user's cash flow
-		CashFlow cashflow = cashflowStore.getCashFlow();
+		CashFlow cashflow = cashflowStore.get().getCashFlow();
 
 		// delete the account with the given key
 		dao.deleteTransaction(Key.create(cashflow.getKey(), Transaction.class,
@@ -78,7 +79,7 @@ public class FloTransactionStore implements TransactionStore {
 	@Override
 	public FinancialTransaction copyTransaction(long id, String name, Date date) {
 		// get the user's cash flow
-		CashFlow cashflow = cashflowStore.getCashFlow();
+		CashFlow cashflow = cashflowStore.get().getCashFlow();
 
 		Key<Transaction> key = Key.create(cashflow.getKey(), Transaction.class,
 				id);
@@ -100,7 +101,7 @@ public class FloTransactionStore implements TransactionStore {
 	@Override
 	public Transaction editTransaction(long id, String name, Date date) {
 		// get the user's cash flow
-		CashFlow cashflow = cashflowStore.getCashFlow();
+		CashFlow cashflow = cashflowStore.get().getCashFlow();
 
 		Key<Transaction> key = Key.create(cashflow.getKey(), Transaction.class,
 				id);
@@ -113,7 +114,7 @@ public class FloTransactionStore implements TransactionStore {
 	@Override
 	public List<FinancialTransaction> getTransactions(Date startDate) {
 		// get the user's cash flow
-		CashFlow cashflow = cashflowStore.getCashFlow();
+		CashFlow cashflow = cashflowStore.get().getCashFlow();
 
 		List<Transaction> transactions = dao.getTransactions(cashflow,
 				startDate);
@@ -134,7 +135,7 @@ public class FloTransactionStore implements TransactionStore {
 	@Override
 	public Transaction getTransaction(long id) {
 		// get the user's cash flow
-		CashFlow cashflow = cashflowStore.getCashFlow();
+		CashFlow cashflow = cashflowStore.get().getCashFlow();
 
 		Key<Transaction> key = Key.create(cashflow.getKey(), Transaction.class,
 				id);
@@ -145,7 +146,7 @@ public class FloTransactionStore implements TransactionStore {
 	@Override
 	public List<FinancialTransaction> getTransactions() {
 		// get the user's cash flow
-		CashFlow cashflow = cashflowStore.getCashFlow();
+		CashFlow cashflow = cashflowStore.get().getCashFlow();
 
 		List<Transaction> transactions = dao.getTransactions(cashflow);
 		List<FinancialTransaction> financialTransactions = new ArrayList<FinancialTransaction>(

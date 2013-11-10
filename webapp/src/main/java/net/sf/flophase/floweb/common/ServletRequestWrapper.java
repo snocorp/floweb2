@@ -2,9 +2,13 @@ package net.sf.flophase.floweb.common;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
+
+import net.sf.flophase.floweb.cashflow.FloCashFlowService;
 
 import com.google.gson.Gson;
 
@@ -16,6 +20,12 @@ import com.google.gson.Gson;
  *            The content type of the response
  */
 public class ServletRequestWrapper<T> {
+
+	/**
+	 * The logger
+	 */
+	private static final Logger log = Logger.getLogger(FloCashFlowService.class
+			.getName());
 
 	/**
 	 * JSON formatter.
@@ -47,6 +57,8 @@ public class ServletRequestWrapper<T> {
 
 			output = gson.toJson(response, type);
 		} catch (Exception e) {
+			log.log(Level.SEVERE, "Unexpected error", e);
+
 			response = new Response<T>(Response.RESULT_FAILURE);
 			response.addMessage("Unexpected error");
 

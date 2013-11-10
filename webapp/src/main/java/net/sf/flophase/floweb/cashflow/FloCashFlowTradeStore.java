@@ -20,9 +20,9 @@ import net.sf.flophase.floweb.xaction.TransactionStore;
 public class FloCashFlowTradeStore implements CashFlowTradeStore {
 
 	/**
-	 * The cash flow store.
+	 * The cash flow import store.
 	 */
-	private final CashFlowStore cashflowStore;
+	private final CashFlowImportStore cashflowStore;
 
 	/**
 	 * The account store.
@@ -52,7 +52,7 @@ public class FloCashFlowTradeStore implements CashFlowTradeStore {
 	 *            The entry store
 	 */
 	@Inject
-	protected FloCashFlowTradeStore(CashFlowStore cashflowStore,
+	protected FloCashFlowTradeStore(CashFlowImportStore cashflowStore,
 			AccountStore accountStore, TransactionStore xactionStore,
 			EntryStore entryStore) {
 		this.cashflowStore = cashflowStore;

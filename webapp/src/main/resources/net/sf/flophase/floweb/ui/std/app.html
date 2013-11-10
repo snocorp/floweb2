@@ -27,6 +27,11 @@
 	        			href="#" 
 	        			class="btn"></a>
 	        	</div>
+   				<div class="btn-group">
+	        		<a id="importCashFlow"
+	        		    href="#"
+	        			class="btn">import data</a>
+	        	</div>
    				<ul class="nav pull-right">
    					<li id="userIdentifier" class="navbar-text">${userEmail}</li>
    					<li><a id="logoutLink" href="${logoutUrl}">logout</a></li>
@@ -128,6 +133,26 @@
             <div class="modal-footer">
                 <button id="copyTransactionOk" type="button" class="btn">OK</button>
                 <button id="copyTransactionCancel" type="button" class="btn">Cancel</button>
+            </div>
+        </div>
+        <div id="importCashflowDialog" class="flo-off-screen modal">
+            <div class="modal-header">
+				<h3>Import Cash Flow</h3>
+			</div>
+			<div class="modal-body">
+	            <label for="newAccountName">Cash Flow:</label>
+	            <textarea
+	                id="cashflowData"
+	                name="cashflowData"
+	                class="flo-full-width"></textarea>
+	            <div id="importCashFlowProgress" class="progress" style="display:none;">
+	            	<div id="importCashFlowProgressBar" class="bar" style="width: 0%;"></div>
+	            </div>
+	            <div id="importCashFlowError" class="flo-dialog-error" style="display:none;"></div>
+            </div>
+            <div class="modal-footer">
+                <button id="importCashFlowOk" type="button" class="btn">OK</button>
+                <button id="importCashFlowCancel" type="button" class="btn">Cancel</button>
             </div>
         </div>
         

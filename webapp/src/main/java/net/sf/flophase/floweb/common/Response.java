@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The Response class is a generic way that service classes can respond to invocations.
+ * The Response class is a generic way that service classes can respond to
+ * invocations.
  * 
  * @param <T>
  *            The type of parameter the response will hold.
@@ -28,12 +29,19 @@ public class Response<T> {
 	/**
 	 * Any messages that resulted during the logic.
 	 */
-	private List<String> messages = new ArrayList<String>();
+	private final List<String> messages = new ArrayList<String>();
 
 	/**
 	 * The content of the response.
 	 */
 	private T content;
+
+	/**
+	 * Creates a new empty response.
+	 */
+	public Response() {
+		this(RESULT_SUCCESS, null);
+	}
 
 	/**
 	 * Creates a new empty response.

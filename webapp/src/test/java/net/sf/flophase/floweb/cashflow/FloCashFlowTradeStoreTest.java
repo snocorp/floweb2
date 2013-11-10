@@ -97,7 +97,7 @@ public class FloCashFlowTradeStoreTest {
 	/**
 	 * The mock cash flow store.
 	 */
-	private CashFlowStore cashflowStore;
+	private CashFlowImportStore cashflowStore;
 
 	/**
 	 * The mock entry store
@@ -115,7 +115,7 @@ public class FloCashFlowTradeStoreTest {
 	public void setUp() throws Exception {
 		helper.setUp();
 
-		cashflowStore = context.mock(CashFlowStore.class);
+		cashflowStore = context.mock(CashFlowImportStore.class);
 		accountStore = context.mock(AccountStore.class);
 		xactionStore = context.mock(TransactionStore.class);
 		entryStore = context.mock(EntryStore.class);

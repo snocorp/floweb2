@@ -54,6 +54,12 @@ define([
 			});
 			
 			$('#'+floweb.toolbar.dateButtonGroupRef).show();
+			
+			var importCashFlowButton = $('#'+floweb.toolbar.importCashFlowRef);
+			importCashFlowButton.click(function() {
+				app.showImportCashFlow();
+				return false;
+			});
 		},
 		onTransactionLoad: function(cashflow) {
 			

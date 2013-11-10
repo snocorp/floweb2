@@ -50,11 +50,21 @@ var floweb = {
     	copyNodeRef:'xactionCopy',
     	deleteNodeRef:'xactionDelete'
     },
+    importCashflowDialog: {
+    	nodeRef:'importCashflowDialog',
+    	dataNodeRef:'cashflowData',
+    	progressNodeRef:'importCashFlowProgress',
+    	progressBarNodeRef:'importCashFlowProgressBar',
+    	errorNodeRef:'importCashFlowError',
+    	okNodeRef:'importCashFlowOk',
+    	cancelNodeRef:'importCashFlowCancel'
+    },
     toolbar: {
     	dateButtonGroupRef:'dateButtonGroup',
     	addAccountRef:'addAccount',
     	addTransactionRef:'addTransaction',
     	loadEarlierRef:'loadEarlier',
-    	loadUpcomingRef:'loadUpcoming'
+    	loadUpcomingRef:'loadUpcoming',
+    	importCashFlowRef:'importCashFlow'
     }
 };

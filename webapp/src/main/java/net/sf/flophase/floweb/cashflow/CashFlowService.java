@@ -32,14 +32,16 @@ public interface CashFlowService {
 	/**
 	 * Imports the given cash flow.
 	 * 
+	 * @param cashflowKey
+	 *            The key of the cash flow into which we will import
 	 * @param key
 	 *            The import status key
 	 * @param cashflow
 	 *            The cash flow in JSON format.
 	 * @return The final status.
 	 */
-	public Response<CashFlowImportStatus> importCashFlow(String key,
-			String cashflow);
+	public Response<CashFlowImportStatus> importCashFlow(String cashflowKey,
+			String key, String cashflow);
 
 	/**
 	 * Returns the status of a cash flow import task.

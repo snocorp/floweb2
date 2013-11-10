@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import net.sf.flophase.floweb.cashflow.CashFlow;
 import net.sf.flophase.floweb.cashflow.CashFlowStore;
 
+import com.google.inject.Provider;
 import com.googlecode.objectify.Key;
 
 /**
@@ -43,7 +44,7 @@ public class FloAccountStore implements AccountStore {
 	/**
 	 * The cash flow store.
 	 */
-	private final CashFlowStore cashflowStore;
+	private final Provider<CashFlowStore> cashflowStore;
 
 	/**
 	 * Creates a new FloAccountStore instance.
@@ -54,7 +55,8 @@ public class FloAccountStore implements AccountStore {
 	 *            The cash flow store
 	 */
 	@Inject
-	public FloAccountStore(AccountDAO accountDAO, CashFlowStore cashflowStore) {
+	public FloAccountStore(AccountDAO accountDAO,
+			Provider<CashFlowStore> cashflowStore) {
 		this.dao = accountDAO;
 		this.cashflowStore = cashflowStore;
 	}
@@ -62,7 +64,7 @@ public class FloAccountStore implements AccountStore {
 	@Override
 	public List<Account> getAccounts() {
 		// get the user's cash flow
-		CashFlow cashflow = cashflowStore.getCashFlow();
+		CashFlow cashflow = cashflowStore.get().getCashFlow();
 
 		// get the list of accounts
 		List<Account> accounts = dao.getAccounts(cashflow);
@@ -97,7 +99,7 @@ public class FloAccountStore implements AccountStore {
 	@Override
 	public void deleteAccount(long id) {
 		// get the user's cash flow
-		CashFlow cashflow = cashflowStore.getCashFlow();
+		CashFlow cashflow = cashflowStore.get().getCashFlow();
 
 		// delete the account with the given key
 		dao.deleteAccount(Key.create(cashflow.getKey(), Account.class, id));
@@ -107,7 +109,7 @@ public class FloAccountStore implements AccountStore {
 	public Account editAccount(long id, String name, double balance,
 			double negativeThreshold, double positiveThreshold) {
 		// get the user's cash flow
-		CashFlow cashflow = cashflowStore.getCashFlow();
+		CashFlow cashflow = cashflowStore.get().getCashFlow();
 
 		Key<Account> key = Key.create(cashflow.getKey(), Account.class, id);
 
@@ -119,7 +121,7 @@ public class FloAccountStore implements AccountStore {
 	@Override
 	public Account getAccount(long id) {
 		// get the user's cash flow
-		CashFlow cashflow = cashflowStore.getCashFlow();
+		CashFlow cashflow = cashflowStore.get().getCashFlow();
 
 		Key<Account> key = Key.create(cashflow.getKey(), Account.class, id);
 
@@ -130,7 +132,7 @@ public class FloAccountStore implements AccountStore {
 	public Account createAccount(String name, double balance,
 			double negativeThreshold, double positiveThreshold) {
 		// get the user's cash flow
-		CashFlow cashflow = cashflowStore.getCashFlow();
+		CashFlow cashflow = cashflowStore.get().getCashFlow();
 
 		// create the new account
 		Account acct = dao.createAccount(cashflow, name, balance,

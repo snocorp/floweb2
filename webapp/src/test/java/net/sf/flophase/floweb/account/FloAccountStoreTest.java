@@ -7,6 +7,7 @@ import java.util.List;
 
 import net.sf.flophase.floweb.cashflow.CashFlow;
 import net.sf.flophase.floweb.cashflow.CashFlowStore;
+import net.sf.flophase.floweb.test.MockProvider;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -100,7 +101,8 @@ public class FloAccountStoreTest {
 
 		cashflowStore = context.mock(CashFlowStore.class);
 
-		store = new FloAccountStore(accountDAO, cashflowStore);
+		store = new FloAccountStore(accountDAO,
+				new MockProvider<CashFlowStore>(cashflowStore));
 	}
 
 	/**

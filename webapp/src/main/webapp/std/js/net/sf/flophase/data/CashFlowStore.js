@@ -111,6 +111,68 @@ define([
 				cashflow.setEndMonth(date);
 			}
         },
+        importCashFlow: function(options) {
+        	var _this = this;
+        	var args = {
+        		url: '/cashflow/import',
+                handleAs: "json",
+        		load: function(data) {
+        			_this.handleCashFlowImportStatus({
+        				status: data.content, 
+        				progress: options.progress,
+        				success: options.success,
+        				error: options.error
+        			});
+        		},
+                error: function(msg) {
+                	if (options.key) {
+	                    options.error({
+	                 	   messages:["Error loading import status."],
+	                 	   cause: msg
+	                    });
+                	} else {
+                		options.error({
+ 	                 	   messages:["Unable to import cash flow."],
+ 	                 	   cause: msg
+ 	                    });
+                	}
+                }
+        	};
+        	
+        	if (options.key) {
+        		args.content = {
+        			key: options.key
+        		};
+        		dojo.xhrGet(args);
+        	} else if (options.data) {
+        		args.postData = options.data;
+        		dojo.xhrPost(args);
+        	} else {
+        		options.success();
+        	}
+        },
+        handleCashFlowImportStatus: function(options) {
+        	var _this = this;
+        	if (options.status.total >= 0) {
+        		//update the progress
+        		options.progress(options.status.done, options.status.total);
+        	
+        		if (options.status.done >= options.status.total) {
+        			options.success();
+        		}
+        	}
+        	
+        	if (options.status.done < options.status.total || options.status.total < 0) {
+        		setTimeout(function() {
+	        		_this.importCashFlow({
+	        			key: options.status.id,
+	        			progress: options.progress,
+	        			success: options.success,
+	        			error: options.error
+	        		});
+        		}, 1000);
+        	}
+        },
         /**
          * Adds a new account to the cashflow.
          *
@@ -208,7 +270,6 @@ define([
                 "negativeThreshold": options.negativeThreshold,
                 "positiveThreshold": options.positiveThreshold,
                 "success": function() {
-                	var updateBalancesFlag = false;
                 	
                     //update the account object
                     account.name = options.name;

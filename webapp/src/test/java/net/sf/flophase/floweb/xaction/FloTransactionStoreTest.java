@@ -1,7 +1,8 @@
 package net.sf.flophase.floweb.xaction;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -13,6 +14,7 @@ import net.sf.flophase.floweb.cashflow.CashFlow;
 import net.sf.flophase.floweb.cashflow.CashFlowStore;
 import net.sf.flophase.floweb.entry.Entry;
 import net.sf.flophase.floweb.entry.EntryStore;
+import net.sf.flophase.floweb.test.MockProvider;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -111,7 +113,8 @@ public class FloTransactionStoreTest {
 		entryStore = context.mock(EntryStore.class);
 		cashflowStore = context.mock(CashFlowStore.class);
 
-		store = new FloTransactionStore(xactionDAO, entryStore, cashflowStore);
+		store = new FloTransactionStore(xactionDAO, entryStore,
+				new MockProvider<CashFlowStore>(cashflowStore));
 	}
 
 	/**

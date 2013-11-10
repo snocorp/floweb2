@@ -141,6 +141,10 @@ input.newxactiondate {
     padding: 1px;
     background-color: #fff;
 }
+textarea.flo-full-width  {
+	width: 100%; 
+	box-sizing: border-box;
+}
 
 div.flo-advanced-options {
 	background-color: #eee;

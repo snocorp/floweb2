@@ -9,6 +9,7 @@ define([
         "net/sf/flophase/ui/CopyTransactionDialog",
         "net/sf/flophase/ui/EditAccountDialog",
         "net/sf/flophase/ui/EditTransactionDialog",
+        "net/sf/flophase/ui/ImportCashFlowDialog",
         "net/sf/flophase/ui/Toolbar",
         "net/sf/flophase/EventBus"
     ], function(
@@ -22,10 +23,11 @@ define([
     		copyTransactionDialog,
     		editAccountDialog,
     		editTransactionDialog,
+    		importCashFlowDialog,
     		toolbar,
     		eventBus) {
     
-    var cashflow;
+    var cashflow = null;
 
     return {
         /**
@@ -42,6 +44,7 @@ define([
         	                       copyTransactionDialog,
         	                       editAccountDialog,
         	                       editTransactionDialog,
+        	               		   importCashFlowDialog,
         	                       toolbar
         	                       ]);
         	
@@ -142,6 +145,12 @@ define([
             event.stopPropagation();
         },
         /**
+         * Shows the import cash flow dialog.
+         */
+        showImportCashFlow: function() {
+        	importCashFlowDialog.show();
+        },
+        /**
          * Hides the add account dialog.
          */
         hideAddAccount: function() {
@@ -170,6 +179,12 @@ define([
          */
         hideEditTransaction: function() {
         	editTransactionDialog.hide();
+        },
+        /**
+         * Hides the import cash flow dialog.
+         */
+        hideImportCashFlow: function() {
+        	importCashFlowDialog.hide();
         },
         /**
          * Adds a new account.
@@ -381,6 +396,28 @@ define([
                 },
                 error: function(error) { _this.handleError(error); }
             });
+        },
+        /**
+         * Imports the given cash flow.
+         * 
+         * @param cashflowData The cash flow JSON data
+         */
+        importCashFlow: function(cashflowData) {
+        	var _this = this; //store a reference to this
+        	
+        	cashFlowStore.importCashFlow({
+        		data: cashflowData,
+        		progress: importCashFlowDialog.showProgress,
+        		success: function() {
+        			_this.hideImportCashFlow();
+        			
+        			//this is the easiest way to re-sync everything
+        			document.location.reload();
+        		},
+        		error: function(messages) { 
+        			importCashFlowDialog.showError(messages); 
+        		}
+        	});
         },
         /**
          * Pops up a notification.

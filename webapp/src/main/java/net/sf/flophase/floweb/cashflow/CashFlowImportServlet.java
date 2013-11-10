@@ -2,6 +2,8 @@ package net.sf.flophase.floweb.cashflow;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.inject.Inject;
 import javax.servlet.ServletException;
@@ -25,6 +27,12 @@ import com.google.inject.Singleton;
 public class CashFlowImportServlet extends HttpServlet {
 
 	/**
+	 * The logger
+	 */
+	private static final Logger log = Logger
+			.getLogger(CashFlowImportServlet.class.getName());
+
+	/**
 	 * Serialization identifier
 	 */
 	private static final long serialVersionUID = 9209614462585301347L;
@@ -41,6 +49,9 @@ public class CashFlowImportServlet extends HttpServlet {
 	@Inject
 	private Gson gson;
 
+	/**
+	 * A wrapper to execute a common logic flow.
+	 */
 	@Inject
 	private ServletRequestWrapper<CashFlowImportStatus> logicWrapper;
 
@@ -51,23 +62,32 @@ public class CashFlowImportServlet extends HttpServlet {
 		Response<CashFlowImportStatus> response;
 
 		BufferedReader reader = req.getReader();
-		String line;
-		StringBuilder requestDataString = new StringBuilder();
-		while ((line = reader.readLine()) != null) {
-			requestDataString.append(line);
+		try {
+			String line;
+			StringBuilder requestDataString = new StringBuilder();
+			while ((line = reader.readLine()) != null) {
+				requestDataString.append(line);
+			}
+
+			String key = req.getParameter("key");
+			String cashflowId = req.getParameter("cashflow");
+
+			// execute synchronously
+			response = cashflowService.importCashFlow(cashflowId, key,
+					requestDataString.toString());
+
+			String output = gson.toJson(response);
+
+			if (response.getResult() == Response.RESULT_FAILURE) {
+				log.log(Level.SEVERE, response.getMessages().toString());
+			}
+
+			resp.setContentType(Constants.JSON_CONTENT_TYPE);
+			resp.setContentLength(output.length());
+			resp.getWriter().write(output);
+		} finally {
+			reader.close();
 		}
-
-		String key = req.getParameter("key");
-
-		// execute synchronously
-		response = cashflowService.importCashFlow(key,
-				requestDataString.toString());
-
-		String output = gson.toJson(response);
-
-		resp.setContentType(Constants.JSON_CONTENT_TYPE);
-		resp.setContentLength(output.length());
-		resp.getWriter().write(output);
 	}
 
 	@Override
@@ -75,24 +95,28 @@ public class CashFlowImportServlet extends HttpServlet {
 			throws ServletException, IOException {
 
 		BufferedReader reader = req.getReader();
-		String line;
-		final StringBuilder requestDataString = new StringBuilder();
-		while ((line = reader.readLine()) != null) {
-			requestDataString.append(line);
-		}
-
-		Executable<Response<CashFlowImportStatus>> logic = new Executable<Response<CashFlowImportStatus>>() {
-
-			@Override
-			public Response<CashFlowImportStatus> execute() {
-				return cashflowService.importCashFlow(requestDataString
-						.toString());
+		try {
+			String line;
+			final StringBuilder requestDataString = new StringBuilder();
+			while ((line = reader.readLine()) != null) {
+				requestDataString.append(line);
 			}
-		};
 
-		logicWrapper.execute(logic,
-				new TypeToken<Response<CashFlowImportStatus>>() {
-				}.getType(), resp);
+			Executable<Response<CashFlowImportStatus>> logic = new Executable<Response<CashFlowImportStatus>>() {
+
+				@Override
+				public Response<CashFlowImportStatus> execute() {
+					return cashflowService.importCashFlow(requestDataString
+							.toString());
+				}
+			};
+
+			logicWrapper.execute(logic,
+					new TypeToken<Response<CashFlowImportStatus>>() {
+					}.getType(), resp);
+		} finally {
+			reader.close();
+		}
 	}
 
 	@Override

@@ -1,12 +1,15 @@
 package net.sf.flophase.floweb.cashflow;
 
 import static com.googlecode.objectify.ObjectifyService.ofy;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import net.sf.flophase.floweb.test.AbstractDAOTestCase;
 
-import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -101,9 +104,67 @@ public class FloCashFlowDAOTest extends AbstractDAOTestCase {
 		assertEquals(dao.getCashFlow(user2).getKey(), cashflow2.getKey());
 
 		// ensure the two cashflows are different
-		assertThat(cashflow2.getKey(),
-				Matchers.is(Matchers.not(Matchers.equalTo(cashflow1.getKey()))));
+		assertThat(cashflow2.getKey(), is(not(equalTo(cashflow1.getKey()))));
 
+	}
+
+	/**
+	 * Test creation of a cash flow import status.
+	 */
+	@Test
+	public void testCreateCashFlowImportStatus() {
+		User user = UserServiceFactory.getUserService().getCurrentUser();
+
+		CashFlow cashflow = dao.createCashFlow(user);
+
+		CashFlowImportStatus createdStatus = dao.createCashFlowImportStatus(
+				cashflow, -1);
+
+		CashFlowImportStatus loadedStatus = dao.getCashFlowImportStatus(
+				cashflow, createdStatus.getKey().getId());
+
+		assertThat(loadedStatus.getDone(), is(equalTo(0)));
+		assertThat(loadedStatus.getTotal(), is(equalTo(-1)));
+	}
+
+	/**
+	 * Tests that updating the status persists the values properly.
+	 */
+	@Test
+	public void testUpdateCashFlowImportStatus() {
+		User user = UserServiceFactory.getUserService().getCurrentUser();
+		CashFlow cashflow = dao.createCashFlow(user);
+		CashFlowImportStatus status = dao.createCashFlowImportStatus(cashflow,
+				-1);
+
+		status.setDone(1);
+		status.setTotal(2);
+
+		dao.updateCashFlowImportStatus(status).now();
+
+		CashFlowImportStatus loadedStatus = dao.getCashFlowImportStatus(
+				cashflow, status.getKey().getId());
+
+		assertThat(loadedStatus.getDone(), is(equalTo(1)));
+		assertThat(loadedStatus.getTotal(), is(equalTo(2)));
+	}
+
+	/**
+	 * Tests that deleting the status removes the entity properly.
+	 */
+	@Test
+	public void testDeleteCashFlowImportStatus() {
+		User user = UserServiceFactory.getUserService().getCurrentUser();
+		CashFlow cashflow = dao.createCashFlow(user);
+		CashFlowImportStatus status = dao.createCashFlowImportStatus(cashflow,
+				-1);
+
+		dao.deleteCashFlowImportStatus(status).now();
+
+		CashFlowImportStatus loadedStatus = dao.getCashFlowImportStatus(
+				cashflow, status.getKey().getId());
+
+		assertThat(loadedStatus, is(nullValue(CashFlowImportStatus.class)));
 	}
 
 }

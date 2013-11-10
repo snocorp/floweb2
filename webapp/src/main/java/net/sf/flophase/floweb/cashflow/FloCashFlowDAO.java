@@ -5,6 +5,7 @@ import static com.googlecode.objectify.ObjectifyService.register;
 
 import com.google.appengine.api.users.User;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.Result;
 import com.googlecode.objectify.cmd.Query;
 
 /**
@@ -41,7 +42,7 @@ public class FloCashFlowDAO implements CashFlowDAO {
 	}
 
 	@Override
-	public CashFlowImportStatus createCashFlowImport(CashFlow cashflow,
+	public CashFlowImportStatus createCashFlowImportStatus(CashFlow cashflow,
 			int total) {
 		CashFlowImportStatus status = new CashFlowImportStatus(
 				cashflow.getKey(), total);
@@ -54,13 +55,26 @@ public class FloCashFlowDAO implements CashFlowDAO {
 	@Override
 	public CashFlowImportStatus getCashFlowImportStatus(CashFlow cashflow,
 			long id) {
-		return ofy().load().key(Key.create(CashFlowImportStatus.class, id))
-				.now();
+		return ofy()
+				.load()
+				.key(Key.create(cashflow.getKey(), CashFlowImportStatus.class,
+						id)).now();
 	}
 
 	@Override
-	public void updateCashFlowImportStatus(CashFlowImportStatus status) {
-		ofy().save().entity(status);
+	public Result<Key<CashFlowImportStatus>> updateCashFlowImportStatus(
+			CashFlowImportStatus status) {
+		return ofy().save().entity(status);
+	}
+
+	@Override
+	public Result<Void> deleteCashFlowImportStatus(CashFlowImportStatus status) {
+		return ofy().delete().entity(status);
+	}
+
+	@Override
+	public CashFlow getCashFlow(Key<CashFlow> key) {
+		return ofy().load().key(key).now();
 	}
 
 }

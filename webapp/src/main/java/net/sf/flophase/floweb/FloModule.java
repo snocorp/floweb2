@@ -12,10 +12,12 @@ import net.sf.flophase.floweb.account.FloAccountService;
 import net.sf.flophase.floweb.account.FloAccountStore;
 import net.sf.flophase.floweb.cashflow.CashFlowDAO;
 import net.sf.flophase.floweb.cashflow.CashFlowImportStatus;
+import net.sf.flophase.floweb.cashflow.CashFlowImportStore;
 import net.sf.flophase.floweb.cashflow.CashFlowService;
 import net.sf.flophase.floweb.cashflow.CashFlowStore;
 import net.sf.flophase.floweb.cashflow.CashFlowTradeStore;
 import net.sf.flophase.floweb.cashflow.FloCashFlowDAO;
+import net.sf.flophase.floweb.cashflow.FloCashFlowImportStore;
 import net.sf.flophase.floweb.cashflow.FloCashFlowService;
 import net.sf.flophase.floweb.cashflow.FloCashFlowStore;
 import net.sf.flophase.floweb.cashflow.FloCashFlowTradeStore;
@@ -56,6 +58,7 @@ import com.google.gson.GsonBuilder;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provider;
 import com.google.inject.TypeLiteral;
+import com.google.inject.servlet.ServletScopes;
 import com.googlecode.objectify.ObjectifyFilter;
 import com.googlecode.objectify.annotation.Parent;
 
@@ -109,7 +112,9 @@ public class FloModule extends AbstractModule {
 		bind(EntryStore.class).to(FloEntryStore.class);
 
 		bind(CashFlowDAO.class).to(FloCashFlowDAO.class);
-		bind(CashFlowStore.class).to(FloCashFlowStore.class);
+		bind(CashFlowStore.class).to(FloCashFlowStore.class).in(
+				ServletScopes.REQUEST);
+		bind(CashFlowImportStore.class).to(FloCashFlowImportStore.class);
 		bind(CashFlowTradeStore.class).to(FloCashFlowTradeStore.class);
 		bind(CashFlowService.class).to(FloCashFlowService.class);
 

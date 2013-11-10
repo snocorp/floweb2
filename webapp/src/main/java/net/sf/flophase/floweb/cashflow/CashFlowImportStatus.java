@@ -12,6 +12,11 @@ import com.googlecode.objectify.annotation.Parent;
 public class CashFlowImportStatus {
 
 	/**
+	 * Value for total that represents a status that is not yet started.
+	 */
+	public static final int NOT_STARTED = -1;
+
+	/**
 	 * The cash flow import status identifier
 	 */
 	@Id
@@ -98,5 +103,14 @@ public class CashFlowImportStatus {
 	 */
 	public void setTotal(int total) {
 		this.total = total;
+	}
+
+	/**
+	 * Returns the cash flow key
+	 * 
+	 * @return The cash flow key
+	 */
+	public Key<CashFlow> getCashflow() {
+		return cashflow;
 	}
 }

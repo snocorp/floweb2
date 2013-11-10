@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.isIn;
 import static org.junit.Assert.assertThat;
 import net.sf.flophase.floweb.account.FloAccountService;
 import net.sf.flophase.floweb.common.Response;
+import net.sf.flophase.floweb.test.MockProvider;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -43,9 +44,19 @@ public class FloCashFlowServiceTest {
 	private static final String MSG_INVALID_CASH_FLOW = "The cash flow is not valid";
 
 	/**
+	 * The message when the import has already started.
+	 */
+	private static final String MSG_IMPORT_HAS_STARTED = "Import has already started";
+
+	/**
 	 * The id of the import status.
 	 */
 	protected static final long IMPORT_STATUS_ID = 1L;
+
+	/**
+	 * The id of the cash flow.
+	 */
+	protected static final long CASH_FLOW_ID = 1000L;
 
 	/**
 	 * App engine helper for when we need a key.
@@ -84,6 +95,11 @@ public class FloCashFlowServiceTest {
 	private Queue queue;
 
 	/**
+	 * The mock cash flow import store.
+	 */
+	private CashFlowImportStore cashFlowImportStore;
+
+	/**
 	 * Sets up the test case. Creates mock user service and account store.
 	 * Creates the service to be tested.
 	 */
@@ -93,6 +109,7 @@ public class FloCashFlowServiceTest {
 
 		userService = context.mock(UserService.class);
 		cashFlowStore = context.mock(CashFlowStore.class);
+		cashFlowImportStore = context.mock(CashFlowImportStore.class);
 		cashFlowTradeStore = context.mock(CashFlowTradeStore.class);
 		queue = context.mock(Queue.class);
 		Provider<Queue> queueProvider = new Provider<Queue>() {
@@ -104,8 +121,10 @@ public class FloCashFlowServiceTest {
 
 		};
 
-		service = new FloCashFlowService(userService, cashFlowStore,
-				cashFlowTradeStore, queueProvider, new Gson());
+		service = new FloCashFlowService(userService,
+				new MockProvider<CashFlowStore>(cashFlowStore),
+				cashFlowImportStore, cashFlowTradeStore, queueProvider,
+				new Gson());
 	}
 
 	/**
@@ -193,6 +212,51 @@ public class FloCashFlowServiceTest {
 	}
 
 	/**
+	 * Tests that the status is retrieved from the store.
+	 */
+	@Test
+	public void testGetCashFlowImportStatus() {
+		context.checking(new Expectations() {
+			{
+				// no user is logged in
+				oneOf(userService).isUserLoggedIn();
+				will(returnValue(true));
+
+				oneOf(cashFlowImportStore).getCashFlowImportStatus(
+						IMPORT_STATUS_ID);
+			}
+		});
+
+		service.getCashFlowImportStatus(String.valueOf(IMPORT_STATUS_ID));
+
+		context.assertIsSatisfied();
+	}
+
+	/**
+	 * Tests the {@link FloCashFlowService#getCashFlowImportStatus(String)}
+	 * method when there is no logged in user.
+	 */
+	@Test
+	public void testGetCashFlowImportStatusWithNoLoggedInUser() {
+		context.checking(new Expectations() {
+			{
+				// no user is logged in
+				oneOf(userService).isUserLoggedIn();
+				will(returnValue(false));
+			}
+		});
+
+		Response<CashFlowImportStatus> response = service
+				.getCashFlowImportStatus(String.valueOf(IMPORT_STATUS_ID));
+
+		assertThat(response.getResult(), is(equalTo(Response.RESULT_FAILURE)));
+
+		assertThat(MSG_PERMISSION_DENIED, isIn(response.getMessages()));
+
+		context.assertIsSatisfied();
+	}
+
+	/**
 	 * Tests the {@link FloCashFlowService#getCashFlowExport()} method when
 	 * there is no logged in user.
 	 */
@@ -230,8 +294,14 @@ public class FloCashFlowServiceTest {
 		final CashFlowImportStatus status = new CashFlowImportStatus() {
 
 			@Override
+			public Key<CashFlow> getCashflow() {
+				return Key.create(CashFlow.class, CASH_FLOW_ID);
+
+			}
+
+			@Override
 			public Key<CashFlowImportStatus> getKey() {
-				return Key.create(CashFlowImportStatus.class, 1);
+				return Key.create(CashFlowImportStatus.class, IMPORT_STATUS_ID);
 			}
 
 		};
@@ -242,7 +312,7 @@ public class FloCashFlowServiceTest {
 				oneOf(userService).isUserLoggedIn();
 				will(returnValue(true));
 
-				oneOf(cashFlowStore).createCashFlowImportStatus();
+				oneOf(cashFlowImportStore).createCashFlowImportStatus();
 				will(returnValue(status));
 
 				oneOf(queue).add(with(aNonNull(TaskOptions.class)));
@@ -299,22 +369,22 @@ public class FloCashFlowServiceTest {
 
 		String cashflowToImport = new Gson().toJson(exportResponse);
 
-		final CashFlowImportStatus status = new CashFlowImportStatus() {
+		final CashFlowImportStatus status = new CashFlowImportStatus(null,
+				CashFlowImportStatus.NOT_STARTED) {
 
 			@Override
 			public Key<CashFlowImportStatus> getKey() {
-				return Key.create(CashFlowImportStatus.class, 1);
+				return Key.create(CashFlowImportStatus.class, IMPORT_STATUS_ID);
 			}
 
 		};
 
 		context.checking(new Expectations() {
 			{
-				// no user is logged in
-				oneOf(userService).isUserLoggedIn();
-				will(returnValue(true));
+				oneOf(cashFlowStore).setCashFlowId(CASH_FLOW_ID);
 
-				oneOf(cashFlowStore).getCashFlowImportStatus(IMPORT_STATUS_ID);
+				oneOf(cashFlowImportStore).getCashFlowImportStatus(
+						IMPORT_STATUS_ID);
 				will(returnValue(status));
 
 				oneOf(cashFlowTradeStore).importCashFlow(with(equal(status)),
@@ -323,7 +393,8 @@ public class FloCashFlowServiceTest {
 		});
 
 		Response<CashFlowImportStatus> statusResponse = service.importCashFlow(
-				String.valueOf(IMPORT_STATUS_ID), cashflowToImport);
+				String.valueOf(CASH_FLOW_ID), String.valueOf(IMPORT_STATUS_ID),
+				cashflowToImport);
 
 		assertThat(statusResponse.getResult(), equalTo(Response.RESULT_SUCCESS));
 
@@ -335,23 +406,37 @@ public class FloCashFlowServiceTest {
 	 * input.
 	 */
 	@Test
-	public void testImportCashFlowSyncWithInvalidKey() {
+	public void testImportCashFlowSyncWithInvalidCashFlowKey() {
 		CashFlowExport export = new CashFlowExport();
 		Response<CashFlowExport> exportResponse = new Response<CashFlowExport>(
 				Response.RESULT_SUCCESS, export);
 
 		String cashflowToImport = new Gson().toJson(exportResponse);
 
-		context.checking(new Expectations() {
-			{
-				// no user is logged in
-				oneOf(userService).isUserLoggedIn();
-				will(returnValue(true));
-			}
-		});
-
 		Response<CashFlowImportStatus> response = service.importCashFlow("abc",
-				cashflowToImport);
+				String.valueOf(IMPORT_STATUS_ID), cashflowToImport);
+
+		assertThat(response.getResult(), equalTo(Response.RESULT_FAILURE));
+
+		assertThat(MSG_INVALID_KEY, isIn(response.getMessages()));
+
+		context.assertIsSatisfied();
+	}
+
+	/**
+	 * Tests that the correct error message is returned when an invalid key is
+	 * input.
+	 */
+	@Test
+	public void testImportCashFlowSyncWithInvalidImportStatusKey() {
+		CashFlowExport export = new CashFlowExport();
+		Response<CashFlowExport> exportResponse = new Response<CashFlowExport>(
+				Response.RESULT_SUCCESS, export);
+
+		String cashflowToImport = new Gson().toJson(exportResponse);
+
+		Response<CashFlowImportStatus> response = service.importCashFlow(
+				String.valueOf(CASH_FLOW_ID), "abc", cashflowToImport);
 
 		assertThat(response.getResult(), equalTo(Response.RESULT_FAILURE));
 
@@ -367,28 +452,29 @@ public class FloCashFlowServiceTest {
 	@Test
 	public void testImportCashFlowSyncWithInvalidCashFlow() {
 
-		final CashFlowImportStatus status = new CashFlowImportStatus() {
+		final CashFlowImportStatus status = new CashFlowImportStatus(null,
+				CashFlowImportStatus.NOT_STARTED) {
 
 			@Override
 			public Key<CashFlowImportStatus> getKey() {
-				return Key.create(CashFlowImportStatus.class, 1);
+				return Key.create(CashFlowImportStatus.class, IMPORT_STATUS_ID);
 			}
 
 		};
 
 		context.checking(new Expectations() {
 			{
-				// no user is logged in
-				oneOf(userService).isUserLoggedIn();
-				will(returnValue(true));
+				oneOf(cashFlowStore).setCashFlowId(CASH_FLOW_ID);
 
-				oneOf(cashFlowStore).getCashFlowImportStatus(IMPORT_STATUS_ID);
+				oneOf(cashFlowImportStore).getCashFlowImportStatus(
+						IMPORT_STATUS_ID);
 				will(returnValue(status));
 			}
 		});
 
 		Response<CashFlowImportStatus> response = service.importCashFlow(
-				String.valueOf(IMPORT_STATUS_ID), "xyz");
+				String.valueOf(CASH_FLOW_ID), String.valueOf(IMPORT_STATUS_ID),
+				"xyz");
 
 		assertThat(response.getResult(), equalTo(Response.RESULT_FAILURE));
 
@@ -398,31 +484,44 @@ public class FloCashFlowServiceTest {
 	}
 
 	/**
-	 * Tests that permission is denied when an import is attempted with no
-	 * logged in user.
+	 * Tests that import fails when an import is attempted after it has already
+	 * started.
 	 */
 	@Test
-	public void testImportCashFlowSyncWithNoLoggedInUser() {
+	public void testImportCashFlowSyncWithAlreadyStartedImport() {
 		CashFlowExport export = new CashFlowExport();
 		Response<CashFlowExport> exportResponse = new Response<CashFlowExport>(
 				Response.RESULT_SUCCESS, export);
 
 		String cashflowToImport = new Gson().toJson(exportResponse);
 
+		final CashFlowImportStatus status = new CashFlowImportStatus(null, 1) {
+
+			@Override
+			public Key<CashFlowImportStatus> getKey() {
+				return Key.create(CashFlowImportStatus.class, IMPORT_STATUS_ID);
+			}
+
+		};
+
 		context.checking(new Expectations() {
 			{
-				// no user is logged in
-				oneOf(userService).isUserLoggedIn();
-				will(returnValue(false));
+				oneOf(cashFlowStore).setCashFlowId(CASH_FLOW_ID);
+
+				// get the status
+				oneOf(cashFlowImportStore).getCashFlowImportStatus(
+						IMPORT_STATUS_ID);
+				will(returnValue(status));
 			}
 		});
 
-		Response<CashFlowImportStatus> response = service.importCashFlow("1",
+		Response<CashFlowImportStatus> response = service.importCashFlow(
+				String.valueOf(CASH_FLOW_ID), String.valueOf(IMPORT_STATUS_ID),
 				cashflowToImport);
 
 		assertThat(response.getResult(), is(equalTo(Response.RESULT_FAILURE)));
 
-		assertThat(MSG_PERMISSION_DENIED, isIn(response.getMessages()));
+		assertThat(MSG_IMPORT_HAS_STARTED, isIn(response.getMessages()));
 
 		context.assertIsSatisfied();
 	}

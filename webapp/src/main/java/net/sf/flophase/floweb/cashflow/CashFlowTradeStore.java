@@ -1,6 +1,5 @@
 package net.sf.flophase.floweb.cashflow;
 
-
 /**
  * This interface defines the internal API to manipulate cash flows.
  */

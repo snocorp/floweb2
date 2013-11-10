@@ -51,11 +51,16 @@ public class CashFlowImportServletTest extends AbstractServletTestCase {
 	/**
 	 * The key for the import status.
 	 */
-	protected static final String IMPORT_STATUS_KEY = "1";
+	private static final String IMPORT_STATUS_KEY = "1";
+
+	/**
+	 * The key for the cash flow.
+	 */
+	private static final String CASH_FLOW_KEY = "1000";
 
 	@Override
 	protected String getQuery() {
-		return "?key=" + IMPORT_STATUS_KEY;
+		return "?key=" + IMPORT_STATUS_KEY + "&cashflow=" + CASH_FLOW_KEY;
 	}
 
 	/**
@@ -172,8 +177,8 @@ public class CashFlowImportServletTest extends AbstractServletTestCase {
 
 		context.checking(new Expectations() {
 			{
-				oneOf(mockCashFlowService).importCashFlow(IMPORT_STATUS_KEY,
-						cashflowJson);
+				oneOf(mockCashFlowService).importCashFlow(CASH_FLOW_KEY,
+						IMPORT_STATUS_KEY, cashflowJson);
 				will(returnValue(response));
 			}
 		});

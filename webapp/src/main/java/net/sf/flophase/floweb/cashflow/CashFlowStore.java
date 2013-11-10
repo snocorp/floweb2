@@ -12,31 +12,11 @@ public interface CashFlowStore {
 	public CashFlow getCashFlow();
 
 	/**
-	 * Creates a record of a cash flow import.
+	 * Allows the service to return the cashflow with the given id when no user
+	 * is available.
 	 * 
-	 * @return The initial status
+	 * @param cashflowId
+	 *            The id
 	 */
-	public CashFlowImportStatus createCashFlowImportStatus();
-
-	/**
-	 * Retrieves the cash flow import status with the given id.
-	 * 
-	 * @param id
-	 *            The import status id
-	 * @return The status.
-	 */
-	public CashFlowImportStatus getCashFlowImportStatus(long id);
-
-	/**
-	 * Updates the status of the import.
-	 * 
-	 * @param status
-	 *            The import status
-	 * @param done
-	 *            How many are done
-	 * @param total
-	 *            The total to be imported.
-	 */
-	public void updateCashFlowImportStatus(CashFlowImportStatus status,
-			int done, int total);
+	public void setCashFlowId(long cashflowId);
 }
