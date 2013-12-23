@@ -29,6 +29,8 @@ define([
             $('#'+floweb.importCashflowDialog.dataNodeRef).val('');
 
             $("#"+floweb.importCashflowDialog.nodeRef).show();
+            
+            $('#'+floweb.importCashflowDialog.dataNodeRef).focus();
     	},
     	hide: function() {
 

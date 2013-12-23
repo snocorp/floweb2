@@ -1,6 +1,7 @@
 package net.sf.flophase.floweb.cashflow;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -82,13 +83,30 @@ public class FloCashFlowTradeStore implements CashFlowTradeStore {
 		cashflowStore.updateCashFlowImportStatus(status, done, total);
 
 		Map<Long, Long> accountIdMap = new HashMap<Long, Long>();
+		Map<String, Account> accountNameMap = new HashMap<String, Account>();
+
+		// try to match existing accounts by name
+		List<Account> existingAccounts = accountStore.getAccounts();
+		for (Account account : existingAccounts) {
+			accountNameMap.put(account.getName(), account);
+		}
 
 		// import accounts
 		Account newAccount;
 		for (Account account : cashflowExport.getAccounts()) {
-			newAccount = accountStore.createAccount(account.getName(),
-					account.getBalance(), account.getNegativeThreshold(),
-					account.getPositiveThreshold());
+			if (accountNameMap.containsKey(account.getName())) {
+				newAccount = accountNameMap.get(account.getName());
+
+				// update the account based on the imported data
+				accountStore.editAccount(newAccount.getKey().getId(),
+						newAccount.getName(), account.getBalance(),
+						account.getNegativeThreshold(),
+						account.getPositiveThreshold());
+			} else {
+				newAccount = accountStore.createAccount(account.getName(),
+						account.getBalance(), account.getNegativeThreshold(),
+						account.getPositiveThreshold());
+			}
 
 			accountIdMap.put(account.getKey().getId(), newAccount.getKey()
 					.getId());
