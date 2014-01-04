@@ -97,7 +97,7 @@
 				</div>
 			</div>
 		</div>
-	  	<div class="current">
+	  	<div id="current" class="current">
 			<div class="details row">
 				<span class="title col-sm-3">Current</span>
 				<span class="date col-sm-3" ng-bind="currDate"></span>
@@ -207,7 +207,7 @@
       			ng-model="newTransaction.name"/>
       	</div>
        	<div class="form-group">
-       		<label for="newTransactionBalance">Date</label>
+       		<label for="newTransactionDate">Date</label>
        		<input 
        			id="newTransactionDate" 
        			class="form-control" 
@@ -234,7 +234,7 @@
       			ng-model="copyTransaction.name"/>
       	</div>
        	<div class="form-group">
-       		<label for="copyTransactionBalance">Date</label>
+       		<label for="copyTransactionDate">Date</label>
        		<input 
        			id="copyTransactionDate" 
        			class="form-control" 

@@ -1,3 +1,6 @@
+/*jslint browser: true, indent: 2 */
+/*globals define*/
+
 define([
   'angular', 'jquery'
 ], function (angular, $) {

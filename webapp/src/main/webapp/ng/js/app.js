@@ -1,3 +1,5 @@
+/*jslint browser: true, indent: 2 */
+/*globals define*/
 define([
   'angular',
 
@@ -9,11 +11,11 @@ define([
 
   var initialize = function () {
     
-    var mainModule = angular.module('floPhase',['ui.date']);
+    var mainModule = angular.module('floPhase', ['ui.date']);
     controllers.initialize(mainModule);
     directives.initialize(mainModule);
 
-    angular.bootstrap(window.document,['floPhase']);
+    angular.bootstrap(window.document, ['floPhase']);
           
   };
 

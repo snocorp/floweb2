@@ -1,4 +1,5 @@
-"use strict";
+/*jslint browser: true, indent: 2 */
+/*globals require*/
 
 require.config({
   paths: {
@@ -9,11 +10,11 @@ require.config({
     'angular-ui-date': 'libs/angular-ui-date/date'
   },
   shim: {
-  	'angular': {
-  		exports: 'angular'
-  	},
-  	'twitter-bootstrap': ['jquery'],
-  	'angular-ui-date': ['angular']
+    'angular': {
+      exports: 'angular'
+    },
+    'twitter-bootstrap': ['jquery'],
+    'angular-ui-date': ['angular']
   }
 });
 
@@ -26,22 +27,23 @@ require([
   'twitter-bootstrap',
   'angular-ui-date'
 ], function (require, $, angular) {
+  'use strict';
 
   require(['app'], function (App) {
   	
-  	//done first to avoid any DOM manipulation after angular initializes
-  	$( "#addAccountDialog" ).dialog({
+    //done first to avoid any DOM manipulation after angular initializes
+    $("#addAccountDialog").dialog({
       autoOpen: false,
       modal: true
-  	});
-  	$( "#addTransactionDialog" ).dialog({
+    });
+    $("#addTransactionDialog").dialog({
       autoOpen: false,
       modal: true
-  	});
-  	$( "#copyTransactionDialog" ).dialog({
+    });
+    $("#copyTransactionDialog").dialog({
       autoOpen: false,
       modal: true
-  	});
+    });
     
     App.initialize();
 

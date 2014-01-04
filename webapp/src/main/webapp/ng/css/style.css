@@ -31,18 +31,25 @@ body {
 	margin: 1px 0;
 	border-radius: 4px;
 }
-.current .account:hover, .current .account.selected:hover {
-	background-color: #5CCDC9;
+.current .account:nth-child(even), .transactions .transaction:nth-child(even) {
+	background-color: #DDD;
 }
-.current .account.selected {
-	background-color: #009B95;
+.current .account:nth-child(odd), .transactions .transaction:nth-child(odd) {
+	background-color: #EEE;
 }
-.transactions .transaction:hover, .transactions .transaction.selected:hover {
-	background-color: #5CCDC9;
+.current .account:hover, .transactions .transaction:hover {
+	background-color: #ABEBFF;
 }
-.transactions .transaction.selected {
-	background-color: #009B95;
+.current .account.selected:hover, .transactions .transaction.selected:hover {
+	background-color: #BDEDFC;
 }
+.current .account.selected:nth-child(even), .transactions .transaction.selected:nth-child(even) {
+	background-color: #80D0E9;
+}
+.current .account.selected:nth-child(odd), .transactions .transaction.selected:nth-child(odd) {
+	background-color: #95D9EE;
+}
+
 .flo-hidden {
 	display: none;
 }
