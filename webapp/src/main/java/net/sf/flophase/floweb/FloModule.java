@@ -171,6 +171,7 @@ public class FloModule extends AbstractModule {
 
 		Gson gson = new GsonBuilder()
 				.addSerializationExclusionStrategy(strategy)
+				.serializeSpecialFloatingPointValues()
 				.setDateFormat(Constants.ISO_DATE_FORMAT).create();
 		bind(Gson.class).toInstance(gson);
 	}
